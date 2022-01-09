@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.workplatform.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.User">
+        <!--@mbg.generated-->
+        <!--@Table `user`-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, phone_number, `password`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from `user`
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from `user`
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.User"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into `user` (phone_number, `password`)
+        values (#{phoneNumber,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.User"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into `user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="phoneNumber != null">
+                phone_number,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="phoneNumber != null">
+                #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.User">
+        <!--@mbg.generated-->
+        update `user`
+        <set>
+            <if test="phoneNumber != null">
+                phone_number = #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.User">
+        <!--@mbg.generated-->
+        update `user`
+        set phone_number = #{phoneNumber,jdbcType=VARCHAR},
+        `password` = #{password,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPhoneAndPass" resultMap="BaseResultMap">
+        select * from user
+        where phone_number = #{phoneNumber} and password = #{password}
+    </select>
+    <select id="selectByPhone" resultMap="BaseResultMap">
+        select * from user
+        where phone_number = #{phoneNumber}
+    </select>
+    <select id="checkPasswordCorrect" resultType="int">
+        SELECT DISTINCT IF(
+        EXISTS(SELECT password FROM user WHERE id = #{id} and password = #{oldPassword}),1,0
+        )
+        AS info
+    </select>
+    <update id="updatePasswordByPrimaryKey">
+        update user set password = #{newPassword}
+        where id = #{id}
+    </update>
+</mapper>
