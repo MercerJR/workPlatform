@@ -1,8 +1,8 @@
 package com.project.workplatform.controller;
 
-import com.project.workplatform.data.request.ChangePasswordRequest;
-import com.project.workplatform.data.request.UserInfoRequest;
-import com.project.workplatform.data.request.UserLoginRequest;
+import com.project.workplatform.data.request.user.ChangePasswordRequest;
+import com.project.workplatform.data.request.user.UserInfoRequest;
+import com.project.workplatform.data.request.user.UserLoginRequest;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.service.UserService;

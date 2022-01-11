@@ -1,4 +1,4 @@
-package com.project.workplatform.data.request;
+package com.project.workplatform.data.request.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

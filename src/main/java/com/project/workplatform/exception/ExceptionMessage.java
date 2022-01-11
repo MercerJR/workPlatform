@@ -15,4 +15,7 @@ public interface ExceptionMessage {
     String NEW_PASSWORD_AGAIN_WRONG = "两次输入的密码不相同";
     String PHONE_NUMBER_ALREADY_REGISTER = "该电话号码已被注册";
 
+    String ALREADY_FRIEND = "你们已经是好友了";
+    String ALREADY_DEAL_APPLY = "你已经处理过该请求了";
+
 }

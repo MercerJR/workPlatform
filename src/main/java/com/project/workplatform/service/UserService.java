@@ -2,9 +2,9 @@ package com.project.workplatform.service;
 
 import com.project.workplatform.dao.UserInfoMapper;
 import com.project.workplatform.dao.UserMapper;
-import com.project.workplatform.data.request.ChangePasswordRequest;
-import com.project.workplatform.data.request.UserInfoRequest;
-import com.project.workplatform.data.request.UserLoginRequest;
+import com.project.workplatform.data.request.user.ChangePasswordRequest;
+import com.project.workplatform.data.request.user.UserInfoRequest;
+import com.project.workplatform.data.request.user.UserLoginRequest;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;

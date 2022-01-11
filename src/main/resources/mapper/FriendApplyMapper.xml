@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.workplatform.dao.FriendApplyMapper">
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    <!--@Table friend_apply-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="target_id" jdbcType="INTEGER" property="targetId" />
+    <result column="tag" jdbcType="INTEGER" property="tag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, target_id, tag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from friend_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from friend_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.FriendApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into friend_apply (user_id, target_id, tag
+      )
+    values (#{userId,jdbcType=INTEGER}, #{targetId,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.FriendApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into friend_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    update friend_apply
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    update friend_apply
+    set user_id = #{userId,jdbcType=INTEGER},
+      target_id = #{targetId,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

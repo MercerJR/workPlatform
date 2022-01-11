@@ -1,4 +1,4 @@
-package com.project.workplatform.data.request;
+package com.project.workplatform.data.request.user;
 
 import com.project.workplatform.data.ValidConstant;
 import lombok.AllArgsConstructor;
