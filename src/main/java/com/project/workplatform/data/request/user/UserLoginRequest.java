@@ -1,5 +1,6 @@
 package com.project.workplatform.data.request.user;
 
+import com.project.workplatform.annotion.IsPhoneNumber;
 import com.project.workplatform.data.ValidConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
 public class UserLoginRequest {
 
     @NotEmpty(message = ValidConstant.PHONE_NUMBER_EMPTY)
-    @Size(min = 11,max = 15,message = ValidConstant.PHONE_NUMBER_LENGTH)
+    @IsPhoneNumber
     private String phoneNumber;
 
     @NotBlank(message = ValidConstant.PASSWORD_EMPTY)

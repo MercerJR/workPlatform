@@ -32,11 +32,10 @@ public class FriendService {
         if (isAlreadyFriend(userId,applyFriendRequest.getTargetId())){
             throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.ALREADY_FRIEND);
         }
-        //TODO 添加请求验证消息
-
         FriendApply apply = new FriendApply();
         apply.setUserId(userId);
         apply.setTargetId(applyFriendRequest.getTargetId());
+        apply.setApplyMessage(applyFriendRequest.getApplyMessage());
         applyMapper.insertSelective(apply);
 
         //TODO 用消息队列设置消息通知

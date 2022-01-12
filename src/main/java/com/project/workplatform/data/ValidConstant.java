@@ -6,6 +6,8 @@ package com.project.workplatform.data;
  */
 public interface ValidConstant {
 
+    //用户模块 校验常量
+
     String PHONE_NUMBER_EMPTY = "电话号码不能位空";
     String PHONE_NUMBER_LENGTH = "电话号码长度不对";
     String PASSWORD_EMPTY = "密码不能为空";
@@ -13,4 +15,9 @@ public interface ValidConstant {
     String NAME_EMPTY = "姓名不能为空";
     String PHONE_NUMBER_WRONG_FORMAT = "请输入正确的11位手机号格式";
     String NEW_PASSWORD_EMPTY = "新密码不能为空";
+
+    //好友模块 校验常量
+
+    String APPLY_MESSAGE_LENGTH = "申请消息不能超过50字符";
+
 }

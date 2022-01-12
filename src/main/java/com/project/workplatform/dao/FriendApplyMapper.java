@@ -4,7 +4,7 @@ import com.project.workplatform.pojo.FriendApply;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/11 10:53
+ * @Date: 2022/1/12 19:37
  */
 public interface FriendApplyMapper {
     int deleteByPrimaryKey(Integer id);
