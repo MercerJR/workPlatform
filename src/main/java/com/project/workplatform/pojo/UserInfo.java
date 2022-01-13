@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/8 14:42
+ * @Date: 2022/1/13 10:31
  */
 @Data
 @AllArgsConstructor
@@ -16,6 +16,8 @@ public class UserInfo implements Serializable {
     private Integer id;
 
     private Integer userId;
+
+    private String name;
 
     private String describe;
 

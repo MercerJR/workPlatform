@@ -1,124 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.UserInfoMapper">
-    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.UserInfo">
-        <!--@mbg.generated-->
-        <!--@Table user_info-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="describe" jdbcType="VARCHAR" property="describe"/>
-        <result column="gender" jdbcType="VARCHAR" property="gender"/>
-        <result column="hobby" jdbcType="VARCHAR" property="hobby"/>
-        <result column="live_place" jdbcType="VARCHAR" property="livePlace"/>
-        <result column="hometown" jdbcType="VARCHAR" property="hometown"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, user_id, `describe`, gender, hobby, live_place, hometown
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from user_info
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from user_info
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserInfo"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into user_info (user_id, `describe`, gender,
-        hobby, live_place, hometown
-        )
-        values (#{userId,jdbcType=INTEGER}, #{describe,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
-        #{hobby,jdbcType=VARCHAR}, #{livePlace,jdbcType=VARCHAR}, #{hometown,jdbcType=VARCHAR}
-        )
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserInfo"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into user_info
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="describe != null">
-                `describe`,
-            </if>
-            <if test="gender != null">
-                gender,
-            </if>
-            <if test="hobby != null">
-                hobby,
-            </if>
-            <if test="livePlace != null">
-                live_place,
-            </if>
-            <if test="hometown != null">
-                hometown,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="describe != null">
-                #{describe,jdbcType=VARCHAR},
-            </if>
-            <if test="gender != null">
-                #{gender,jdbcType=VARCHAR},
-            </if>
-            <if test="hobby != null">
-                #{hobby,jdbcType=VARCHAR},
-            </if>
-            <if test="livePlace != null">
-                #{livePlace,jdbcType=VARCHAR},
-            </if>
-            <if test="hometown != null">
-                #{hometown,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.UserInfo">
-        <!--@mbg.generated-->
-        update user_info
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="describe != null">
-                `describe` = #{describe,jdbcType=VARCHAR},
-            </if>
-            <if test="gender != null">
-                gender = #{gender,jdbcType=VARCHAR},
-            </if>
-            <if test="hobby != null">
-                hobby = #{hobby,jdbcType=VARCHAR},
-            </if>
-            <if test="livePlace != null">
-                live_place = #{livePlace,jdbcType=VARCHAR},
-            </if>
-            <if test="hometown != null">
-                hometown = #{hometown,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.UserInfo">
-        <!--@mbg.generated-->
-        update user_info
-        set user_id = #{userId,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.UserInfo">
+    <!--@mbg.generated-->
+    <!--@Table user_info-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="describe" jdbcType="VARCHAR" property="describe" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="hobby" jdbcType="VARCHAR" property="hobby" />
+    <result column="live_place" jdbcType="VARCHAR" property="livePlace" />
+    <result column="hometown" jdbcType="VARCHAR" property="hometown" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, `name`, `describe`, gender, hobby, live_place, hometown
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_info (user_id, `name`, `describe`, 
+      gender, hobby, live_place, 
+      hometown)
+    values (#{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, #{livePlace,jdbcType=VARCHAR}, 
+      #{hometown,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="describe != null">
+        `describe`,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="hobby != null">
+        hobby,
+      </if>
+      <if test="livePlace != null">
+        live_place,
+      </if>
+      <if test="hometown != null">
+        hometown,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null">
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="livePlace != null">
+        #{livePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="hometown != null">
+        #{hometown,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.UserInfo">
+    <!--@mbg.generated-->
+    update user_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
         `describe` = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
         gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null">
         hobby = #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="livePlace != null">
         live_place = #{livePlace,jdbcType=VARCHAR},
-        hometown = #{hometown,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="hometown != null">
+        hometown = #{hometown,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.UserInfo">
+    <!--@mbg.generated-->
+    update user_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      `describe` = #{describe,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      hobby = #{hobby,jdbcType=VARCHAR},
+      live_place = #{livePlace,jdbcType=VARCHAR},
+      hometown = #{hometown,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <select id="selectByUser" resultMap="BaseResultMap">
         select * from user_info
         where user_id = #{userId}

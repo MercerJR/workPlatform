@@ -8,10 +8,7 @@ import com.project.workplatform.service.FriendService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,5 +44,11 @@ public class FriendController {
         service.delete(userId,deleteFriendRequest);
         return new Response().success();
     }
+
+//    @GetMapping(value = "list",produces = "application/json")
+//    public Response list(HttpServletRequest request){
+//        Integer userId = JwtUtil.getId(request);
+//        service.getList(userId);
+//    }
 
 }

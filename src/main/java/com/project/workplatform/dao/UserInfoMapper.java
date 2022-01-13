@@ -4,7 +4,7 @@ import com.project.workplatform.pojo.UserInfo;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/8 14:42
+ * @Date: 2022/1/13 10:31
  */
 public interface UserInfoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,5 +20,4 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     UserInfo selectByUser(int userId);
-
 }
