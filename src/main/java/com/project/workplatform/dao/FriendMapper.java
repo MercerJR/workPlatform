@@ -21,4 +21,6 @@ public interface FriendMapper {
     int updateByPrimaryKey(Friend record);
 
     Friend selectByUserAndFriend(@Param("userId") int userId,@Param("friendId") int friendId);
+
+    void deleteByFriend(@Param("userId") int userId,@Param("friendId") int friendId);
 }

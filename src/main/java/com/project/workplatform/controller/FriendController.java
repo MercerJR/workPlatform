@@ -2,6 +2,7 @@ package com.project.workplatform.controller;
 
 import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
+import com.project.workplatform.data.request.friend.DeleteFriendRequest;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.service.FriendService;
 import com.project.workplatform.util.JwtUtil;
@@ -37,6 +38,13 @@ public class FriendController {
     public Response dealApply(@RequestBody DealApplyRequest dealApplyRequest, HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         service.dealApply(userId,dealApplyRequest);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/delete",produces = "application/json")
+    public Response delete(@RequestBody DeleteFriendRequest deleteFriendRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.delete(userId,deleteFriendRequest);
         return new Response().success();
     }
 

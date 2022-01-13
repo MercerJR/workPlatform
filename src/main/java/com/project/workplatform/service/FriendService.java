@@ -4,6 +4,7 @@ import com.project.workplatform.dao.FriendApplyMapper;
 import com.project.workplatform.dao.FriendMapper;
 import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
+import com.project.workplatform.data.request.friend.DeleteFriendRequest;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -73,5 +74,10 @@ public class FriendService {
 
     private boolean isAlreadyFriend(int userId,int targetId){
         return mapper.selectByUserAndFriend(userId, targetId) != null && mapper.selectByUserAndFriend(targetId, userId) != null;
+    }
+
+    public void delete(Integer userId, DeleteFriendRequest deleteFriendRequest) {
+        mapper.deleteByFriend(userId,deleteFriendRequest.getFriendId());
+        mapper.deleteByFriend(deleteFriendRequest.getFriendId(),userId);
     }
 }
