@@ -1,5 +1,6 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.friend.FriendListResponse;
 import com.project.workplatform.pojo.Friend;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,6 @@ public interface FriendMapper {
     Friend selectByUserAndFriend(@Param("userId") int userId,@Param("friendId") int friendId);
 
     void deleteByFriend(@Param("userId") int userId,@Param("friendId") int friendId);
+
+    FriendListResponse selectFriendList(Integer userId);
 }

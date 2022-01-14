@@ -4,6 +4,7 @@ import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
 import com.project.workplatform.data.request.friend.DeleteFriendRequest;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.friend.FriendListResponse;
 import com.project.workplatform.service.FriendService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,11 @@ public class FriendController {
         return new Response().success();
     }
 
-//    @GetMapping(value = "list",produces = "application/json")
-//    public Response list(HttpServletRequest request){
-//        Integer userId = JwtUtil.getId(request);
-//        service.getList(userId);
-//    }
+    @GetMapping(value = "list",produces = "application/json")
+    public Response list(HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        FriendListResponse friendList = service.getList(userId);
+        return new Response().success(friendList);
+    }
 
 }

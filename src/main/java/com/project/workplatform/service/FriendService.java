@@ -5,6 +5,7 @@ import com.project.workplatform.dao.FriendMapper;
 import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
 import com.project.workplatform.data.request.friend.DeleteFriendRequest;
+import com.project.workplatform.data.response.friend.FriendListResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -79,5 +80,9 @@ public class FriendService {
     public void delete(Integer userId, DeleteFriendRequest deleteFriendRequest) {
         mapper.deleteByFriend(userId,deleteFriendRequest.getFriendId());
         mapper.deleteByFriend(deleteFriendRequest.getFriendId(),userId);
+    }
+
+    public FriendListResponse getList(Integer userId) {
+        return mapper.selectFriendList(userId);
     }
 }

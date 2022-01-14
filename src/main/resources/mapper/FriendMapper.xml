@@ -79,4 +79,10 @@
         delete from friend
         where user_id = #{userId} and friend_id = #{friendId}
     </delete>
+    <select id="selectFriendList"
+            resultType="com.project.workplatform.data.response.friend.FriendListResponse">
+        select f.friend_id,ui.name from friend as f inner join user_info as ui
+        on f.friend_id = ui.user_id
+        where f.user_id = #{userId}
+    </select>
 </mapper>
