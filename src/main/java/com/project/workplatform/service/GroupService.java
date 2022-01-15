@@ -1,12 +1,16 @@
 package com.project.workplatform.service;
 
+import com.project.workplatform.dao.GroupApplyMapper;
 import com.project.workplatform.dao.GroupMapper;
+import com.project.workplatform.dao.UserGroupMapper;
+import com.project.workplatform.data.request.group.ApplyJoinGroupRequest;
 import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
 import com.project.workplatform.pojo.Group;
+import com.project.workplatform.pojo.GroupApply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,11 @@ public class GroupService {
     @Autowired
     private GroupMapper mapper;
 
+    @Autowired
+    private UserGroupMapper userGroupMapper;
+
+    @Autowired
+    private GroupApplyMapper groupApplyMapper;
 
     public void createGroup(Integer userId, CreateGroupRequest createGroupRequest) {
         Group group = new Group();
@@ -49,5 +58,16 @@ public class GroupService {
         group.setGroupName(updateGroupRequest.getGroupName());
         group.setClassify(updateGroupRequest.getClassify());
         mapper.updateByPrimaryKeySelective(group);
+    }
+
+    public void applyJoin(Integer userId, ApplyJoinGroupRequest applyJoinGroupRequest) {
+        if (userGroupMapper.selectByUserAndGroup(userId,applyJoinGroupRequest.getGroupId()) != null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
+        }
+        GroupApply apply = new GroupApply();
+        apply.setUserId(userId);
+        apply.setGroupId(applyJoinGroupRequest.getGroupId());
+        apply.setApplyMessage(applyJoinGroupRequest.getApplyMessage());
+        groupApplyMapper.insertSelective(apply);
     }
 }
