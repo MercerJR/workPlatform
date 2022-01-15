@@ -14,6 +14,10 @@ public enum CustomExceptionType {
      */
     NORMAL_ERROR(1,"普通错误"),
     /**
+     * 参数校验错误
+     */
+    PERMISSION_ERROR(2,"权限错误"),
+    /**
      * 未知错误
      */
     UNKNOWN_ERROR(9,"未知错误");

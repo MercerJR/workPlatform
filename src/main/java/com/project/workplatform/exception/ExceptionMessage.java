@@ -18,4 +18,8 @@ public interface ExceptionMessage {
     String ALREADY_FRIEND = "你们已经是好友了";
     String ALREADY_DEAL_APPLY = "你已经处理过该请求了";
 
+    String NOT_ADMIN = "你不是群聊的群主或管理员";
+
+    String PERMISSION_DENIED = "你没有权限处理该请求";
+
 }

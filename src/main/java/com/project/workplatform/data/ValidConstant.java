@@ -16,8 +16,15 @@ public interface ValidConstant {
     String PHONE_NUMBER_WRONG_FORMAT = "请输入正确的11位手机号格式";
     String NEW_PASSWORD_EMPTY = "新密码不能为空";
 
+
     //好友模块 校验常量
 
     String APPLY_MESSAGE_LENGTH = "申请消息不能超过50字符";
+
+
+    //群聊模块 校验常量
+
+    String GROUP_NAME_LENGTH = "群聊名称不得超过20个字符";
+    String GROUP_CLASSIFY_LENGTH = "群聊分类不得超过20个字符";
 
 }
