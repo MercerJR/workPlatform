@@ -1,14 +1,10 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.data.response.group.MemberResponse;
-import com.project.workplatform.pojo.UserGroup;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.project.workplatform.data.response.group.MemberResponse;import com.project.workplatform.pojo.UserGroup;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/15 17:25
+ * @Date: 2022/1/16 20:23
  */
 public interface UserGroupMapper {
     int deleteByPrimaryKey(Integer id);
