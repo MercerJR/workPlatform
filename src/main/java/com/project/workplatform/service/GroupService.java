@@ -4,16 +4,21 @@ import com.project.workplatform.dao.GroupApplyMapper;
 import com.project.workplatform.dao.GroupMapper;
 import com.project.workplatform.dao.UserGroupMapper;
 import com.project.workplatform.data.request.group.ApplyJoinGroupRequest;
+import com.project.workplatform.data.request.group.ApproveApplyRequest;
 import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
+import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
 import com.project.workplatform.pojo.Group;
 import com.project.workplatform.pojo.GroupApply;
+import com.project.workplatform.pojo.UserGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -49,10 +54,9 @@ public class GroupService {
     }
 
     public void updateGroupInfo(Integer userId, UpdateGroupRequest updateGroupRequest) {
-        //TODO 除了校验用户是否为群聊创始人身份外，还考虑是否需要加入管理员身份的校验
-        if (mapper.selectCreatorByGroup(updateGroupRequest.getGroupId()) != userId){
-            throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_ADMIN);
-        }
+        //校验用户是否为该群聊的管理员
+        checkAdmin(userId,updateGroupRequest.getGroupId());
+
         Group group = new Group();
         group.setId(updateGroupRequest.getGroupId());
         group.setGroupName(updateGroupRequest.getGroupName());
@@ -61,13 +65,53 @@ public class GroupService {
     }
 
     public void applyJoin(Integer userId, ApplyJoinGroupRequest applyJoinGroupRequest) {
-        if (userGroupMapper.selectByUserAndGroup(userId,applyJoinGroupRequest.getGroupId()) != null){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
-        }
+        //校验用户是否已经是群聊成员
+        checkUserInGroup(userId,applyJoinGroupRequest.getGroupId());
         GroupApply apply = new GroupApply();
         apply.setUserId(userId);
         apply.setGroupId(applyJoinGroupRequest.getGroupId());
         apply.setApplyMessage(applyJoinGroupRequest.getApplyMessage());
         groupApplyMapper.insertSelective(apply);
+    }
+
+    public List<ApplyUserResponse> getApplyList(Integer userId, Integer groupId) {
+        //校验用户是否为该群聊的管理员
+        checkAdmin(userId,groupId);
+        return groupApplyMapper.selectApplyList(groupId);
+    }
+
+    private void checkAdmin(int userId,int groupId){
+        //TODO 除了校验用户是否为群聊创始人身份外，还考虑是否需要加入管理员身份的校验
+        if (mapper.selectCreatorByGroup(groupId) != userId){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_ADMIN);
+        }
+    }
+
+    public void approveApply(Integer userId, ApproveApplyRequest approveApplyRequest) {
+        GroupApply groupApply = groupApplyMapper.selectByPrimaryKey(approveApplyRequest.getApplyId());
+        //检查请求是否已经被处理过
+        if (groupApply.getTag() != 0){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.APPLY_ALREADY_DEAL);
+        }
+        //校验用户是否为该群聊的管理员
+        checkAdmin(userId,groupApply.getGroupId());
+
+        if (approveApplyRequest.isResponse()){
+            //校验用户是否已经是群聊成员
+            checkUserInGroup(groupApply.getUserId(),groupApply.getGroupId());
+            UserGroup userGroup = new UserGroup();
+            userGroup.setUserId(groupApply.getUserId());
+            userGroup.setGroupId(groupApply.getGroupId());
+            userGroupMapper.insertSelective(userGroup);
+        }
+        //更新apply
+        int tag = approveApplyRequest.isResponse() ? 1 : 2;
+        groupApplyMapper.updateTag(approveApplyRequest.getApplyId(),tag);
+    }
+
+    private void checkUserInGroup(int userId,int groupId){
+        if (userGroupMapper.selectByUserAndGroup(userId,groupId) != null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
+        }
     }
 }

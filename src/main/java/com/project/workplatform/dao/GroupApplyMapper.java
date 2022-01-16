@@ -1,6 +1,10 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.pojo.GroupApply;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -18,4 +22,8 @@ public interface GroupApplyMapper {
     int updateByPrimaryKeySelective(GroupApply record);
 
     int updateByPrimaryKey(GroupApply record);
+
+    List<ApplyUserResponse> selectApplyList(Integer groupId);
+
+    int updateTag(@Param("applyId") int applyId, @Param("tag") int tag);
 }
