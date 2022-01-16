@@ -20,4 +20,5 @@ public interface GroupMapper {
     int updateByPrimaryKey(Group record);
 
     int selectCreatorByGroup(int groupId);
+
 }

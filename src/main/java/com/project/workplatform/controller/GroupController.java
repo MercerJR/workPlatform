@@ -6,6 +6,7 @@ import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
+import com.project.workplatform.data.response.group.GroupInfoResponse;
 import com.project.workplatform.service.GroupService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,12 @@ public class GroupController {
         Integer userId = JwtUtil.getId(request);
         service.approveApply(userId,approveApplyRequest);
         return new Response().success();
+    }
+
+    @GetMapping(value = "show_group_info/{group_id}",produces = "application/json")
+    public Response showGroupInfo(@PathVariable("group_id")int groupId){
+        GroupInfoResponse groupInfo = service.getGroupInfo(groupId);
+        return new Response().success(groupInfo);
     }
 
 

@@ -11,4 +11,7 @@ public interface Constant {
 
     String JWT_TOKEN = "token";
 
+    String INNER_GROUP = "工作室内部群聊";
+    String OUTSIDE_GROUP = "外部群聊";
+
 }

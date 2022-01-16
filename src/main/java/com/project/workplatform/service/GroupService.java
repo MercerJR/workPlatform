@@ -3,17 +3,20 @@ package com.project.workplatform.service;
 import com.project.workplatform.dao.GroupApplyMapper;
 import com.project.workplatform.dao.GroupMapper;
 import com.project.workplatform.dao.UserGroupMapper;
+import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.request.group.ApplyJoinGroupRequest;
 import com.project.workplatform.data.request.group.ApproveApplyRequest;
 import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
+import com.project.workplatform.data.response.group.GroupInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
 import com.project.workplatform.pojo.Group;
 import com.project.workplatform.pojo.GroupApply;
 import com.project.workplatform.pojo.UserGroup;
+import com.project.workplatform.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,5 +116,19 @@ public class GroupService {
         if (userGroupMapper.selectByUserAndGroup(userId,groupId) != null){
             throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
         }
+    }
+
+    public GroupInfoResponse getGroupInfo(int groupId) {
+        Group group = mapper.selectByPrimaryKey(groupId);
+        if (group == null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.GROUP_NOT_EXIST);
+        }
+        GroupInfoResponse groupInfo = new GroupInfoResponse();
+        groupInfo.setGroupName(group.getGroupName());
+        groupInfo.setType(group.getType() == 0 ? Constant.OUTSIDE_GROUP : Constant.INNER_GROUP);
+        groupInfo.setGroupName(group.getGroupName());
+        groupInfo.setClassify(group.getClassify());
+        groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime()));
+        return groupInfo;
     }
 }
