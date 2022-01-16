@@ -85,8 +85,7 @@ public class GroupService {
     }
 
     private void checkAdmin(int userId,int groupId){
-        //TODO 除了校验用户是否为群聊创始人身份外，还考虑是否需要加入管理员身份的校验
-        if (mapper.selectCreatorByGroup(groupId) != userId){
+        if(userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId() == 0){
             throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_ADMIN);
         }
     }
