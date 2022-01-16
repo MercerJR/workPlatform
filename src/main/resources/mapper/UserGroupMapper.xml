@@ -88,4 +88,9 @@
         select * from user_group
         where user_id = #{userId} and group_id = #{groupId}
     </select>
+    <select id="selectMemberByGroup" resultType="com.project.workplatform.data.response.group.MemberResponse">
+        select ui.user_id as userId,ur.nickname,ui.name from user_group as ur inner join user_info as ui
+        on ur.user_id = ui.user_id
+        where ur.group_id = #{groupId}
+    </select>
 </mapper>

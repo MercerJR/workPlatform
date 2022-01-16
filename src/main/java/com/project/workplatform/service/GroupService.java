@@ -10,6 +10,7 @@ import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.data.response.group.GroupInfoResponse;
+import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -130,5 +132,12 @@ public class GroupService {
         groupInfo.setClassify(group.getClassify());
         groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime()));
         return groupInfo;
+    }
+
+    public List<MemberResponse> getMemberList(Integer userId, int groupId) {
+        if (userGroupMapper.selectByUserAndGroup(userId,groupId) == null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.NOT_IN_GROUP);
+        }
+        return userGroupMapper.selectMemberByGroup(groupId);
     }
 }

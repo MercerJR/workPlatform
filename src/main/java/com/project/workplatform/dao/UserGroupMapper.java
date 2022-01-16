@@ -1,7 +1,10 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.pojo.UserGroup;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -21,4 +24,6 @@ public interface UserGroupMapper {
     int updateByPrimaryKey(UserGroup record);
 
     UserGroup selectByUserAndGroup(@Param("userId") Integer userId, @Param("groupId") int groupId);
+
+    List<MemberResponse> selectMemberByGroup(int groupId);
 }
