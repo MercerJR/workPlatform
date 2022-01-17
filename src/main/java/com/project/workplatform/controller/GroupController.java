@@ -7,6 +7,7 @@ import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.data.response.group.GroupInfoResponse;
+import com.project.workplatform.data.response.group.GroupResponse;
 import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.service.GroupService;
 import com.project.workplatform.util.JwtUtil;
@@ -75,6 +76,13 @@ public class GroupController {
     public Response showMemberList(@PathVariable("group_id")int groupId,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         List<MemberResponse> list = service.getMemberList(userId,groupId);
+        return new Response().success(list);
+    }
+
+    @GetMapping(value = "/show_group_list",produces = "application/json")
+    public Response showGroupList(HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        List<GroupResponse> list = service.getGroupList(userId);
         return new Response().success(list);
     }
 

@@ -10,6 +10,7 @@ import com.project.workplatform.data.request.group.CreateGroupRequest;
 import com.project.workplatform.data.request.group.UpdateGroupRequest;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.data.response.group.GroupInfoResponse;
+import com.project.workplatform.data.response.group.GroupResponse;
 import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
@@ -137,5 +138,9 @@ public class GroupService {
             throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.NOT_IN_GROUP);
         }
         return userGroupMapper.selectMemberByGroup(groupId);
+    }
+
+    public List<GroupResponse> getGroupList(Integer userId) {
+        return userGroupMapper.selectByUser(userId);
     }
 }
