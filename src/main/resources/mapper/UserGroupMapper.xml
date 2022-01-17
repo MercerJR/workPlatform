@@ -109,4 +109,9 @@
         on ug.group_id = g.id
         where ug.user_id = #{userId}
     </select>
+    <update id="updateRoleByUserAndGroup">
+        update user_group
+        set role_id = #{roleId}
+        where user_id = #{userId} and group_id = #{groupId}
+    </update>
 </mapper>

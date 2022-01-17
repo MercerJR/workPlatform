@@ -1,9 +1,6 @@
 package com.project.workplatform.controller;
 
-import com.project.workplatform.data.request.group.ApplyJoinGroupRequest;
-import com.project.workplatform.data.request.group.ApproveApplyRequest;
-import com.project.workplatform.data.request.group.CreateGroupRequest;
-import com.project.workplatform.data.request.group.UpdateGroupRequest;
+import com.project.workplatform.data.request.group.*;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.data.response.group.GroupInfoResponse;
@@ -84,6 +81,13 @@ public class GroupController {
         Integer userId = JwtUtil.getId(request);
         List<GroupResponse> list = service.getGroupList(userId);
         return new Response().success(list);
+    }
+
+    @PostMapping(value = "/update_role",produces = "application/json")
+    public Response updateRole(@Valid @RequestBody UpdateRoleRequest updateRoleRequest, HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.updateRole(userId,updateRoleRequest);
+        return new Response().success();
     }
 
 }

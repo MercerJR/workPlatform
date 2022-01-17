@@ -25,4 +25,6 @@ public interface UserGroupMapper {
     List<MemberResponse> selectMemberByGroup(int groupId);
 
     List<GroupResponse> selectByUser(Integer userId);
+
+    void updateRoleByUserAndGroup(@Param("roleId") int roleId,@Param("userId") int userId,@Param("groupId") int groupId);
 }

@@ -19,10 +19,13 @@ public interface ExceptionMessage {
     String ALREADY_DEAL_APPLY = "你已经处理过该请求了";
 
     String NOT_ADMIN = "你不是群聊的群主或管理员";
+    String NOT_CREATOR = "你不是群主";
     String ALREADY_GROUP_MEMBER = "你已经是群聊成员了";
     String APPLY_ALREADY_DEAL = "该请求已被处理过了";
     String GROUP_NOT_EXIST = "该群聊不存在";
     String NOT_IN_GROUP = "你不是该群聊的成员";
+    String USER_NOT_IN_GROUP = "该用户不是该群聊的成员";
+    String USER_ALREADY_ADMIN = "该用户已经是群聊管理员了";
 
     String PERMISSION_DENIED = "你没有权限处理该请求";
 

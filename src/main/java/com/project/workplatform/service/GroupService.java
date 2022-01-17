@@ -4,10 +4,8 @@ import com.project.workplatform.dao.GroupApplyMapper;
 import com.project.workplatform.dao.GroupMapper;
 import com.project.workplatform.dao.UserGroupMapper;
 import com.project.workplatform.data.Constant;
-import com.project.workplatform.data.request.group.ApplyJoinGroupRequest;
-import com.project.workplatform.data.request.group.ApproveApplyRequest;
-import com.project.workplatform.data.request.group.CreateGroupRequest;
-import com.project.workplatform.data.request.group.UpdateGroupRequest;
+import com.project.workplatform.data.enums.GroupRoleEnum;
+import com.project.workplatform.data.request.group.*;
 import com.project.workplatform.data.response.group.ApplyUserResponse;
 import com.project.workplatform.data.response.group.GroupInfoResponse;
 import com.project.workplatform.data.response.group.GroupResponse;
@@ -59,9 +57,10 @@ public class GroupService {
     }
 
     public void updateGroupInfo(Integer userId, UpdateGroupRequest updateGroupRequest) {
-        //校验用户是否为该群聊的管理员
-        checkAdmin(userId,updateGroupRequest.getGroupId());
-
+        //校验用户是否为该群的群主
+        if (!checkCreator(userId,updateGroupRequest.getGroupId())){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_CREATOR);
+        }
         Group group = new Group();
         group.setId(updateGroupRequest.getGroupId());
         group.setGroupName(updateGroupRequest.getGroupName());
@@ -71,7 +70,9 @@ public class GroupService {
 
     public void applyJoin(Integer userId, ApplyJoinGroupRequest applyJoinGroupRequest) {
         //校验用户是否已经是群聊成员
-        checkUserInGroup(userId,applyJoinGroupRequest.getGroupId());
+        if (checkUserInGroup(userId,applyJoinGroupRequest.getGroupId())){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
+        }
         GroupApply apply = new GroupApply();
         apply.setUserId(userId);
         apply.setGroupId(applyJoinGroupRequest.getGroupId());
@@ -81,14 +82,10 @@ public class GroupService {
 
     public List<ApplyUserResponse> getApplyList(Integer userId, Integer groupId) {
         //校验用户是否为该群聊的管理员
-        checkAdmin(userId,groupId);
-        return groupApplyMapper.selectApplyList(groupId);
-    }
-
-    private void checkAdmin(int userId,int groupId){
-        if(userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId() == 0){
-            throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_ADMIN);
+        if (!checkAdmin(userId,groupId)){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_ADMIN);
         }
+        return groupApplyMapper.selectApplyList(groupId);
     }
 
     public void approveApply(Integer userId, ApproveApplyRequest approveApplyRequest) {
@@ -98,11 +95,15 @@ public class GroupService {
             throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.APPLY_ALREADY_DEAL);
         }
         //校验用户是否为该群聊的管理员
-        checkAdmin(userId,groupApply.getGroupId());
+        if (!checkAdmin(userId,groupApply.getGroupId())){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_ADMIN);
+        }
 
         if (approveApplyRequest.isResponse()){
             //校验用户是否已经是群聊成员
-            checkUserInGroup(groupApply.getUserId(),groupApply.getGroupId());
+            if (checkUserInGroup(groupApply.getUserId(),groupApply.getGroupId())){
+                throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
+            }
             UserGroup userGroup = new UserGroup();
             userGroup.setUserId(groupApply.getUserId());
             userGroup.setGroupId(groupApply.getGroupId());
@@ -111,12 +112,6 @@ public class GroupService {
         //更新apply
         int tag = approveApplyRequest.isResponse() ? 1 : 2;
         groupApplyMapper.updateTag(approveApplyRequest.getApplyId(),tag);
-    }
-
-    private void checkUserInGroup(int userId,int groupId){
-        if (userGroupMapper.selectByUserAndGroup(userId,groupId) != null){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.ALREADY_GROUP_MEMBER);
-        }
     }
 
     public GroupInfoResponse getGroupInfo(int groupId) {
@@ -143,4 +138,30 @@ public class GroupService {
     public List<GroupResponse> getGroupList(Integer userId) {
         return userGroupMapper.selectByUser(userId);
     }
+
+    public void updateRole(Integer userId, UpdateRoleRequest updateRoleRequest) {
+        //检查操作用户是不是群主
+        if (!checkCreator(userId,updateRoleRequest.getGroupId())){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_CREATOR);
+        }
+        //检查被操作的用户是否还在群聊中
+        if (!checkUserInGroup(updateRoleRequest.getMemberId(),updateRoleRequest.getGroupId())){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_NOT_IN_GROUP);
+        }
+        userGroupMapper.updateRoleByUserAndGroup(updateRoleRequest.getRoleId(),
+                updateRoleRequest.getMemberId(),updateRoleRequest.getGroupId());
+    }
+
+    private boolean checkUserInGroup(int userId,int groupId){
+        return userGroupMapper.selectByUserAndGroup(userId, groupId) != null;
+    }
+
+    private boolean checkAdmin(int userId,int groupId){
+        return userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId() != GroupRoleEnum.MEMBER.getRoleId();
+    }
+
+    private boolean checkCreator(int userId,int groupId){
+        return userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId() == GroupRoleEnum.CREATOR.getRoleId();
+    }
+
 }
