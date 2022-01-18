@@ -27,4 +27,9 @@ public interface ValidConstant {
     String GROUP_NAME_LENGTH = "群聊名称不得超过20个字符";
     String GROUP_CLASSIFY_LENGTH = "群聊分类不得超过20个字符";
 
+
+    //话题圈模块 校验常量
+
+    String TITLE_LENGTH = "标题不得超过20个字符";
+
 }

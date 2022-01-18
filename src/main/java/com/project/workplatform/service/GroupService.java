@@ -124,7 +124,7 @@ public class GroupService {
         groupInfo.setType(group.getType() == 0 ? Constant.OUTSIDE_GROUP : Constant.INNER_GROUP);
         groupInfo.setGroupName(group.getGroupName());
         groupInfo.setClassify(group.getClassify());
-        groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime()));
+        groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime(),DateFormatUtil.DAY_FORMAT));
         return groupInfo;
     }
 
