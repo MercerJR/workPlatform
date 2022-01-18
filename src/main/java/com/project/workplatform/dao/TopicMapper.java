@@ -22,4 +22,6 @@ public interface TopicMapper {
     int updateByPrimaryKey(Topic record);
 
     List<Topic> selectByStudio(int studioId);
+
+    int updateLikeNumByPrimaryKey(int id);
 }

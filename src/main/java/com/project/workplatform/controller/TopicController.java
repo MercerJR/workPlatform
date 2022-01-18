@@ -1,7 +1,9 @@
 package com.project.workplatform.controller;
 
+import com.project.workplatform.data.request.topic.PublishCommentRequest;
 import com.project.workplatform.data.request.topic.PublishTopicRequest;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.Topic.CommentResponse;
 import com.project.workplatform.data.response.Topic.TopicResponse;
 import com.project.workplatform.service.TopicService;
 import com.project.workplatform.util.JwtUtil;
@@ -39,6 +41,24 @@ public class TopicController {
         return new Response().success(list);
     }
 
+    @PostMapping(value = "/like",produces = "application/json")
+    public Response like(@RequestBody int topicId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.like(userId,topicId);
+        return new Response().success();
+    }
 
+    @PostMapping(value = "/comment",produces = "application/json")
+    public Response comment(@Valid @RequestBody PublishCommentRequest publishCommentRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.comment(userId,publishCommentRequest);
+        return new Response().success();
+    }
+
+    @GetMapping(value = "/show_comment_list/{topic_id}",produces = "application/json")
+    public Response showCommentList(@PathVariable("topic_id")int topicId){
+        List<CommentResponse> list = service.getCommentList(topicId);
+        return new Response().success(list);
+    }
 
 }

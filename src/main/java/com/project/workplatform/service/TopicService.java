@@ -1,9 +1,13 @@
 package com.project.workplatform.service;
 
+import com.project.workplatform.dao.TopicCommentMapper;
 import com.project.workplatform.dao.TopicMapper;
+import com.project.workplatform.data.request.topic.PublishCommentRequest;
 import com.project.workplatform.data.request.topic.PublishTopicRequest;
+import com.project.workplatform.data.response.Topic.CommentResponse;
 import com.project.workplatform.data.response.Topic.TopicResponse;
 import com.project.workplatform.pojo.Topic;
+import com.project.workplatform.pojo.TopicComment;
 import com.project.workplatform.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,9 @@ public class TopicService {
 
     @Autowired
     private TopicMapper mapper;
+
+    @Autowired
+    private TopicCommentMapper commentMapper;
 
     public void publicTopic(Integer userId, PublishTopicRequest publishTopicRequest) {
         Topic topic = new Topic();
@@ -57,9 +64,28 @@ public class TopicService {
             record.setCommentNum(topic.getCommentNum());
             record.setCreateTime(DateFormatUtil.getStringDateByDate(
                     topic.getCreateTime(),DateFormatUtil.MINUTE_FORMAT));
+            //TODO 还需要获取该用户是否为该话题点了赞
+
             topicList.add(record);
         }
         return topicList;
+    }
+
+    public void like(Integer userId, int topicId) {
+        mapper.updateLikeNumByPrimaryKey(topicId);
+    }
+
+    public void comment(Integer userId, PublishCommentRequest publishCommentRequest) {
+        TopicComment comment = new TopicComment();
+        comment.setTopicId(publishCommentRequest.getTopicId());
+        comment.setPublisherId(userId);
+        comment.setTargetId(publishCommentRequest.getTargetId());
+        comment.setCommentContent(publishCommentRequest.getCommentContent());
+        commentMapper.insertSelective(comment);
+    }
+
+    public List<CommentResponse> getCommentList(int topicId) {
+        return commentMapper.selectByTopicId(topicId);
     }
 
     private String convertListToString(List<String> list){

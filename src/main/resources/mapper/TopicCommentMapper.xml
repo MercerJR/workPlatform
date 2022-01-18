@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.workplatform.dao.TopicCommentMapper">
+    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.TopicComment">
+        <!--@mbg.generated-->
+        <!--@Table topic_comment-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
+        <result column="publisher_id" jdbcType="INTEGER" property="publisherId"/>
+        <result column="target_id" jdbcType="INTEGER" property="targetId"/>
+        <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, topic_id, publisher_id, target_id, comment_content
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from topic_comment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from topic_comment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.TopicComment"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into topic_comment (topic_id, publisher_id, target_id,
+        comment_content)
+        values (#{topicId,jdbcType=INTEGER}, #{publisherId,jdbcType=INTEGER}, #{targetId,jdbcType=INTEGER},
+        #{commentContent,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.project.workplatform.pojo.TopicComment" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into topic_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="topicId != null">
+                topic_id,
+            </if>
+            <if test="publisherId != null">
+                publisher_id,
+            </if>
+            <if test="targetId != null">
+                target_id,
+            </if>
+            <if test="commentContent != null">
+                comment_content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="topicId != null">
+                #{topicId,jdbcType=INTEGER},
+            </if>
+            <if test="publisherId != null">
+                #{publisherId,jdbcType=INTEGER},
+            </if>
+            <if test="targetId != null">
+                #{targetId,jdbcType=INTEGER},
+            </if>
+            <if test="commentContent != null">
+                #{commentContent,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.TopicComment">
+        <!--@mbg.generated-->
+        update topic_comment
+        <set>
+            <if test="topicId != null">
+                topic_id = #{topicId,jdbcType=INTEGER},
+            </if>
+            <if test="publisherId != null">
+                publisher_id = #{publisherId,jdbcType=INTEGER},
+            </if>
+            <if test="targetId != null">
+                target_id = #{targetId,jdbcType=INTEGER},
+            </if>
+            <if test="commentContent != null">
+                comment_content = #{commentContent,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.TopicComment">
+        <!--@mbg.generated-->
+        update topic_comment
+        set topic_id = #{topicId,jdbcType=INTEGER},
+        publisher_id = #{publisherId,jdbcType=INTEGER},
+        target_id = #{targetId,jdbcType=INTEGER},
+        comment_content = #{commentContent,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByTopicId" resultType="com.project.workplatform.data.response.Topic.CommentResponse">
+        select tc.publisher_id as publisherId,ui1.name as publisherName,
+        tc.target_id as targetId,ui2.name as targetName,tc.comment_content as commentContent
+        from topic_comment as tc inner join user_info as ui1 inner join user_info as ui2
+        on tc.publisher_id = ui1.user_id and tc.target_id = ui2.user_id
+        where tc.topic_id = #{topicId}
+    </select>
+
+</mapper>

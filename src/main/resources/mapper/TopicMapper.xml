@@ -159,4 +159,9 @@
         select * from topic
         where studio_id = #{studioId}
     </select>
+    <update id="updateLikeNumByPrimaryKey">
+        update topic
+        set like_num = like_num + 1
+        where id = #{id}
+    </update>
 </mapper>
