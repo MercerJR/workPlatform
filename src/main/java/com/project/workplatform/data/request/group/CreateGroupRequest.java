@@ -4,6 +4,7 @@ import com.project.workplatform.data.ValidConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class CreateGroupRequest {
 
+    @NotBlank(message = ValidConstant.GROUP_NAME_EMPTY)
     @Size(max = 20,message = ValidConstant.GROUP_NAME_LENGTH)
     private String groupName;
 

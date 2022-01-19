@@ -24,6 +24,7 @@ public interface ValidConstant {
 
     //群聊模块 校验常量
 
+    String GROUP_NAME_EMPTY = "群聊名称不能为空";
     String GROUP_NAME_LENGTH = "群聊名称不得超过20个字符";
     String GROUP_CLASSIFY_LENGTH = "群聊分类不得超过20个字符";
 
@@ -31,5 +32,13 @@ public interface ValidConstant {
     //话题圈模块 校验常量
 
     String TITLE_LENGTH = "标题不得超过20个字符";
+    String COMMENT_EMPTY = "评论内容不能为空";
+    String CONTENT_EMPTY = "内容不能为空";
+
+
+    //工作室 校验常量
+
+    String STUDIO_NAME_EMPTY = "工作室名称不能为空";
+    String STUDIO_NAME_LENGTH = "工作室名称不能超过20个字符";
 
 }

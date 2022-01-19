@@ -44,9 +44,9 @@ public class UserService {
         return JwtUtil.createToken(user);
     }
 
-    public void updateUserInfo(UserInfoRequest request) {
-        UserInfo info = infoMapper.selectByUser(request.getUserId());
-        info.setUserId(request.getUserId());
+    public void updateUserInfo(int userId,UserInfoRequest request) {
+        UserInfo info = infoMapper.selectByUser(userId);
+        info.setUserId(userId);
         info.setDescribe(request.getDescribe());
         info.setGender(request.getGender());
         info.setHobby(request.getHobby());

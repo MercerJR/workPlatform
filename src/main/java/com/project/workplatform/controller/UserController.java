@@ -41,8 +41,7 @@ public class UserController {
     @PostMapping(value = "/update_info",produces = "application/json")
     public Response updateInfo(@Valid @RequestBody UserInfoRequest userInfoRequest, HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
-        userInfoRequest.setUserId(userId);
-        service.updateUserInfo(userInfoRequest);
+        service.updateUserInfo(userId,userInfoRequest);
         return new Response().success();
     }
 

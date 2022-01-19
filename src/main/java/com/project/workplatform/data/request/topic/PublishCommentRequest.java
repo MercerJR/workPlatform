@@ -1,8 +1,10 @@
 package com.project.workplatform.data.request.topic;
 
+import com.project.workplatform.data.ValidConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @Author: Mercer JR
@@ -17,6 +19,7 @@ public class PublishCommentRequest {
 
     private int targetId;
 
+    @NotBlank(message = ValidConstant.COMMENT_EMPTY)
     private String commentContent;
 
 }

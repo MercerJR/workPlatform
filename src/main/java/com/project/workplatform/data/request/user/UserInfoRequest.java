@@ -15,8 +15,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserInfoRequest {
 
-    private Integer userId;
-
     @Size(max = 2,message = "请输入正确的性别，如“男”、“女”")
     private String gender;
 

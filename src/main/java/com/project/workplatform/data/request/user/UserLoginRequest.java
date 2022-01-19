@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserLoginRequest {
 
-    @NotEmpty(message = ValidConstant.PHONE_NUMBER_EMPTY)
+    @NotBlank(message = ValidConstant.PHONE_NUMBER_EMPTY)
     @IsPhoneNumber
     private String phoneNumber;
 
