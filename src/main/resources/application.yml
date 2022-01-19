@@ -20,6 +20,7 @@ spring:
     port: 6379
     password: Justmyself957!
     host: 82.156.194.208
+    database: 1
     lettuce:
       pool:
         max-active: 8

@@ -2,6 +2,7 @@ package com.project.workplatform.service;
 
 import com.project.workplatform.dao.TopicCommentMapper;
 import com.project.workplatform.dao.TopicMapper;
+import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.request.topic.PublishCommentRequest;
 import com.project.workplatform.data.request.topic.PublishTopicRequest;
 import com.project.workplatform.data.response.Topic.CommentResponse;
@@ -10,6 +11,7 @@ import com.project.workplatform.pojo.Topic;
 import com.project.workplatform.pojo.TopicComment;
 import com.project.workplatform.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -32,6 +34,9 @@ public class TopicService {
 
     @Autowired
     private TopicCommentMapper commentMapper;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     public void publicTopic(Integer userId, PublishTopicRequest publishTopicRequest) {
         Topic topic = new Topic();
@@ -60,19 +65,26 @@ public class TopicService {
             record.setContent(topic.getContent());
             record.setImgList(convertStringToList(topic.getImg()));
             record.setLabelList(convertStringToList(topic.getLabel()));
-            record.setLikeNum(topic.getLikeNum());
+            record.setLikeNum(getLikeNum(topic.getId()));
             record.setCommentNum(topic.getCommentNum());
             record.setCreateTime(DateFormatUtil.getStringDateByDate(
                     topic.getCreateTime(),DateFormatUtil.MINUTE_FORMAT));
-            //TODO 还需要获取该用户是否为该话题点了赞
+            record.setLike(isLike(userId,topic.getId()));
 
             topicList.add(record);
         }
         return topicList;
     }
 
-    public void like(Integer userId, int topicId) {
-        mapper.updateLikeNumByPrimaryKey(topicId);
+    public void likeOrNot(Integer userId, int topicId) {
+        String redisKey = Constant.REDIS_LIKE_KEY_PREFIX + topicId;
+        //检查用户是否点赞
+        boolean isLike = isLike(userId,topicId);
+        if (isLike){
+            redisTemplate.opsForSet().remove(redisKey,userId);
+        }else {
+            redisTemplate.opsForSet().add(redisKey,userId);
+        }
     }
 
     public void comment(Integer userId, PublishCommentRequest publishCommentRequest) {
@@ -86,6 +98,21 @@ public class TopicService {
 
     public List<CommentResponse> getCommentList(int topicId) {
         return commentMapper.selectByTopicId(topicId);
+    }
+
+    /**
+     * 点赞数目前不可能超过2^16，因此转换为int类型返回即可
+     */
+    private int getLikeNum(int topicId){
+        String redisKey = Constant.REDIS_LIKE_KEY_PREFIX + topicId;
+        Long likeCount = redisTemplate.opsForSet().size(redisKey);
+        return likeCount == null ? 0 : Math.toIntExact(likeCount);
+    }
+
+    private boolean isLike(int userId,int topicId){
+        String redisKey = Constant.REDIS_LIKE_KEY_PREFIX + topicId;
+        Boolean like = redisTemplate.opsForSet().isMember(redisKey, userId);
+        return like == null ? false : like;
     }
 
     private String convertListToString(List<String> list){

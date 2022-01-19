@@ -33,4 +33,6 @@ public class TopicResponse {
 
     private String createTime;
 
+    private boolean like;
+
 }

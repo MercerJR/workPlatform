@@ -41,10 +41,10 @@ public class TopicController {
         return new Response().success(list);
     }
 
-    @PostMapping(value = "/like",produces = "application/json")
-    public Response like(@RequestBody int topicId,HttpServletRequest request){
+    @PostMapping(value = "/like_or_not",produces = "application/json")
+    public Response likeOrNot(@RequestParam("topic_id") Integer topicId,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
-        service.like(userId,topicId);
+        service.likeOrNot(userId,topicId);
         return new Response().success();
     }
 

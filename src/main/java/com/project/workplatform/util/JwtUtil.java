@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class JwtUtil {
 
-    private static final long EXPIRE_DATE = 60 * 60 * 1000;
+    private static final long EXPIRE_DATE = 24 * 60 * 60 * 1000;
 
     public static String createToken(User user) {
         String token = "";
