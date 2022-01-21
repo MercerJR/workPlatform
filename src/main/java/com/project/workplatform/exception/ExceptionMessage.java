@@ -29,4 +29,9 @@ public interface ExceptionMessage {
 
     String PERMISSION_DENIED = "你没有权限处理该请求";
 
+    String INVALID_INVITE_CODE = "无效的邀请码";
+    String NOT_STUDIO_SUPER_ADMIN = "你不是工作室的超级管理员";
+    String NOT_STUDIO_ADMIN = "你不是工作室的管理员";
+    String NOT_STUDIO_CREATOR = "你不是工作室的创始人";
+
 }

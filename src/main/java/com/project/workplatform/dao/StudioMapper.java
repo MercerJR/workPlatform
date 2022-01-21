@@ -1,10 +1,11 @@
 package com.project.workplatform.dao;
 
 import com.project.workplatform.pojo.Studio;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/19 17:17
+ * @Date: 2022/1/21 14:16
  */
 public interface StudioMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +19,8 @@ public interface StudioMapper {
     int updateByPrimaryKeySelective(Studio record);
 
     int updateByPrimaryKey(Studio record);
+
+    int selectCreatorByPrimaryKey(int id);
+
+    int updateInviteCodeByPrimaryKey(@Param("inviteCode") String inviteCode, @Param("id") int id);
 }

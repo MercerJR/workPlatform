@@ -1,15 +1,15 @@
 package com.project.workplatform.controller;
 
+import com.project.workplatform.data.request.studio.CheckInviteCodeRequest;
 import com.project.workplatform.data.request.studio.CreateStudioRequest;
+import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
+import com.project.workplatform.data.request.studio.JoinStudioRequest;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,6 +30,26 @@ public class StudioController {
     public Response create(@Valid @RequestBody CreateStudioRequest createStudioRequest, HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         service.create(userId,createStudioRequest);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/init_invite_code",produces = "application/json")
+    public Response initInviteCode(@Valid @RequestBody InitInviteCodeRequest initInviteCodeRequest, HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        String inviteCode = service.initInviteCode(userId, initInviteCodeRequest);
+        return new Response().success(inviteCode);
+    }
+
+    @PostMapping(value = "/check_invite_code",produces = "application/json")
+    public Response checkInviteCode(@Valid @RequestBody CheckInviteCodeRequest checkInviteCodeRequest){
+        Integer studioId = service.checkInviteCode(checkInviteCodeRequest.getInviteCode());
+        return new Response().success(studioId);
+    }
+
+    @PostMapping(value = "/apply_join",produces = "application/json")
+    public Response applyJoin(@Valid @RequestBody JoinStudioRequest joinStudioRequest, HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.applyJoin(userId,joinStudioRequest);
         return new Response().success();
     }
 

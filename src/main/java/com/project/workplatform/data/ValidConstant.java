@@ -40,5 +40,8 @@ public interface ValidConstant {
 
     String STUDIO_NAME_EMPTY = "工作室名称不能为空";
     String STUDIO_NAME_LENGTH = "工作室名称不能超过20个字符";
+    String INVALID_CODE_EMPTY = "请输入邀请码";
+    String INVALID_CODE_LENGTH = "请输入有效的8位邀请码";
+    String STUDIO_APPLY_MESSAGE_LENGTH = "申请消息不能超过50个字符";
 
 }

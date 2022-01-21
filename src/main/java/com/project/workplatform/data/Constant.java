@@ -14,5 +14,6 @@ public interface Constant {
     String OUTSIDE_GROUP = "外部群聊";
 
     String REDIS_LIKE_KEY_PREFIX = "like:";
+    String REDIS_INVITE_CODE_KEY_PREFIX = "inviteCode:";
 
 }

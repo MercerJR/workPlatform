@@ -7,27 +7,24 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/21 14:16
+ * @Date: 2022/1/21 11:30
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Studio implements Serializable {
+public class StudioApply implements Serializable {
     private Integer id;
 
-    private String studioName;
+    private Integer userId;
 
-    private String studioAbbreviation;
+    private Integer studioId;
 
-    private Integer creatorId;
+    private String applyMessage;
 
-    private String classify;
-
-    private String describe;
-
-    private Integer peopleNumber;
-
-    private String inviteCode;
+    /**
+    * 0：未处理；1：同意；2：拒绝
+    */
+    private Integer tag;
 
     private static final long serialVersionUID = 1L;
 }
