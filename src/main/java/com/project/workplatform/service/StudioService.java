@@ -8,6 +8,7 @@ import com.project.workplatform.data.request.studio.ApplyJoinStudioRequest;
 import com.project.workplatform.data.request.studio.CreateStudioRequest;
 import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
 import com.project.workplatform.data.request.studio.InviteJoinStudioRequest;
+import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -117,6 +118,13 @@ public class StudioService {
         applyMapper.insertSelective(apply);
     }
 
+    public StudioInfoResponse getStudioInfo(int userId,int studioId) {
+        if (!checkMember(userId, studioId)){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_MEMBER);
+        }
+        return mapper.selectStudioInfoByPrimaryKey(studioId);
+    }
+
     private boolean checkCreator(int userId,int studioId){
         return mapper.selectCreatorByPrimaryKey(studioId) == userId;
     }
@@ -130,6 +138,10 @@ public class StudioService {
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
         return userStudio != null && userStudio.getDepartmentId() == departmentId &&
                 userStudio.getAdminTag() == 1;
+    }
+
+    private boolean checkMember(int userId,int studioId){
+        return userStudioMapper.selectByUserAndStudio(userId,studioId) != null;
     }
 
 }

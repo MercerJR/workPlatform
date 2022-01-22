@@ -2,17 +2,17 @@ package com.project.workplatform.controller;
 
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.studio.StudioInfoResponse;
+import com.project.workplatform.pojo.Studio;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -58,6 +58,13 @@ public class StudioController {
         Integer userId = JwtUtil.getId(request);
         service.inviteJoin(userId,inviteJoinStudioRequest);
         return new Response().success();
+    }
+
+    @GetMapping(value = "/show_studio_info/{studio_id}",produces = "application/json")
+    public Response showStudioInfo(@PathVariable("studio_id")int studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        StudioInfoResponse info = service.getStudioInfo(userId,studioId);
+        return new Response().success(info);
     }
 
 }

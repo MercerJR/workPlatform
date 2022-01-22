@@ -1,5 +1,6 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.pojo.Studio;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,6 @@ public interface StudioMapper {
     int selectCreatorByPrimaryKey(int id);
 
     int updateInviteCodeByPrimaryKey(@Param("inviteCode") String inviteCode, @Param("id") int id);
+
+    StudioInfoResponse selectStudioInfoByPrimaryKey(int id);
 }
