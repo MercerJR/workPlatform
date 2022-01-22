@@ -8,11 +8,13 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="studio_id" jdbcType="INTEGER" property="studioId" />
     <result column="apply_message" jdbcType="VARCHAR" property="applyMessage" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="apply_tag" jdbcType="INTEGER" property="applyTag" />
     <result column="tag" jdbcType="INTEGER" property="tag" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, studio_id, apply_message, tag
+    id, user_id, studio_id, apply_message, department_id, apply_tag, tag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,9 +31,11 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.StudioApply" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into studio_apply (user_id, studio_id, apply_message, 
-      tag)
+      department_id, apply_tag, tag
+      )
     values (#{userId,jdbcType=INTEGER}, #{studioId,jdbcType=INTEGER}, #{applyMessage,jdbcType=VARCHAR}, 
-      #{tag,jdbcType=INTEGER})
+      #{departmentId,jdbcType=INTEGER}, #{applyTag,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.StudioApply" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -46,6 +50,12 @@
       <if test="applyMessage != null">
         apply_message,
       </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="applyTag != null">
+        apply_tag,
+      </if>
       <if test="tag != null">
         tag,
       </if>
@@ -59,6 +69,12 @@
       </if>
       <if test="applyMessage != null">
         #{applyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="applyTag != null">
+        #{applyTag,jdbcType=INTEGER},
       </if>
       <if test="tag != null">
         #{tag,jdbcType=INTEGER},
@@ -78,6 +94,12 @@
       <if test="applyMessage != null">
         apply_message = #{applyMessage,jdbcType=VARCHAR},
       </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="applyTag != null">
+        apply_tag = #{applyTag,jdbcType=INTEGER},
+      </if>
       <if test="tag != null">
         tag = #{tag,jdbcType=INTEGER},
       </if>
@@ -90,6 +112,8 @@
     set user_id = #{userId,jdbcType=INTEGER},
       studio_id = #{studioId,jdbcType=INTEGER},
       apply_message = #{applyMessage,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=INTEGER},
+      apply_tag = #{applyTag,jdbcType=INTEGER},
       tag = #{tag,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

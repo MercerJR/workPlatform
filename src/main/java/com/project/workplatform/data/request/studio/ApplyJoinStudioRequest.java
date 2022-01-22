@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinStudioRequest {
+public class ApplyJoinStudioRequest {
 
     private int studioId;
 

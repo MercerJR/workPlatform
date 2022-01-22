@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/21 11:30
+ * @Date: 2022/1/22 12:53
  */
 @Data
 @AllArgsConstructor
@@ -21,9 +21,16 @@ public class StudioApply implements Serializable {
 
     private String applyMessage;
 
+    private Integer departmentId;
+
     /**
-    * 0：未处理；1：同意；2：拒绝
-    */
+     * 0：自己申请；1：工作室部门负责人邀请
+     */
+    private Integer applyTag;
+
+    /**
+     * 0：未处理；1：同意；2：拒绝
+     */
     private Integer tag;
 
     private static final long serialVersionUID = 1L;

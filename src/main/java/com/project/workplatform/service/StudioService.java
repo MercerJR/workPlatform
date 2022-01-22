@@ -4,9 +4,10 @@ import com.project.workplatform.dao.StudioApplyMapper;
 import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
+import com.project.workplatform.data.request.studio.ApplyJoinStudioRequest;
 import com.project.workplatform.data.request.studio.CreateStudioRequest;
 import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
-import com.project.workplatform.data.request.studio.JoinStudioRequest;
+import com.project.workplatform.data.request.studio.InviteJoinStudioRequest;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -94,11 +95,25 @@ public class StudioService {
         return Integer.valueOf(redisValue);
     }
 
-    public void applyJoin(Integer userId, JoinStudioRequest joinStudioRequest) {
+    public void applyJoin(Integer userId, ApplyJoinStudioRequest applyJoinStudioRequest) {
         StudioApply apply = new StudioApply();
         apply.setUserId(userId);
-        apply.setStudioId(joinStudioRequest.getStudioId());
-        apply.setApplyMessage(joinStudioRequest.getApplyMessage());
+        apply.setStudioId(applyJoinStudioRequest.getStudioId());
+        apply.setApplyMessage(applyJoinStudioRequest.getApplyMessage());
+        apply.setApplyTag(0);
+        applyMapper.insertSelective(apply);
+    }
+
+    public void inviteJoin(Integer userId, InviteJoinStudioRequest inviteJoinStudioRequest) {
+        if (checkDepartmentAdmin(userId,inviteJoinStudioRequest.getStudioId(),
+                inviteJoinStudioRequest.getDepartmentId())){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_ADMIN);
+        }
+        StudioApply apply = new StudioApply();
+        apply.setUserId(inviteJoinStudioRequest.getInviteUserId());
+        apply.setStudioId(inviteJoinStudioRequest.getStudioId());
+        apply.setDepartmentId(inviteJoinStudioRequest.getDepartmentId());
+        apply.setApplyTag(1);
         applyMapper.insertSelective(apply);
     }
 
