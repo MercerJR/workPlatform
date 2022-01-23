@@ -4,10 +4,8 @@ import com.project.workplatform.dao.StudioApplyMapper;
 import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
-import com.project.workplatform.data.request.studio.ApplyJoinStudioRequest;
-import com.project.workplatform.data.request.studio.CreateStudioRequest;
-import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
-import com.project.workplatform.data.request.studio.InviteJoinStudioRequest;
+import com.project.workplatform.data.enums.StudioRoleEnum;
+import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
@@ -60,7 +58,7 @@ public class StudioService {
      */
     public String initInviteCode(int userId, InitInviteCodeRequest initInviteCodeRequest){
         int studioId = initInviteCodeRequest.getStudioId();
-        if (!checkSuperAdmin(userId,studioId)){
+        if (!isSuperAdmin(userId,studioId)){
             throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
         }
         String inviteCode = null;
@@ -106,7 +104,7 @@ public class StudioService {
     }
 
     public void inviteJoin(Integer userId, InviteJoinStudioRequest inviteJoinStudioRequest) {
-        if (checkDepartmentAdmin(userId,inviteJoinStudioRequest.getStudioId(),
+        if (!isDepartmentAdmin(userId,inviteJoinStudioRequest.getStudioId(),
                 inviteJoinStudioRequest.getDepartmentId())){
             throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_ADMIN);
         }
@@ -119,28 +117,48 @@ public class StudioService {
     }
 
     public StudioInfoResponse getStudioInfo(int userId,int studioId) {
-        if (!checkMember(userId, studioId)){
+        if (!isMember(userId, studioId)){
             throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_MEMBER);
         }
         return mapper.selectStudioInfoByPrimaryKey(studioId);
     }
 
-    private boolean checkCreator(int userId,int studioId){
+    public void dealApply(Integer userId, DealStudioApplyRequest dealStudioApplyRequest) {
+        StudioApply apply = applyMapper.selectByPrimaryKey(dealStudioApplyRequest.getApplyId());
+        if (!isSuperAdmin(userId,apply.getStudioId())){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
+        }
+        apply.setTag(dealStudioApplyRequest.isAgree() ? 1 : 2);
+        applyMapper.updateByPrimaryKeySelective(apply);
+        if (dealStudioApplyRequest.isAgree()){
+            UserStudio userStudio = new UserStudio();
+            userStudio.setUserId(apply.getUserId());
+            userStudio.setStudioId(apply.getStudioId());
+            userStudio.setDepartmentId(apply.getDepartmentId() == null ?
+                    dealStudioApplyRequest.getDepartmentId() : apply.getDepartmentId());
+            userStudio.setAdminTag(dealStudioApplyRequest.getAdminTag());
+            userStudioMapper.insertSelective(userStudio);
+        }
+        //TODO 通过消息通知申请用户
+
+    }
+
+    private boolean isCreator(int userId,int studioId){
         return mapper.selectCreatorByPrimaryKey(studioId) == userId;
     }
 
-    private boolean checkSuperAdmin(int userId,int studioId){
+    private boolean isSuperAdmin(int userId,int studioId){
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
-        return userStudio != null && userStudio.getAdminTag() == 2;
+        return userStudio != null && userStudio.getAdminTag() == StudioRoleEnum.CREATOR.getRoleId();
     }
 
-    private boolean checkDepartmentAdmin(int userId,int studioId,int departmentId){
+    private boolean isDepartmentAdmin(int userId,int studioId,int departmentId){
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
         return userStudio != null && userStudio.getDepartmentId() == departmentId &&
-                userStudio.getAdminTag() == 1;
+                userStudio.getAdminTag() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId();
     }
 
-    private boolean checkMember(int userId,int studioId){
+    private boolean isMember(int userId,int studioId){
         return userStudioMapper.selectByUserAndStudio(userId,studioId) != null;
     }
 

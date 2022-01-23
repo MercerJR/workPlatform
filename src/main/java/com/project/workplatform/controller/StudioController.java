@@ -67,4 +67,11 @@ public class StudioController {
         return new Response().success(info);
     }
 
+    @PostMapping(value = "/deal_apply",produces = "application/json")
+    public Response dealApply(@Valid @RequestBody DealStudioApplyRequest dealStudioApplyRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.dealApply(userId,dealStudioApplyRequest);
+        return new Response().success();
+    }
+
 }
