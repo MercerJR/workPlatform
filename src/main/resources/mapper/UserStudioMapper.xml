@@ -8,12 +8,12 @@
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="studio_id" jdbcType="INTEGER" property="studioId"/>
         <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
-        <result column="admin_tag" jdbcType="INTEGER" property="adminTag"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
         <result column="inside_alias" jdbcType="VARCHAR" property="insideAlias"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, user_id, studio_id, department_id, admin_tag, inside_alias
+        id, user_id, studio_id, department_id, role_id, inside_alias
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -31,9 +31,9 @@
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into user_studio (user_id, studio_id, department_id,
-        admin_tag, inside_alias)
+        role_id, inside_alias)
         values (#{userId,jdbcType=INTEGER}, #{studioId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER},
-        #{adminTag,jdbcType=INTEGER}, #{insideAlias,jdbcType=VARCHAR})
+        #{roleId,jdbcType=INTEGER}, #{insideAlias,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id"
             parameterType="com.project.workplatform.pojo.UserStudio" useGeneratedKeys="true">
@@ -49,8 +49,8 @@
             <if test="departmentId != null">
                 department_id,
             </if>
-            <if test="adminTag != null">
-                admin_tag,
+            <if test="roleId != null">
+                role_id,
             </if>
             <if test="insideAlias != null">
                 inside_alias,
@@ -66,8 +66,8 @@
             <if test="departmentId != null">
                 #{departmentId,jdbcType=INTEGER},
             </if>
-            <if test="adminTag != null">
-                #{adminTag,jdbcType=INTEGER},
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
             </if>
             <if test="insideAlias != null">
                 #{insideAlias,jdbcType=VARCHAR},
@@ -87,8 +87,8 @@
             <if test="departmentId != null">
                 department_id = #{departmentId,jdbcType=INTEGER},
             </if>
-            <if test="adminTag != null">
-                admin_tag = #{adminTag,jdbcType=INTEGER},
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=INTEGER},
             </if>
             <if test="insideAlias != null">
                 inside_alias = #{insideAlias,jdbcType=VARCHAR},
@@ -102,7 +102,7 @@
         set user_id = #{userId,jdbcType=INTEGER},
         studio_id = #{studioId,jdbcType=INTEGER},
         department_id = #{departmentId,jdbcType=INTEGER},
-        admin_tag = #{adminTag,jdbcType=INTEGER},
+        role_id = #{roleId,jdbcType=INTEGER},
         inside_alias = #{insideAlias,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -110,4 +110,9 @@
         select * from user_studio
         where user_id = #{userId} and studio_id = #{studioId}
     </select>
+    <update id="updateDepartmentInfoByUserAndStudio">
+        update user_studio
+        set department_id = #{departmentId},role_id = #{roleId}
+        where user_id = #{userId} and studio_id = #{studioId}
+    </update>
 </mapper>

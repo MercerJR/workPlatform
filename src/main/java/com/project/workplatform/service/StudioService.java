@@ -1,6 +1,7 @@
 package com.project.workplatform.service;
 
 import com.project.workplatform.dao.StudioApplyMapper;
+import com.project.workplatform.dao.StudioDepartmentMapper;
 import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
@@ -12,6 +13,7 @@ import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
 import com.project.workplatform.pojo.Studio;
 import com.project.workplatform.pojo.StudioApply;
+import com.project.workplatform.pojo.StudioDepartment;
 import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class StudioService {
     private UserStudioMapper userStudioMapper;
 
     @Autowired
+    private StudioDepartmentMapper departmentMapper;
+
+    @Autowired
     private RedisTemplate<String,Object> redisTemplate;
 
     public void create(Integer userId, CreateStudioRequest createStudioRequest) {
@@ -58,9 +63,7 @@ public class StudioService {
      */
     public String initInviteCode(int userId, InitInviteCodeRequest initInviteCodeRequest){
         int studioId = initInviteCodeRequest.getStudioId();
-        if (!isSuperAdmin(userId,studioId)){
-            throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
-        }
+        checkSuperAdmin(userId,initInviteCodeRequest.getStudioId());
         String inviteCode = null;
         Boolean exist = null;
         //防止重复的邀请码
@@ -125,9 +128,7 @@ public class StudioService {
 
     public void dealApply(Integer userId, DealStudioApplyRequest dealStudioApplyRequest) {
         StudioApply apply = applyMapper.selectByPrimaryKey(dealStudioApplyRequest.getApplyId());
-        if (!isSuperAdmin(userId,apply.getStudioId())){
-            throw new CustomException(CustomExceptionType.PERMISSION_ERROR,ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
-        }
+        checkSuperAdmin(userId,apply.getStudioId());
         apply.setTag(dealStudioApplyRequest.isAgree() ? 1 : 2);
         applyMapper.updateByPrimaryKeySelective(apply);
         if (dealStudioApplyRequest.isAgree()){
@@ -136,11 +137,31 @@ public class StudioService {
             userStudio.setStudioId(apply.getStudioId());
             userStudio.setDepartmentId(apply.getDepartmentId() == null ?
                     dealStudioApplyRequest.getDepartmentId() : apply.getDepartmentId());
-            userStudio.setAdminTag(dealStudioApplyRequest.getAdminTag());
+            userStudio.setRoleId(dealStudioApplyRequest.getAdminTag());
             userStudioMapper.insertSelective(userStudio);
         }
         //TODO 通过消息通知申请用户
 
+    }
+
+    public void createDepartment(Integer userId, CreateDepartmentRequest createDepartmentRequest) {
+        checkSuperAdmin(userId,createDepartmentRequest.getStudioId());
+        //TODO 校验部门名称是否符合格式规范
+        StudioDepartment department = new StudioDepartment();
+        department.setDepartmentName(createDepartmentRequest.getDepartmentName());
+        department.setStudioId(createDepartmentRequest.getStudioId());
+        department.setParentDepartmentId(createDepartmentRequest.getParentDepartmentId());
+        department.setType(createDepartmentRequest.getType());
+        departmentMapper.insertSelective(department);
+    }
+
+    public void distributeLeader(Integer userId, DistributeLeaderRequest distributeLeaderRequest) {
+        checkSuperAdmin(userId,distributeLeaderRequest.getStudioId());
+        //修改department表信息，修改user_studio表信息
+        departmentMapper.updateLeaderByStudioAndDepartment(distributeLeaderRequest.getLeaderId(),
+                distributeLeaderRequest.getStudioId(),distributeLeaderRequest.getDepartmentId());
+        userStudioMapper.updateDepartmentInfoByUserAndStudio(distributeLeaderRequest.getDepartmentId(),
+                StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId(), distributeLeaderRequest.getLeaderId(),distributeLeaderRequest.getStudioId());
     }
 
     private boolean isCreator(int userId,int studioId){
@@ -149,17 +170,23 @@ public class StudioService {
 
     private boolean isSuperAdmin(int userId,int studioId){
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
-        return userStudio != null && userStudio.getAdminTag() == StudioRoleEnum.CREATOR.getRoleId();
+        return userStudio != null && userStudio.getRoleId() == StudioRoleEnum.CREATOR.getRoleId();
     }
 
     private boolean isDepartmentAdmin(int userId,int studioId,int departmentId){
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
         return userStudio != null && userStudio.getDepartmentId() == departmentId &&
-                userStudio.getAdminTag() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId();
+                userStudio.getRoleId() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId();
     }
 
     private boolean isMember(int userId,int studioId){
         return userStudioMapper.selectByUserAndStudio(userId,studioId) != null;
+    }
+
+    private void checkSuperAdmin(int userId,int studioId){
+        if (!isSuperAdmin(userId,studioId)){
+            throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
+        }
     }
 
 }

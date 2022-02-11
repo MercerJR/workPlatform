@@ -3,7 +3,6 @@ package com.project.workplatform.controller;
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
-import com.project.workplatform.pojo.Studio;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -71,6 +69,20 @@ public class StudioController {
     public Response dealApply(@Valid @RequestBody DealStudioApplyRequest dealStudioApplyRequest,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         service.dealApply(userId,dealStudioApplyRequest);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/create_department",produces = "application/json")
+    public Response createDepartment(@Valid @RequestBody CreateDepartmentRequest createDepartmentRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.createDepartment(userId,createDepartmentRequest);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/distribute_leader",produces = "application/json")
+    public Response distributeLeader(@Valid @RequestBody DistributeLeaderRequest distributeLeaderRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.distributeLeader(userId,distributeLeaderRequest);
         return new Response().success();
     }
 

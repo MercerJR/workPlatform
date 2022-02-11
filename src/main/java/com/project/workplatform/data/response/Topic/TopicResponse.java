@@ -1,5 +1,6 @@
 package com.project.workplatform.data.response.Topic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class TopicResponse {
 
     private int commentNum;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private String createTime;
 
     private boolean like;

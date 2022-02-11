@@ -14,9 +14,13 @@ public enum CustomExceptionType {
      */
     NORMAL_ERROR(1,"普通错误"),
     /**
-     * 参数校验错误
+     * 用户登陆错误
      */
-    PERMISSION_ERROR(2,"权限错误"),
+    LOGIN_ERROR(2,"登陆错误"),
+    /**
+     * 用户权限错误
+     */
+    PERMISSION_ERROR(3,"权限错误"),
     /**
      * 未知错误
      */

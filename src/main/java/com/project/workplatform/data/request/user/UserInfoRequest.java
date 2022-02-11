@@ -15,6 +15,9 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserInfoRequest {
 
+    @Size(max = 20,message = "用户名不能超过20个字符")
+    private String name;
+
     @Size(max = 2,message = "请输入正确的性别，如“男”、“女”")
     private String gender;
 

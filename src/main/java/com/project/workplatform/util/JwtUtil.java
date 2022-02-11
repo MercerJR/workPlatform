@@ -54,7 +54,7 @@ public class JwtUtil {
             jwtVerifier.verify(token);
             return true;
         } catch (TokenExpiredException e){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.TOKEN_EXPIRE);
+            throw new CustomException(CustomExceptionType.LOGIN_ERROR, ExceptionMessage.TOKEN_EXPIRE);
         } catch (Exception e) {
             return false;
         }
@@ -65,7 +65,7 @@ public class JwtUtil {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim(Constant.JWT_CLAIM_ID).asInt();
         } catch (JWTDecodeException | NullPointerException e) {
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.TOKEN_INVALID);
+            throw new CustomException(CustomExceptionType.LOGIN_ERROR,ExceptionMessage.TOKEN_INVALID);
         }
     }
 

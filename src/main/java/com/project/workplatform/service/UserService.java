@@ -46,7 +46,7 @@ public class UserService {
 
     public void updateUserInfo(int userId,UserInfoRequest request) {
         UserInfo info = infoMapper.selectByUser(userId);
-        info.setUserId(userId);
+        info.setName(request.getName());
         info.setDescribe(request.getDescribe());
         info.setGender(request.getGender());
         info.setHobby(request.getHobby());

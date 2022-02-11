@@ -32,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         User user = mapper.selectByPrimaryKey(id);
         boolean flag = JwtUtil.verifyToken(token, user.getPhoneNumber(), user.getPassword());
         if (!flag){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.TOKEN_INVALID);
+            throw new CustomException(CustomExceptionType.LOGIN_ERROR, ExceptionMessage.TOKEN_INVALID);
         }
         return true;
     }
