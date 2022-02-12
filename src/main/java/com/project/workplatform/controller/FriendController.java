@@ -4,6 +4,7 @@ import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
 import com.project.workplatform.data.request.friend.DeleteFriendRequest;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.friend.FriendInfoResponse;
 import com.project.workplatform.data.response.friend.FriendListResponse;
 import com.project.workplatform.service.FriendService;
 import com.project.workplatform.util.JwtUtil;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -25,32 +27,38 @@ public class FriendController {
     @Autowired
     private FriendService service;
 
-    @PostMapping(value = "/apply",produces = "application/json")
-    public Response apply(@RequestBody ApplyFriendRequest applyFriendRequest, HttpServletRequest request){
+    @PostMapping(value = "/apply", produces = "application/json")
+    public Response apply(@RequestBody ApplyFriendRequest applyFriendRequest, HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
-        service.applyFriend(userId,applyFriendRequest);
+        service.applyFriend(userId, applyFriendRequest);
         return new Response().success();
     }
 
-    @PostMapping(value = "/deal_apply",produces = "application/json")
-    public Response dealApply(@RequestBody DealApplyRequest dealApplyRequest, HttpServletRequest request){
+    @PostMapping(value = "/deal_apply", produces = "application/json")
+    public Response dealApply(@RequestBody DealApplyRequest dealApplyRequest, HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
-        service.dealApply(userId,dealApplyRequest);
+        service.dealApply(userId, dealApplyRequest);
         return new Response().success();
     }
 
-    @PostMapping(value = "/delete",produces = "application/json")
-    public Response delete(@RequestBody DeleteFriendRequest deleteFriendRequest,HttpServletRequest request){
+    @PostMapping(value = "/delete", produces = "application/json")
+    public Response delete(@RequestBody DeleteFriendRequest deleteFriendRequest, HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
-        service.delete(userId,deleteFriendRequest);
+        service.delete(userId, deleteFriendRequest);
         return new Response().success();
     }
 
-    @GetMapping(value = "list",produces = "application/json")
-    public Response list(HttpServletRequest request){
+    @GetMapping(value = "/list", produces = "application/json")
+    public Response list(HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
-        FriendListResponse friendList = service.getList(userId);
+        List<FriendListResponse> friendList = service.getList(userId);
         return new Response().success(friendList);
+    }
+
+    @GetMapping(value = "/show_friend_info/{friend_id}", produces = "application/json")
+    public Response showOne(@PathVariable("friend_id") int friendId, HttpServletRequest request) {
+        FriendInfoResponse friendInfoResponse = service.getFriendInfo(friendId);
+        return new Response().success(friendInfoResponse);
     }
 
 }

@@ -5,6 +5,7 @@ import com.project.workplatform.dao.FriendMapper;
 import com.project.workplatform.data.request.friend.ApplyFriendRequest;
 import com.project.workplatform.data.request.friend.DealApplyRequest;
 import com.project.workplatform.data.request.friend.DeleteFriendRequest;
+import com.project.workplatform.data.response.friend.FriendInfoResponse;
 import com.project.workplatform.data.response.friend.FriendListResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
@@ -14,6 +15,8 @@ import com.project.workplatform.pojo.FriendApply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -82,7 +85,11 @@ public class FriendService {
         mapper.deleteByFriend(deleteFriendRequest.getFriendId(),userId);
     }
 
-    public FriendListResponse getList(Integer userId) {
+    public List<FriendListResponse> getList(Integer userId) {
         return mapper.selectFriendList(userId);
+    }
+
+    public FriendInfoResponse getFriendInfo(int friendId) {
+        return mapper.selectFriendInfo(friendId);
     }
 }
