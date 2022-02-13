@@ -122,8 +122,8 @@ public class GroupService {
         GroupInfoResponse groupInfo = new GroupInfoResponse();
         groupInfo.setGroupName(group.getGroupName());
         groupInfo.setType(group.getType() == 0 ? Constant.OUTSIDE_GROUP : Constant.INNER_GROUP);
-        groupInfo.setGroupName(group.getGroupName());
         groupInfo.setClassify(group.getClassify());
+        groupInfo.setPeopleNumber(group.getPeopleNumber());
         groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime(),DateFormatUtil.DAY_FORMAT));
         return groupInfo;
     }
@@ -135,8 +135,8 @@ public class GroupService {
         return userGroupMapper.selectMemberByGroup(groupId);
     }
 
-    public List<GroupResponse> getGroupList(Integer userId) {
-        return userGroupMapper.selectByUser(userId);
+    public List<GroupResponse> getGroupList(Integer userId,int type) {
+        return userGroupMapper.selectByUser(userId,type);
     }
 
     public void updateRole(Integer userId, UpdateRoleRequest updateRoleRequest) {

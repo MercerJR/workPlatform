@@ -76,10 +76,10 @@ public class GroupController {
         return new Response().success(list);
     }
 
-    @GetMapping(value = "/show_group_list",produces = "application/json")
-    public Response showGroupList(HttpServletRequest request){
+    @GetMapping(value = "/list/{type}",produces = "application/json")
+    public Response showGroupList(@PathVariable("type") int type,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
-        List<GroupResponse> list = service.getGroupList(userId);
+        List<GroupResponse> list = service.getGroupList(userId,type);
         return new Response().success(list);
     }
 

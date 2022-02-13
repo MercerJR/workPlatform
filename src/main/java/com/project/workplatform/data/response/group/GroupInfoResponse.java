@@ -18,9 +18,9 @@ public class GroupInfoResponse {
 
     private String type;
 
-    private String studio;
-
     private String classify;
+
+    private int peopleNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private String createTime;

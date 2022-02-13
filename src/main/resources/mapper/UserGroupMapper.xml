@@ -100,14 +100,14 @@
         where user_id = #{userId} and group_id = #{groupId}
     </select>
     <select id="selectMemberByGroup" resultType="com.project.workplatform.data.response.group.MemberResponse">
-        select ui.user_id as userId,ug.nickname,ui.name,gr.role from user_group as ug inner join user_info as ui inner join group_role as gr
+        select ui.user_id as userId,ifnull(ug.nickname,ui.name) as nickname,ui.name,gr.role from user_group as ug inner join user_info as ui inner join group_role as gr
         on ug.user_id = ui.user_id and ug.role_id = gr.role_id
         where ug.group_id = #{groupId}
     </select>
     <select id="selectByUser" resultType="com.project.workplatform.data.response.group.GroupResponse">
         select g.id as groupId,g.group_name from user_group as ug inner join `group` as g
         on ug.group_id = g.id
-        where ug.user_id = #{userId}
+        where ug.user_id = #{userId} and g.type = #{type}
     </select>
     <update id="updateRoleByUserAndGroup">
         update user_group
