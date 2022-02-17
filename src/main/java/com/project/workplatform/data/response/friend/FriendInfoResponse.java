@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class FriendInfoResponse {
 
+    private int friendId;
+
     private String name;
 
     private String describe;

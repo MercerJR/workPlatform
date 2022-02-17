@@ -87,7 +87,7 @@
     </select>
     <select id="selectFriendInfo"
             resultType="com.project.workplatform.data.response.friend.FriendInfoResponse">
-        select `name`,`describe` ,gender,hobby,live_place,hometown
+        select user_id as friendId,`name`,`describe` ,gender,hobby,live_place,hometown
         from user_info
         where user_id = #{friendId}
     </select>

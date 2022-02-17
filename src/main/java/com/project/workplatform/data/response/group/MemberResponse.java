@@ -19,6 +19,8 @@ public class MemberResponse {
 
     private String name;
 
+    private int roleId;
+
     private String role;
 
 }
