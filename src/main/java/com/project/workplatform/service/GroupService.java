@@ -114,16 +114,18 @@ public class GroupService {
         groupApplyMapper.updateTag(approveApplyRequest.getApplyId(),tag);
     }
 
-    public GroupInfoResponse getGroupInfo(int groupId) {
+    public GroupInfoResponse getGroupInfo(int groupId,int userId) {
         Group group = mapper.selectByPrimaryKey(groupId);
         if (group == null){
             throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.GROUP_NOT_EXIST);
         }
         GroupInfoResponse groupInfo = new GroupInfoResponse();
+        groupInfo.setGroupId(groupId);
         groupInfo.setGroupName(group.getGroupName());
         groupInfo.setType(group.getType() == 0 ? Constant.OUTSIDE_GROUP : Constant.INNER_GROUP);
         groupInfo.setClassify(group.getClassify());
         groupInfo.setPeopleNumber(group.getPeopleNumber());
+        groupInfo.setCurrentUserRoleId(userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId());
         groupInfo.setCreateTime(DateFormatUtil.getStringDateByDate(group.getCreateTime(),DateFormatUtil.DAY_FORMAT));
         return groupInfo;
     }

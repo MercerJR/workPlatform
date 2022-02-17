@@ -64,8 +64,9 @@ public class GroupController {
     }
 
     @GetMapping(value = "/show_group_info/{group_id}",produces = "application/json")
-    public Response showGroupInfo(@PathVariable("group_id")int groupId){
-        GroupInfoResponse groupInfo = service.getGroupInfo(groupId);
+    public Response showGroupInfo(@PathVariable("group_id")int groupId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        GroupInfoResponse groupInfo = service.getGroupInfo(groupId,userId);
         return new Response().success(groupInfo);
     }
 

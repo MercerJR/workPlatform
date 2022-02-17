@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupInfoResponse {
 
+    private int groupId;
+
     private String groupName;
 
     private String type;
@@ -21,6 +23,8 @@ public class GroupInfoResponse {
     private String classify;
 
     private int peopleNumber;
+
+    private int currentUserRoleId;
 
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private String createTime;
