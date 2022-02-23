@@ -1,6 +1,9 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.search.SearchGroupResponse;
 import com.project.workplatform.pojo.Group;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -21,4 +24,5 @@ public interface GroupMapper {
 
     int selectCreatorByGroup(int groupId);
 
+    List<SearchGroupResponse> selectGroupInfoByGroupNameFuzzy(String fuzzyGroupName);
 }

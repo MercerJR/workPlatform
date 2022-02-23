@@ -4,6 +4,7 @@ import com.project.workplatform.data.request.user.ChangePasswordRequest;
 import com.project.workplatform.data.request.user.UserInfoRequest;
 import com.project.workplatform.data.request.user.UserLoginRequest;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.user.LoginResponse;
 import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.service.UserService;
 import com.project.workplatform.util.JwtUtil;
@@ -34,8 +35,8 @@ public class UserController {
 
     @PostMapping(value = "/login",produces = "application/json")
     public Response login(@Valid @RequestBody UserLoginRequest userLoginRequest){
-        String token = service.loginUser(userLoginRequest.getPhoneNumber(),userLoginRequest.getPassword());
-        return new Response().success(token);
+        LoginResponse response = service.loginUser(userLoginRequest.getPhoneNumber(),userLoginRequest.getPassword());
+        return new Response().success(response);
     }
 
     @PostMapping(value = "/update_info",produces = "application/json")

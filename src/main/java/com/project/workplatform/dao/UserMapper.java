@@ -1,7 +1,10 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.search.SearchUserResponse;
 import com.project.workplatform.pojo.User;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -28,4 +31,7 @@ public interface UserMapper {
 
     int updatePasswordByPrimaryKey(@Param("id") Integer id, @Param("newPassword") String newPassword);
 
+    List<SearchUserResponse> selectUserInfoByPhone(String phoneNumber);
+
+    List<SearchUserResponse> selectUserInfoByNameFuzzy(String fuzzyName);
 }

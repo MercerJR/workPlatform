@@ -134,4 +134,11 @@
         select creator_id from `group`
         where id = #{groupId}
     </select>
+    <select id="selectGroupInfoByGroupNameFuzzy"
+            resultType="com.project.workplatform.data.response.search.SearchGroupResponse">
+        select id as groupId,group_name as groupName,if(`type`=0,'外部群聊','内部群聊') as type,
+        classify,create_time as createTime,people_number as peopleNumber
+        from `group`
+        where group_name like CONCAT(CONCAT('%', #{fuzzyGroupName}), '%')
+    </select>
 </mapper>

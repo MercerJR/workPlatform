@@ -89,4 +89,16 @@
         update user set password = #{newPassword}
         where id = #{id}
     </update>
+    <select id="selectUserInfoByPhone"
+            resultType="com.project.workplatform.data.response.search.SearchUserResponse">
+        select ui.user_id as userId,ui.name,ui.gender,ui.hobby,ui.live_place,ui.hometown,ui.describe
+        from user as u inner join user_info as ui on u.id = ui.user_id
+        where u.phone_number = #{phoneNumber}
+    </select>
+    <select id="selectUserInfoByNameFuzzy"
+            resultType="com.project.workplatform.data.response.search.SearchUserResponse">
+        select user_id as userId,`name`,gender,hobby,live_place,hometown,`describe`
+        from user_info
+        where name like CONCAT(CONCAT('%', #{fuzzyName}), '%')
+    </select>
 </mapper>

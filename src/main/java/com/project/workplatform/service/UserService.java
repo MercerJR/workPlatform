@@ -5,6 +5,7 @@ import com.project.workplatform.dao.UserMapper;
 import com.project.workplatform.data.request.user.ChangePasswordRequest;
 import com.project.workplatform.data.request.user.UserInfoRequest;
 import com.project.workplatform.data.request.user.UserLoginRequest;
+import com.project.workplatform.data.response.user.LoginResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -36,12 +37,16 @@ public class UserService {
         mapper.insert(new User(request.getPhoneNumber(),request.getPassword()));
     }
 
-    public String loginUser(String phoneNumber, String password) {
+    public LoginResponse loginUser(String phoneNumber, String password) {
         User user = mapper.selectByPhoneAndPass(phoneNumber, password);
         if (user == null) {
             throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.ID_OR_PASSWORD_ERROR);
         }
-        return JwtUtil.createToken(user);
+        LoginResponse response = new LoginResponse();
+        response.setUserId(user.getId());
+        response.setName(infoMapper.selectByUser(user.getId()).getName());
+        response.setToken(JwtUtil.createToken(user));
+        return response;
     }
 
     public void updateUserInfo(int userId,UserInfoRequest request) {
