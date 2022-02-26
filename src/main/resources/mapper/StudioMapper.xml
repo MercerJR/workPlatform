@@ -148,5 +148,18 @@
         on s.creator_id = us.user_id and s.creator_id = ui.user_id
         where s.id = #{id}
     </select>
+    <select id="selectStudioBaseInfoByUser"
+            resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
+        select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation
+        from studio as s inner join user_studio as us
+        on s.id = us.studio_id
+        where us.user_id = #{userId}
+    </select>
+    <select id="selectStudioBaseInfoByPrimaryKey"
+            resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
+        select id as studioId,studio_name as studioName,studio_abbreviation as studioAbbreviation
+        from studio
+        where id = #{id}
+    </select>
 
 </mapper>

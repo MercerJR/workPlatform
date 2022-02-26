@@ -2,6 +2,7 @@ package com.project.workplatform.controller;
 
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
+import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Mercer JR
@@ -83,6 +86,20 @@ public class StudioController {
     public Response distributeLeader(@Valid @RequestBody DistributeLeaderRequest distributeLeaderRequest,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         service.distributeLeader(userId,distributeLeaderRequest);
+        return new Response().success();
+    }
+
+    @GetMapping(value = "/list",produces = "application/json")
+    public Response list(HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        Map<String,Object> response = service.getStudioList(userId);
+        return new Response().success(response);
+    }
+
+    @PostMapping(value = "/record_current",produces = "application/json")
+    public Response recordCurrent(@RequestBody Integer studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.recordCurrentStudio(studioId,userId);
         return new Response().success();
     }
 

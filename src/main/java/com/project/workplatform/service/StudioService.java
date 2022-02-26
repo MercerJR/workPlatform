@@ -7,6 +7,7 @@ import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.enums.StudioRoleEnum;
 import com.project.workplatform.data.request.studio.*;
+import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Mercer JR
@@ -162,6 +166,22 @@ public class StudioService {
                 distributeLeaderRequest.getStudioId(),distributeLeaderRequest.getDepartmentId());
         userStudioMapper.updateDepartmentInfoByUserAndStudio(distributeLeaderRequest.getDepartmentId(),
                 StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId(), distributeLeaderRequest.getLeaderId(),distributeLeaderRequest.getStudioId());
+    }
+
+    public Map<String,Object> getStudioList(Integer userId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("studioList",mapper.selectStudioBaseInfoByUser(userId));
+
+        String key = Constant.REDIS_CURRENT_STUDIO_KEY_PREFIX + userId;
+        Integer currentStudioId = (Integer) redisTemplate.opsForValue().get(key);
+        map.put("currentStudioBaseInfo",mapper.selectStudioBaseInfoByPrimaryKey(currentStudioId));
+
+        return map;
+    }
+
+    public void recordCurrentStudio(Integer studioId, Integer userId) {
+        String key = Constant.REDIS_CURRENT_STUDIO_KEY_PREFIX + userId;
+        redisTemplate.opsForValue().set(key,studioId);
     }
 
     private boolean isCreator(int userId,int studioId){

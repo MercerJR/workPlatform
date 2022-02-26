@@ -1,8 +1,11 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.pojo.Studio;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -26,4 +29,8 @@ public interface StudioMapper {
     int updateInviteCodeByPrimaryKey(@Param("inviteCode") String inviteCode, @Param("id") int id);
 
     StudioInfoResponse selectStudioInfoByPrimaryKey(int id);
+
+    List<StudioBaseInfoResponse> selectStudioBaseInfoByUser(Integer userId);
+
+    StudioBaseInfoResponse selectStudioBaseInfoByPrimaryKey(Integer id);
 }
