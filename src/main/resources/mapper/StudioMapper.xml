@@ -157,9 +157,11 @@
     </select>
     <select id="selectStudioBaseInfoByPrimaryKey"
             resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
-        select id as studioId,studio_name as studioName,studio_abbreviation as studioAbbreviation
-        from studio
-        where id = #{id}
+        select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation,
+        sr.role,sd.department_name as departmentName
+        from studio as s inner join user_studio as us inner join studio_role as sr inner join studio_department as sd
+				on s.id = us.studio_id and us.role_id = sr.role_id and us.department_id = sd.id
+        where s.id = #{studioId} and us.user_id = #{studioId};
     </select>
 
 </mapper>

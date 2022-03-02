@@ -103,4 +103,11 @@ public class StudioController {
         return new Response().success();
     }
 
+    @GetMapping(value = "/show_studio_base_info/{studio_id}",produces = "application/json")
+    public Response showStudioBaseInfo(@PathVariable("studio_id") Integer studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        StudioBaseInfoResponse response = service.getStudioBaseInfo(studioId,userId);
+        return new Response().success(response);
+    }
+
 }

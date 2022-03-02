@@ -18,5 +18,9 @@ public class StudioBaseInfoResponse {
     private String studioName;
 
     private String studioAbbreviation;
+    
+    private String role;
+
+    private String departmentName;
 
 }

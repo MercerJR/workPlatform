@@ -174,7 +174,7 @@ public class StudioService {
 
         String key = Constant.REDIS_CURRENT_STUDIO_KEY_PREFIX + userId;
         Integer currentStudioId = (Integer) redisTemplate.opsForValue().get(key);
-        map.put("currentStudioBaseInfo",mapper.selectStudioBaseInfoByPrimaryKey(currentStudioId));
+        map.put("currentStudioBaseInfo",getStudioBaseInfo(currentStudioId,userId));
 
         return map;
     }
@@ -182,6 +182,10 @@ public class StudioService {
     public void recordCurrentStudio(Integer studioId, Integer userId) {
         String key = Constant.REDIS_CURRENT_STUDIO_KEY_PREFIX + userId;
         redisTemplate.opsForValue().set(key,studioId);
+    }
+
+    public StudioBaseInfoResponse getStudioBaseInfo(Integer studioId, Integer userId) {
+        return mapper.selectStudioBaseInfoByPrimaryKey(studioId,userId);
     }
 
     private boolean isCreator(int userId,int studioId){
