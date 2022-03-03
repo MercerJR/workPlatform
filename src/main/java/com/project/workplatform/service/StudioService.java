@@ -9,6 +9,7 @@ import com.project.workplatform.data.enums.StudioRoleEnum;
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
+import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -188,6 +189,19 @@ public class StudioService {
         return mapper.selectStudioBaseInfoByPrimaryKey(studioId,userId);
     }
 
+    public StudioPeopleInfoResponse getStudioPeopleInfo(Integer studioId) {
+        if (studioId <= 0){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.STUDIO_ID_INVALID);
+        }
+        StudioPeopleInfoResponse response = new StudioPeopleInfoResponse();
+        response.setStudioMemberNumber(userStudioMapper.selectMemberNumberByStudio(studioId));
+        response.setNotActivatedNumber(applyMapper.selectNotActivatedNumberByStudio(studioId));
+        response.setDepartmentNumber(departmentMapper.selectDepartmentNumberByStudio(studioId));
+        response.setSuperAdminNumber(userStudioMapper.selectSuperAdminNumberByStudio(studioId));
+        response.setAdminNumber(userStudioMapper.selectAdminNumberByStudio(studioId));
+        return response;
+    }
+
     private boolean isCreator(int userId,int studioId){
         return mapper.selectCreatorByPrimaryKey(studioId) == userId;
     }
@@ -212,5 +226,4 @@ public class StudioService {
             throw new CustomException(CustomExceptionType.PERMISSION_ERROR, ExceptionMessage.NOT_STUDIO_SUPER_ADMIN);
         }
     }
-
 }

@@ -23,4 +23,10 @@ public interface UserStudioMapper {
 
     void updateDepartmentInfoByUserAndStudio(@Param("departmentId") int departmentId,@Param("roleId") int roleId,
                                              @Param("userId") int userId, @Param("studioId") int studioId);
+
+    Integer selectMemberNumberByStudio(Integer studioId);
+
+    Integer selectSuperAdminNumberByStudio(Integer studioId);
+
+    Integer selectAdminNumberByStudio(Integer studioId);
 }

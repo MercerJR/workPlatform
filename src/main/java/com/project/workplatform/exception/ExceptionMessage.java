@@ -34,5 +34,6 @@ public interface ExceptionMessage {
     String NOT_STUDIO_ADMIN = "你不是工作室的部门负责人";
     String NOT_STUDIO_CREATOR = "你不是工作室的创始人";
     String NOT_STUDIO_MEMBER = "你不是工作室的成员";
+    String STUDIO_ID_INVALID = "无效的工作室请求";
 
 }

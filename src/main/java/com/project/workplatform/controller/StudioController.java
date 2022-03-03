@@ -4,6 +4,7 @@ import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
+import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,12 @@ public class StudioController {
     public Response showStudioBaseInfo(@PathVariable("studio_id") Integer studioId,HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         StudioBaseInfoResponse response = service.getStudioBaseInfo(studioId,userId);
+        return new Response().success(response);
+    }
+
+    @GetMapping(value = "/show_people_info/{studio_id}",produces = "application/json")
+    public Response showPeopleInfo(@PathVariable("studio_id") Integer studioId){
+        StudioPeopleInfoResponse response = service.getStudioPeopleInfo(studioId);
         return new Response().success(response);
     }
 

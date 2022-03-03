@@ -125,4 +125,9 @@
         set leader_id = #{leaderId}
         where studio_id = #{studioId} and department_id = #{departmentId}
     </update>
+    <select id="selectDepartmentNumberByStudio" resultType="java.lang.Integer">
+        select count(*)
+        from studio_department
+        where studio_id = #{studioId}
+    </select>
 </mapper>

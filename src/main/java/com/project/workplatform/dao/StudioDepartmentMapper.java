@@ -21,4 +21,6 @@ public interface StudioDepartmentMapper {
     int updateByPrimaryKey(StudioDepartment record);
 
     int updateLeaderByStudioAndDepartment(@Param("leaderId") int leaderId, @Param("studioId") int studioId,@Param("departmentId") int departmentId);
+
+    Integer selectDepartmentNumberByStudio(Integer studioId);
 }

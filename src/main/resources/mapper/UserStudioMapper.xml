@@ -115,4 +115,19 @@
         set department_id = #{departmentId},role_id = #{roleId}
         where user_id = #{userId} and studio_id = #{studioId}
     </update>
+    <select id="selectMemberNumberByStudio" resultType="java.lang.Integer">
+        select count(*)
+        from user_studio
+        where studio_id = #{studioId}
+    </select>
+    <select id="selectSuperAdminNumberByStudio" resultType="java.lang.Integer">
+        select count(*)
+        from user_studio
+        where studio_id = #{studioId} and role_id = 2
+    </select>
+    <select id="selectAdminNumberByStudio" resultType="java.lang.Integer">
+        select count(*)
+        from user_studio
+        where studio_id = #{studioId} and role_id = 1
+    </select>
 </mapper>

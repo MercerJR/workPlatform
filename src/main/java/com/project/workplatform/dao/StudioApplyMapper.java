@@ -18,4 +18,6 @@ public interface StudioApplyMapper {
     int updateByPrimaryKeySelective(StudioApply record);
 
     int updateByPrimaryKey(StudioApply record);
+
+    Integer selectNotActivatedNumberByStudio(Integer studioId);
 }
