@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.workplatform.dao.StudioContactInfoMapper">
+    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.StudioContactInfo">
+        <!--@mbg.generated-->
+        <!--@Table studio_contact_info-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="studio_id" jdbcType="INTEGER" property="studioId"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="contact_mail" jdbcType="VARCHAR" property="contactMail"/>
+        <result column="studio_place" jdbcType="VARCHAR" property="studioPlace"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, studio_id, contact_name, contact_phone, contact_mail, studio_place
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from studio_contact_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from studio_contact_info
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.StudioContactInfo"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into studio_contact_info (studio_id, contact_name, contact_phone,
+        contact_mail, studio_place)
+        values (#{studioId,jdbcType=INTEGER}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR},
+        #{contactMail,jdbcType=VARCHAR}, #{studioPlace,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.project.workplatform.pojo.StudioContactInfo" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into studio_contact_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studioId != null">
+                studio_id,
+            </if>
+            <if test="contactName != null">
+                contact_name,
+            </if>
+            <if test="contactPhone != null">
+                contact_phone,
+            </if>
+            <if test="contactMail != null">
+                contact_mail,
+            </if>
+            <if test="studioPlace != null">
+                studio_place,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studioId != null">
+                #{studioId,jdbcType=INTEGER},
+            </if>
+            <if test="contactName != null">
+                #{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                #{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactMail != null">
+                #{contactMail,jdbcType=VARCHAR},
+            </if>
+            <if test="studioPlace != null">
+                #{studioPlace,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.StudioContactInfo">
+        <!--@mbg.generated-->
+        update studio_contact_info
+        <set>
+            <if test="studioId != null">
+                studio_id = #{studioId,jdbcType=INTEGER},
+            </if>
+            <if test="contactName != null">
+                contact_name = #{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                contact_phone = #{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactMail != null">
+                contact_mail = #{contactMail,jdbcType=VARCHAR},
+            </if>
+            <if test="studioPlace != null">
+                studio_place = #{studioPlace,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.StudioContactInfo">
+        <!--@mbg.generated-->
+        update studio_contact_info
+        set studio_id = #{studioId,jdbcType=INTEGER},
+        contact_name = #{contactName,jdbcType=VARCHAR},
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+        contact_mail = #{contactMail,jdbcType=VARCHAR},
+        studio_place = #{studioPlace,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByStudio"
+            resultType="com.project.workplatform.data.response.studio.StudioContactInfoResponse">
+      select studio_id,contact_name,contact_phone,contact_mail,studio_place
+      from studio_contact_info
+      where studio_id = #{studioId};
+    </select>
+    <update id="updateByStudioSelective" parameterType="com.project.workplatform.pojo.StudioContactInfo">
+        update studio_contact_info
+        <set>
+            <if test="contactName != null">
+                contact_name = #{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                contact_phone = #{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactMail != null">
+                contact_mail = #{contactMail,jdbcType=VARCHAR},
+            </if>
+            <if test="studioPlace != null">
+                studio_place = #{studioPlace,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where studio_id = #{studioId,jdbcType=INTEGER}
+    </update>
+
+</mapper>

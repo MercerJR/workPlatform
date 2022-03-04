@@ -6,25 +6,21 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/22 13:39
+ * @Date: 2022/3/3 20:20
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudioInfoResponse {
+public class StudioContactInfoResponse {
 
     private int studioId;
 
-    private String studioName;
+    private String contactName;
 
-    private String studioAbbreviation;
+    private String contactPhone;
 
-    private String creatorAlias;
+    private String contactMail;
 
-    private String classify;
-
-    private String describe;
-
-    private int peopleNumber;
+    private String studioPlace;
 
 }

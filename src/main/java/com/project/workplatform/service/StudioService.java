@@ -1,22 +1,17 @@
 package com.project.workplatform.service;
 
-import com.project.workplatform.dao.StudioApplyMapper;
-import com.project.workplatform.dao.StudioDepartmentMapper;
-import com.project.workplatform.dao.StudioMapper;
-import com.project.workplatform.dao.UserStudioMapper;
+import com.project.workplatform.dao.*;
 import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.enums.StudioRoleEnum;
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
+import com.project.workplatform.data.response.studio.StudioContactInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
-import com.project.workplatform.pojo.Studio;
-import com.project.workplatform.pojo.StudioApply;
-import com.project.workplatform.pojo.StudioDepartment;
-import com.project.workplatform.pojo.UserStudio;
+import com.project.workplatform.pojo.*;
 import com.project.workplatform.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -47,6 +42,9 @@ public class StudioService {
 
     @Autowired
     private StudioDepartmentMapper departmentMapper;
+
+    @Autowired
+    private StudioContactInfoMapper contactInfoMapper;
 
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
@@ -202,13 +200,39 @@ public class StudioService {
         return response;
     }
 
+    public StudioContactInfoResponse getStudioContactInfo(Integer studioId) {
+        return contactInfoMapper.selectByStudio(studioId);
+    }
+
+    public void updateStudioInfo(UpdateStudioInfoRequest updateStudioInfoRequest, Integer userId) {
+        checkSuperAdmin(userId,updateStudioInfoRequest.getStudioId());
+        Studio studio = new Studio();
+        studio.setId(updateStudioInfoRequest.getStudioId());
+        studio.setStudioName(updateStudioInfoRequest.getStudioName());
+        studio.setStudioAbbreviation(updateStudioInfoRequest.getStudioAbbreviation());
+        studio.setClassify(updateStudioInfoRequest.getClassify());
+        studio.setDescribe(updateStudioInfoRequest.getDescribe());
+        mapper.updateByPrimaryKeySelective(studio);
+    }
+
+    public void updateStudioContactInfo(UpdateStudioContactInfoRequest updateStudioContactInfoRequest, Integer userId) {
+        checkSuperAdmin(userId,updateStudioContactInfoRequest.getStudioId());
+        StudioContactInfo contactInfo = new StudioContactInfo();
+        contactInfo.setStudioId(updateStudioContactInfoRequest.getStudioId());
+        contactInfo.setContactName(updateStudioContactInfoRequest.getContactName());
+        contactInfo.setContactPhone(updateStudioContactInfoRequest.getContactPhone());
+        contactInfo.setContactMail(updateStudioContactInfoRequest.getContactMail());
+        contactInfo.setStudioPlace(updateStudioContactInfoRequest.getStudioPlace());
+        contactInfoMapper.updateByStudioSelective(contactInfo);
+    }
+
     private boolean isCreator(int userId,int studioId){
         return mapper.selectCreatorByPrimaryKey(studioId) == userId;
     }
 
     private boolean isSuperAdmin(int userId,int studioId){
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
-        return userStudio != null && userStudio.getRoleId() == StudioRoleEnum.CREATOR.getRoleId();
+        return userStudio != null && userStudio.getRoleId() == StudioRoleEnum.SUPER_ADMIN.getRoleId();
     }
 
     private boolean isDepartmentAdmin(int userId,int studioId,int departmentId){

@@ -18,7 +18,7 @@ public enum StudioRoleEnum {
     /**
      * 超级管理员
      */
-    CREATOR(2,"超级管理员");
+    SUPER_ADMIN(2,"超级管理员");
 
     private final int roleId;
 

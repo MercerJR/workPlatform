@@ -3,8 +3,10 @@ package com.project.workplatform.controller;
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
+import com.project.workplatform.data.response.studio.StudioContactInfoResponse;
 import com.project.workplatform.data.response.studio.StudioInfoResponse;
 import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
+import com.project.workplatform.pojo.StudioContactInfo;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +117,28 @@ public class StudioController {
     public Response showPeopleInfo(@PathVariable("studio_id") Integer studioId){
         StudioPeopleInfoResponse response = service.getStudioPeopleInfo(studioId);
         return new Response().success(response);
+    }
+
+    @GetMapping(value = "/show_studio_contact_info/{studio_id}",produces = "application/json")
+    public Response showStudioContactInfo(@PathVariable("studio_id") Integer studioId){
+        StudioContactInfoResponse response = service.getStudioContactInfo(studioId);
+        return new Response().success(response);
+    }
+
+    @PostMapping(value = "/update_studio_info",produces = "application/json")
+    public Response updateStudioInfo(@Valid @RequestBody UpdateStudioInfoRequest updateStudioInfoRequest,
+                                     HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.updateStudioInfo(updateStudioInfoRequest,userId);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/update_studio_contact_info",produces = "application/json")
+    public Response updateStudioContactInfo(@Valid @RequestBody UpdateStudioContactInfoRequest updateStudioContactInfoRequest,
+                                            HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.updateStudioContactInfo(updateStudioContactInfoRequest,userId);
+        return new Response().success();
     }
 
 }

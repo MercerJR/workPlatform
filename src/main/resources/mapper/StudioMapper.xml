@@ -142,7 +142,7 @@
     </update>
     <select id="selectStudioInfoByPrimaryKey"
             resultType="com.project.workplatform.data.response.studio.StudioInfoResponse">
-        select s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation,
+        select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation,
         ifnull(us.inside_alias,ui.name) as creatorAlias,s.classify,s.describe,s.people_number as peopleNumber
         from studio as s inner join user_studio as us inner join user_info as ui
         on s.creator_id = us.user_id and s.creator_id = ui.user_id
