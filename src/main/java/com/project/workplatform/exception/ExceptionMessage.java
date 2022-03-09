@@ -25,7 +25,6 @@ public interface ExceptionMessage {
     String GROUP_NOT_EXIST = "该群聊不存在";
     String NOT_IN_GROUP = "你不是该群聊的成员";
     String USER_NOT_IN_GROUP = "该用户不是该群聊的成员";
-    String USER_ALREADY_ADMIN = "该用户已经是群聊管理员了";
 
     String PERMISSION_DENIED = "你没有权限处理该请求";
 
@@ -35,5 +34,10 @@ public interface ExceptionMessage {
     String NOT_STUDIO_CREATOR = "你不是工作室的创始人";
     String NOT_STUDIO_MEMBER = "你不是工作室的成员";
     String STUDIO_ID_INVALID = "无效的工作室请求";
+    String USER_NOT_IN_STUDIO = "该用户不是工作室成员";
+    String USER_ALREADY_SUPER_ADMIN = "该用户已经是超级管理员了";
+    String USER_ALREADY_ADMIN = "该用户已经是管理员了";
+    String USER_NOT_IN_THAT_DEPARTMENT = "该用户不是该工作室的管理员";
+    String USER_NOT_EXIST = "该用户不存在，请输入正确的名称或手机号";
 
 }

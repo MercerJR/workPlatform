@@ -130,4 +130,31 @@
         from user_studio
         where studio_id = #{studioId} and role_id = 1
     </select>
+    <select id="selectAdminByStudio"
+            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,u.phone_number
+        from user_studio as us inner join studio_role as sr inner join `user` as u inner join user_info as ui
+        on us.role_id = sr.role_id and us.user_id = u.id and us.user_id = ui.user_id
+        where us.studio_id = #{studioId} and us.role_id = #{roleId}
+    </select>
+    <select id="searchAdminByStudioAndPhone"
+            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,u.phone_number
+        from user_studio as us inner join studio_role as sr inner join `user` as u inner join user_info as ui
+        on us.role_id = sr.role_id and us.user_id = u.id and us.user_id = ui.user_id
+        where us.studio_id = #{studioId} and us.role_id = #{roleId} and u.phone_number = #{phoneNumber}
+    </select>
+    <select id="searchAdminByStudioAndNameFuzzy"
+            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,u.phone_number
+        from user_studio as us inner join studio_role as sr inner join `user` as u inner join user_info as ui
+        on us.role_id = sr.role_id and us.user_id = u.id and us.user_id = ui.user_id
+        where us.studio_id = #{studioId} and us.role_id = #{roleId} and
+        ui.name like CONCAT(CONCAT('%', #{nameFuzzy}), '%')
+    </select>
+    <update id="updateRoleByUserAndStudio">
+        update user_studio
+        set role_id = #{roleId}
+        where user_id = #{userId} and studio_id = #{studioId}
+    </update>
 </mapper>

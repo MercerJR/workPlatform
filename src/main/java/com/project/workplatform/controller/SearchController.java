@@ -5,7 +5,6 @@ import com.project.workplatform.data.response.Response;
 import com.project.workplatform.data.response.search.SearchGroupResponse;
 import com.project.workplatform.data.response.search.SearchUserResponse;
 import com.project.workplatform.service.SearchService;
-import com.project.workplatform.util.JwtUtil;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -45,5 +43,4 @@ public class SearchController {
         List<SearchGroupResponse> list = service.getSearchGroupResult(searchContent);
         return new Response().success(list);
     }
-
 }

@@ -1,6 +1,10 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.pojo.UserStudio;import org.apache.ibatis.annotations.Param;
+import com.project.workplatform.data.response.studio.StudioAdminResponse;
+import com.project.workplatform.pojo.UserStudio;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -21,7 +25,7 @@ public interface UserStudioMapper {
 
     UserStudio selectByUserAndStudio(@Param("userId") int userId, @Param("studioId") int studioId);
 
-    void updateDepartmentInfoByUserAndStudio(@Param("departmentId") int departmentId,@Param("roleId") int roleId,
+    void updateDepartmentInfoByUserAndStudio(@Param("departmentId") int departmentId, @Param("roleId") int roleId,
                                              @Param("userId") int userId, @Param("studioId") int studioId);
 
     Integer selectMemberNumberByStudio(Integer studioId);
@@ -29,4 +33,14 @@ public interface UserStudioMapper {
     Integer selectSuperAdminNumberByStudio(Integer studioId);
 
     Integer selectAdminNumberByStudio(Integer studioId);
+
+    List<StudioAdminResponse> selectAdminByStudio(@Param("studioId") Integer studioId, @Param("roleId") Integer roleId);
+
+    List<StudioAdminResponse> searchAdminByStudioAndPhone(@Param("studioId") Integer studioId,
+                                                          @Param("roleId") Integer roleId,@Param("phoneNumber") String phoneNumber);
+
+    List<StudioAdminResponse> searchAdminByStudioAndNameFuzzy(@Param("studioId") Integer studioId,
+                                                              @Param("roleId") Integer roleId,@Param("nameFuzzy") String nameFuzzy);
+
+    void updateRoleByUserAndStudio(@Param("userId") Integer userId,@Param("studioId") Integer studioId,@Param("roleId") Integer roleId);
 }

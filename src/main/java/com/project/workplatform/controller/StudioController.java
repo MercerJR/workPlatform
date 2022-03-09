@@ -2,10 +2,7 @@ package com.project.workplatform.controller;
 
 import com.project.workplatform.data.request.studio.*;
 import com.project.workplatform.data.response.Response;
-import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
-import com.project.workplatform.data.response.studio.StudioContactInfoResponse;
-import com.project.workplatform.data.response.studio.StudioInfoResponse;
-import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
+import com.project.workplatform.data.response.studio.*;
 import com.project.workplatform.pojo.StudioContactInfo;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
@@ -138,6 +135,23 @@ public class StudioController {
                                             HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
         service.updateStudioContactInfo(updateStudioContactInfoRequest,userId);
+        return new Response().success();
+    }
+
+    @GetMapping(value = "/show_admin_list",produces = "application/json")
+    public Response showAdminList(@RequestParam("studio_id") Integer studioId,
+                                       @RequestParam("type") String type,
+                                       @RequestParam("search_content") String searchContent,
+                                       HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        List<StudioAdminResponse> response = service.getStudioAdminResponse(studioId,userId,type,searchContent);
+        return new Response().success(response);
+    }
+
+    @PostMapping(value = "/update_admin",produces = "application/json")
+    public Response updateAdmin(@RequestBody UpdateStudioRoleRequest updateStudioRoleRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.updateStudioRole(updateStudioRoleRequest,userId);
         return new Response().success();
     }
 
