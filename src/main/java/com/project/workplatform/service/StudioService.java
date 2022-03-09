@@ -230,15 +230,20 @@ public class StudioService {
     }
 
     public List<StudioAdminResponse> getStudioAdminResponse(Integer studioId, Integer userId,
-                                                            String type, String searchContent) {
+                                                            String type, String searchContent, String select) {
         checkSuperAdmin(userId, studioId);
         //根据type来判断搜索的管理员的类型
         int roleId = "super".equals(type) ? StudioRoleEnum.SUPER_ADMIN.getRoleId() :
                 StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId();
+        //如果搜索框有内容，则进行搜索，否则返回全部
         if (StringUtils.hasLength(searchContent)) {
+            //只有查询部门管理员时才会select才会被赋值
+            if ("department".equals(select)) {
+                return userStudioMapper.selectAdminByDepartmentNameFuzzy(studioId, roleId, searchContent);
+            }
             return ValidUtil.checkPhoneNumber(searchContent) ?
-                    userStudioMapper.searchAdminByStudioAndPhone(studioId, roleId, searchContent) :
-                    userStudioMapper.searchAdminByStudioAndNameFuzzy(studioId, roleId, searchContent);
+                    userStudioMapper.selectAdminByStudioAndPhone(studioId, roleId, searchContent) :
+                    userStudioMapper.selectAdminByStudioAndNameFuzzy(studioId, roleId, searchContent);
         } else {
             return userStudioMapper.selectAdminByStudio(studioId, roleId);
         }
@@ -246,31 +251,34 @@ public class StudioService {
 
     public void updateStudioRole(UpdateStudioRoleRequest updateStudioRoleRequest, Integer userId) {
         int studioId = updateStudioRoleRequest.getStudioId();
-        checkSuperAdmin(userId,studioId);
+        checkSuperAdmin(userId, studioId);
         //根据搜索内容获得userId
-        int memberId = getUserIdBySearchContent(updateStudioRoleRequest.getSearchContent());
+        Integer memberId = updateStudioRoleRequest.getUserId();
+        memberId = (memberId == null || memberId == 0) ?
+                getUserIdByInsideAlias(updateStudioRoleRequest.getInsideAlias()) : memberId;
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(memberId, studioId);
         //检查用户是否是工作室成员
-        if (userStudio == null){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_NOT_IN_STUDIO);
+        if (userStudio == null) {
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.USER_NOT_IN_STUDIO);
         }
         //如果更新的是superAdmin且用户已经是超级管理员了
         if (updateStudioRoleRequest.getRoleId() == StudioRoleEnum.SUPER_ADMIN.getRoleId() &&
-                userStudio.getRoleId() == StudioRoleEnum.SUPER_ADMIN.getRoleId()){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_ALREADY_SUPER_ADMIN);
+                userStudio.getRoleId() == StudioRoleEnum.SUPER_ADMIN.getRoleId()) {
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.USER_ALREADY_SUPER_ADMIN);
         }
-        //如果更新的是admin
         if (updateStudioRoleRequest.getRoleId() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId()){
+            String departmentName = departmentMapper.selectByPrimaryKey(
+                    userStudio.getDepartmentId()).getDepartmentName();
             //若用户不是该部门成员
-            if (userStudio.getDepartmentId() != updateStudioRoleRequest.getDepartmentId()){
-                throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_NOT_IN_THAT_DEPARTMENT);
+            if (!departmentName.equals(updateStudioRoleRequest.getDepartmentName())) {
+                throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.USER_NOT_IN_THAT_DEPARTMENT);
             }
-            //若用户已经是该部门的管理员了
-            if (userStudio.getRoleId() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId()){
-                throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_ALREADY_ADMIN);
+            //如果更新的是admin且用户已经是部门管理员了
+            if (userStudio.getRoleId() == StudioRoleEnum.DEPARTMENT_ADMIN.getRoleId()) {
+                throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.USER_ALREADY_ADMIN);
             }
         }
-        userStudioMapper.updateRoleByUserAndStudio(memberId,studioId,updateStudioRoleRequest.getRoleId());
+        userStudioMapper.updateRoleByUserAndStudio(memberId, studioId, updateStudioRoleRequest.getRoleId());
     }
 
     private boolean isCreator(int userId, int studioId) {
@@ -298,13 +306,13 @@ public class StudioService {
         }
     }
 
-    private int getUserIdBySearchContent(String searchContent){
+    private Integer getUserIdByInsideAlias(String searchContent) {
         //memberId设置成Integer类型为了防止mysql中查询为空返回为null
         Integer memberId = ValidUtil.checkPhoneNumber(searchContent) ?
                 userInfoMapper.selectUserIdByPhoneNumber(searchContent) :
                 userInfoMapper.selectUserIdByName(searchContent);
-        if (memberId == null || memberId == 0){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.USER_NOT_EXIST);
+        if (memberId == null || memberId == 0) {
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.USER_NOT_EXIST);
         }
         return memberId;
     }

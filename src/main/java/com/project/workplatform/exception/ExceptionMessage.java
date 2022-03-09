@@ -37,7 +37,7 @@ public interface ExceptionMessage {
     String USER_NOT_IN_STUDIO = "该用户不是工作室成员";
     String USER_ALREADY_SUPER_ADMIN = "该用户已经是超级管理员了";
     String USER_ALREADY_ADMIN = "该用户已经是管理员了";
-    String USER_NOT_IN_THAT_DEPARTMENT = "该用户不是该工作室的管理员";
+    String USER_NOT_IN_THAT_DEPARTMENT = "该用户不是该工作室的成员，请输入正确的用户名称和工作室名称";
     String USER_NOT_EXIST = "该用户不存在，请输入正确的名称或手机号";
 
 }

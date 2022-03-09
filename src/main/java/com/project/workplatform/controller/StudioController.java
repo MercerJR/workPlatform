@@ -142,9 +142,10 @@ public class StudioController {
     public Response showAdminList(@RequestParam("studio_id") Integer studioId,
                                        @RequestParam("type") String type,
                                        @RequestParam("search_content") String searchContent,
+                                       @RequestParam(value = "select",required = false,defaultValue = "user") String select,
                                        HttpServletRequest request){
         Integer userId = JwtUtil.getId(request);
-        List<StudioAdminResponse> response = service.getStudioAdminResponse(studioId,userId,type,searchContent);
+        List<StudioAdminResponse> response = service.getStudioAdminResponse(studioId,userId,type,searchContent,select);
         return new Response().success(response);
     }
 

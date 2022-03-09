@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateStudioRoleRequest {
 
-    private String searchContent;
+    private Integer userId;
 
-    private int studioId;
+    private String insideAlias;
 
-    private int departmentId;
+    private Integer studioId;
+
+    private String departmentName;
 
     private int roleId;
 

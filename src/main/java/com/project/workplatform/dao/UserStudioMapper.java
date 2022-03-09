@@ -36,11 +36,14 @@ public interface UserStudioMapper {
 
     List<StudioAdminResponse> selectAdminByStudio(@Param("studioId") Integer studioId, @Param("roleId") Integer roleId);
 
-    List<StudioAdminResponse> searchAdminByStudioAndPhone(@Param("studioId") Integer studioId,
+    List<StudioAdminResponse> selectAdminByStudioAndPhone(@Param("studioId") Integer studioId,
                                                           @Param("roleId") Integer roleId,@Param("phoneNumber") String phoneNumber);
 
-    List<StudioAdminResponse> searchAdminByStudioAndNameFuzzy(@Param("studioId") Integer studioId,
+    List<StudioAdminResponse> selectAdminByStudioAndNameFuzzy(@Param("studioId") Integer studioId,
                                                               @Param("roleId") Integer roleId,@Param("nameFuzzy") String nameFuzzy);
 
     void updateRoleByUserAndStudio(@Param("userId") Integer userId,@Param("studioId") Integer studioId,@Param("roleId") Integer roleId);
+
+    List<StudioAdminResponse> selectAdminByDepartmentNameFuzzy(@Param("studioId") Integer studioId,
+                                          @Param("roleId") Integer roleId,@Param("departmentNameFuzzy") String departmentNameFuzzy);
 }

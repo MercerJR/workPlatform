@@ -23,4 +23,6 @@ public class StudioAdminResponse {
 
     private String phoneNumber;
 
+    private String departmentName;
+
 }
