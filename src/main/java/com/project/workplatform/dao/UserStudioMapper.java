@@ -1,5 +1,6 @@
 package com.project.workplatform.dao;
 
+import com.project.workplatform.data.response.studio.DepartmentMemberResponse;
 import com.project.workplatform.data.response.studio.StudioAdminResponse;
 import com.project.workplatform.pojo.UserStudio;
 import org.apache.ibatis.annotations.Param;
@@ -46,4 +47,8 @@ public interface UserStudioMapper {
 
     List<StudioAdminResponse> selectAdminByDepartmentNameFuzzy(@Param("studioId") Integer studioId,
                                           @Param("roleId") Integer roleId,@Param("departmentNameFuzzy") String departmentNameFuzzy);
+
+    List<String> selectLeaderNameByDepartment(Integer departmentId);
+
+    List<DepartmentMemberResponse> selectMemberByDepartment(int departmentId);
 }

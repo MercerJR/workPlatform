@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/23 13:29
+ * @Date: 2022/3/13 12:07
  */
 @Data
 @AllArgsConstructor
@@ -19,9 +19,15 @@ public class StudioDepartment implements Serializable {
 
     private Integer studioId;
 
+    /**
+     * 顶级部门的父部门id为0
+     */
     private Integer parentDepartmentId;
 
-    private Integer leaderId;
+    /**
+     * 子部门id，通过“,”分割
+     */
+    private String childrenDepartmentId;
 
     private String type;
 

@@ -155,5 +155,19 @@ public class StudioController {
         service.updateStudioRole(updateStudioRoleRequest,userId);
         return new Response().success();
     }
+    
+    @GetMapping(value = "/show_department_list/{studio_id}",produces = "application/json")
+    public Response getDepartmentList(@PathVariable("studio_id")int studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        List<DepartmentResponse> responses = service.getDepartmentList(studioId,userId);
+        return new Response().success(responses);
+    }
+
+    @GetMapping(value = "/show_department_member_list/{department_id}",produces = "application/json")
+    public Response getDepartmentMemberList(@PathVariable("department_id")int departmentId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        List<DepartmentMemberResponse> responses = service.getDepartmentMemberList(departmentId,userId);
+        return new Response().success(responses);
+    }
 
 }

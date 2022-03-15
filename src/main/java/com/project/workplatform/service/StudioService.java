@@ -18,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -152,13 +150,39 @@ public class StudioService {
 
     public void createDepartment(Integer userId, CreateDepartmentRequest createDepartmentRequest) {
         checkSuperAdmin(userId, createDepartmentRequest.getStudioId());
-        //TODO 校验部门名称是否符合格式规范
+        Integer parentDepartmentId = departmentMapper.selectIdByDepartmentName(
+                createDepartmentRequest.getParentDepartmentName());
+        if (parentDepartmentId == null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.PARENT_DEPARTMENT_NAME_WRONG);
+        }
+        StudioDepartment parentDepartment = departmentMapper.selectByPrimaryKey(parentDepartmentId);
+        //拼接部门名称
+        String departmentName = parentDepartment.getDepartmentName() +
+                "/" + createDepartmentRequest.getDepartmentName();
+        //校验部门是否已经存在，存在则不重复创建
+        if (departmentMapper.selectIdByDepartmentName(departmentName) != null){
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.DEPARTMENT_ALREADY_EXIST);
+        }
+
         StudioDepartment department = new StudioDepartment();
-        department.setDepartmentName(createDepartmentRequest.getDepartmentName());
+        department.setDepartmentName(departmentName);
         department.setStudioId(createDepartmentRequest.getStudioId());
-        department.setParentDepartmentId(createDepartmentRequest.getParentDepartmentId());
+        department.setParentDepartmentId(parentDepartmentId);
         department.setType(createDepartmentRequest.getType());
         departmentMapper.insertSelective(department);
+
+        //查询新创建的部门id。因为是自增id，所以需要通过查询获取
+        Integer departmentId = departmentMapper.selectIdByDepartmentName(departmentName);
+        String childrenDepartmentId = parentDepartment.getChildrenDepartmentId();
+        String newChildrenDepartmentId;
+        //若上级部门已经有下属部门，则拼接在其后，否则直接赋值给下属部门字段
+        if (StringUtils.hasLength(childrenDepartmentId)){
+            newChildrenDepartmentId = childrenDepartmentId + "," + departmentId;
+        }else{
+            newChildrenDepartmentId = String.valueOf(departmentId);
+        }
+        parentDepartment.setChildrenDepartmentId(newChildrenDepartmentId);
+        departmentMapper.updateByPrimaryKeySelective(parentDepartment);
     }
 
     public void distributeLeader(Integer userId, DistributeLeaderRequest distributeLeaderRequest) {
@@ -279,6 +303,53 @@ public class StudioService {
             }
         }
         userStudioMapper.updateRoleByUserAndStudio(memberId, studioId, updateStudioRoleRequest.getRoleId());
+    }
+
+    public List<DepartmentResponse> getDepartmentList(int studioId, Integer userId) {
+        List<DepartmentResponse> list = new ArrayList<>();
+        StudioDepartment topDepartment = departmentMapper.selectDepartmentByStudioAndParent(studioId,0);
+        getCascadeDepartmentList(topDepartment.getId(),list);
+        return list;
+    }
+
+    private void getCascadeDepartmentList(int departmentId, List<DepartmentResponse> list) {
+        StudioDepartment studioDepartment = departmentMapper.selectByPrimaryKey(departmentId);
+        //为departmentResponse赋值
+        DepartmentResponse departmentResponse = new DepartmentResponse();
+        departmentResponse.setIndex(list.size());
+        departmentResponse.setDepartmentId(studioDepartment.getId());
+        departmentResponse.setDepartmentName(studioDepartment.getDepartmentName());
+        departmentResponse.setPeopleNumber(studioDepartment.getPeopleNumber());
+        departmentResponse.setLeader(getLeaders(studioDepartment.getId()));
+        list.add(departmentResponse);
+
+        //获取孩子部门
+        if (!StringUtils.hasLength(studioDepartment.getChildrenDepartmentId())){
+            return;
+        }
+        String childrenDepartmentId = studioDepartment.getChildrenDepartmentId();
+        String[] children = childrenDepartmentId.split(",");
+        for (String id : children){
+            int childDepartmentId = Integer.parseInt(id);
+            getCascadeDepartmentList(childDepartmentId,list);
+        }
+    }
+
+    private String getLeaders(Integer departmentId) {
+        List<String> list = userStudioMapper.selectLeaderNameByDepartment(departmentId);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0;i < list.size();i++){
+            if (i == list.size() - 1){
+                builder.append(list.get(i));
+            }else {
+                builder.append(list.get(i)).append(",");
+            }
+        }
+        return builder.toString();
+    }
+
+    public List<DepartmentMemberResponse> getDepartmentMemberList(int departmentId, Integer userId) {
+        return userStudioMapper.selectMemberByDepartment(departmentId);
     }
 
     private boolean isCreator(int userId, int studioId) {

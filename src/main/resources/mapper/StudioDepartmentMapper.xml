@@ -8,13 +8,14 @@
         <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
         <result column="studio_id" jdbcType="INTEGER" property="studioId"/>
         <result column="parent_department_id" jdbcType="INTEGER" property="parentDepartmentId"/>
-        <result column="leader_id" jdbcType="INTEGER" property="leaderId"/>
+        <result column="children_department_id" jdbcType="VARCHAR" property="childrenDepartmentId"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="people_number" jdbcType="INTEGER" property="peopleNumber"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, department_name, studio_id, parent_department_id, leader_id, `type`, people_number
+        id, department_name, studio_id, parent_department_id, children_department_id, `type`,
+        people_number
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -32,11 +33,11 @@
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into studio_department (department_name, studio_id, parent_department_id,
-        leader_id, `type`, people_number
+        children_department_id, `type`, people_number
         )
         values (#{departmentName,jdbcType=VARCHAR}, #{studioId,jdbcType=INTEGER},
         #{parentDepartmentId,jdbcType=INTEGER},
-        #{leaderId,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{peopleNumber,jdbcType=INTEGER}
+        #{childrenDepartmentId,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{peopleNumber,jdbcType=INTEGER}
         )
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id"
@@ -53,8 +54,8 @@
             <if test="parentDepartmentId != null">
                 parent_department_id,
             </if>
-            <if test="leaderId != null">
-                leader_id,
+            <if test="childrenDepartmentId != null">
+                children_department_id,
             </if>
             <if test="type != null">
                 `type`,
@@ -73,8 +74,8 @@
             <if test="parentDepartmentId != null">
                 #{parentDepartmentId,jdbcType=INTEGER},
             </if>
-            <if test="leaderId != null">
-                #{leaderId,jdbcType=INTEGER},
+            <if test="childrenDepartmentId != null">
+                #{childrenDepartmentId,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
                 #{type,jdbcType=VARCHAR},
@@ -97,8 +98,8 @@
             <if test="parentDepartmentId != null">
                 parent_department_id = #{parentDepartmentId,jdbcType=INTEGER},
             </if>
-            <if test="leaderId != null">
-                leader_id = #{leaderId,jdbcType=INTEGER},
+            <if test="childrenDepartmentId != null">
+                children_department_id = #{childrenDepartmentId,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
                 `type` = #{type,jdbcType=VARCHAR},
@@ -115,7 +116,7 @@
         set department_name = #{departmentName,jdbcType=VARCHAR},
         studio_id = #{studioId,jdbcType=INTEGER},
         parent_department_id = #{parentDepartmentId,jdbcType=INTEGER},
-        leader_id = #{leaderId,jdbcType=INTEGER},
+        children_department_id = #{childrenDepartmentId,jdbcType=VARCHAR},
         `type` = #{type,jdbcType=VARCHAR},
         people_number = #{peopleNumber,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
@@ -129,5 +130,13 @@
         select count(*)
         from studio_department
         where studio_id = #{studioId}
+    </select>
+    <select id="selectDepartmentByStudioAndParent" resultMap="BaseResultMap">
+        select * from studio_department
+        where studio_id = #{studioId} and parent_department_id = #{parentDepartmentId}
+    </select>
+    <select id="selectIdByDepartmentName" resultType="java.lang.Integer">
+        select id from studio_department
+        where department_name = #{parentDepartmentName}
     </select>
 </mapper>

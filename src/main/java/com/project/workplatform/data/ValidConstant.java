@@ -47,6 +47,8 @@ public interface ValidConstant {
     String STUDIO_APPLY_MESSAGE_LENGTH = "申请消息不能超过50个字符";
     String STUDIO_CONTACT_NAME_LENGTH = "工作室联系人不能超过10个字符";
     String STUDIO_CONTACT_MAIL_WRONG_FORMAT = "联系人邮箱格式错误";
+    String DEPARTMENT_NAME_EMPTY = "部门名称不能为空";
+    String PARENT_DEPARTMENT_NAME_EMPTY = "上级部门名称不能为空";
 
     //搜索模块 校验常量
 

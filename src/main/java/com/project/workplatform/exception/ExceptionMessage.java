@@ -39,5 +39,7 @@ public interface ExceptionMessage {
     String USER_ALREADY_ADMIN = "该用户已经是管理员了";
     String USER_NOT_IN_THAT_DEPARTMENT = "该用户不是该工作室的成员，请输入正确的用户名称和工作室名称";
     String USER_NOT_EXIST = "该用户不存在，请输入正确的名称或手机号";
+    String PARENT_DEPARTMENT_NAME_WRONG = "请输入正确的上级部门名称";
+    String DEPARTMENT_ALREADY_EXIST = "该部门已经存在，无需重复创建";
 
 }
