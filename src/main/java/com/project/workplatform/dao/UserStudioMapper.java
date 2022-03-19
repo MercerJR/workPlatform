@@ -51,4 +51,6 @@ public interface UserStudioMapper {
     List<String> selectLeaderNameByDepartment(Integer departmentId);
 
     List<DepartmentMemberResponse> selectMemberByDepartment(int departmentId);
+
+    List<UserStudio> selectByDepartmentId(Integer departmentId);
 }

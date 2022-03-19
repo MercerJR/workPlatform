@@ -41,5 +41,9 @@ public interface ExceptionMessage {
     String USER_NOT_EXIST = "该用户不存在，请输入正确的名称或手机号";
     String PARENT_DEPARTMENT_NAME_WRONG = "请输入正确的上级部门名称";
     String DEPARTMENT_ALREADY_EXIST = "该部门已经存在，无需重复创建";
+    String DEPARTMENT_NAME_WRONG = "请输入正确的部门名称";
+    String CAN_NOT_DEAL_YOURSELF = "不能对自己进行操作";
+    String PARENT_DEPARTMENT_DO_NOT_BELONG_STUDIO = "该上级部门不属于本工作室";
+    String CAN_NOT_DEAL_TOP_DEPARTMENT = "不能删除顶级部门";
 
 }

@@ -139,4 +139,14 @@
         select id from studio_department
         where department_name = #{parentDepartmentName}
     </select>
+    <update id="decreasePeopleNumber">
+        update studio_department
+        set people_number = people_number - #{number}
+        where id = #{id}
+    </update>
+    <update id="increasePeopleNumber">
+        update studio_department
+        set people_number = people_number + #{number}
+        where id = #{id}
+    </update>
 </mapper>

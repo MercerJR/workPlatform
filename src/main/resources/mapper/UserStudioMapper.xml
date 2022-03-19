@@ -178,4 +178,8 @@
         on us.user_id = ui.user_id and us.department_id = sd.id
         where us.department_id = #{departmentId}
     </select>
+    <select id="selectByDepartmentId" resultMap="BaseResultMap">
+        select * from user_studio
+        where department_id = #{departmentId}
+    </select>
 </mapper>

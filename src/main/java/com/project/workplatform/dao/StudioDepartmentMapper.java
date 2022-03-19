@@ -1,6 +1,7 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.pojo.StudioDepartment;import org.apache.ibatis.annotations.Param;
+import com.project.workplatform.pojo.StudioDepartment;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author: Mercer JR
@@ -26,4 +27,8 @@ public interface StudioDepartmentMapper {
     StudioDepartment selectDepartmentByStudioAndParent(@Param("studioId") int studioId, @Param("parentDepartmentId") int parentDepartmentId);
 
     Integer selectIdByDepartmentName(String parentDepartmentName);
+
+    void decreasePeopleNumber(@Param("id") Integer id, @Param("number") Integer number);
+
+    void increasePeopleNumber(@Param("id") Integer id, @Param("number") Integer i);
 }

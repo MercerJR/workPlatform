@@ -170,4 +170,25 @@ public class StudioController {
         return new Response().success(responses);
     }
 
+    @PostMapping(value = "/change_department",produces = "application/json")
+    public Response changeDepartment(@RequestBody ChangeDepartmentRequest changeDepartmentRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.changeDepartment(changeDepartmentRequest,userId);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/update_department",produces = "application/json")
+    public Response updateDepartment(@RequestBody UpdateDepartmentRequest updateDepartmentRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.updateDepartment(updateDepartmentRequest,userId);
+        return new Response().success();
+    }
+
+    @PostMapping(value = "/delete_department",produces = "application/json")
+    public Response deleteDepartment(@RequestBody DeleteDepartmentRequest deleteDepartmentRequest,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        service.deleteDepartment(deleteDepartmentRequest,userId);
+        return new Response().success();
+    }
+
 }
