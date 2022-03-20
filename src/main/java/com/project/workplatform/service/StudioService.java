@@ -511,6 +511,16 @@ public class StudioService {
         departmentMapper.deleteByPrimaryKey(department.getId());
     }
 
+    /**
+     * 此处因为返回内容和部门成员列表返回的一致，因此沿用List<DepartmentMemberResponse>
+     * @param searchContent
+     * @param studioId
+     * @return List<DepartmentMemberResponse>
+     */
+    public List<DepartmentMemberResponse> searchMember(String searchContent, Integer studioId) {
+        return userStudioMapper.selectMemberByNameFuzzyAndStudio(searchContent,studioId);
+    }
+
     public List<DepartmentMemberResponse> getDepartmentMemberList(int departmentId, Integer userId) {
         return userStudioMapper.selectMemberByDepartment(departmentId);
     }

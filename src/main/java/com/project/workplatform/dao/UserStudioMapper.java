@@ -53,4 +53,6 @@ public interface UserStudioMapper {
     List<DepartmentMemberResponse> selectMemberByDepartment(int departmentId);
 
     List<UserStudio> selectByDepartmentId(Integer departmentId);
+
+    List<DepartmentMemberResponse> selectMemberByNameFuzzyAndStudio(@Param("searchContent") String searchContent, @Param("studioId") Integer studioId);
 }

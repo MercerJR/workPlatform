@@ -182,4 +182,11 @@
         select * from user_studio
         where department_id = #{departmentId}
     </select>
+    <select id="selectMemberByNameFuzzyAndStudio"
+            resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
+        select us.user_id,ifnull(us.inside_alias,ui.name) as insideAlias,ui.phone_number,sd.department_name
+        from user_studio as us inner join user_info as ui inner join studio_department as sd
+        on us.user_id = ui.user_id and us.department_id = sd.id
+        where us.studio_id = #{studioId} and us.inside_alias like CONCAT(CONCAT('%', #{searchContent}), '%')
+    </select>
 </mapper>
