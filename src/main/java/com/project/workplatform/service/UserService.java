@@ -73,4 +73,8 @@ public class UserService {
         }
         mapper.updatePasswordByPrimaryKey(id, request.getNewPassword());
     }
+
+    public User getUserLogInfo(Integer userId){
+        return mapper.selectByPrimaryKey(userId);
+    }
 }
