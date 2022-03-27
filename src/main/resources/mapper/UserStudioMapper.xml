@@ -189,4 +189,8 @@
         on us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.inside_alias like CONCAT(CONCAT('%', #{searchContent}), '%')
     </select>
+    <select id="selectByUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from user_studio
+        where user_id = #{userId}
+    </select>
 </mapper>

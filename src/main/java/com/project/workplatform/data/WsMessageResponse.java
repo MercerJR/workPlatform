@@ -22,4 +22,6 @@ public class WsMessageResponse {
 
     private String time;
 
+    private Integer targetType;
+
 }

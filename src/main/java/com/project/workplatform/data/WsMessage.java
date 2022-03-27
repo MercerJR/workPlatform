@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WsMessage {
 
+    /**
+     * 0：授权；1：文字消息
+     */
     private Integer type;
 
     private String content;

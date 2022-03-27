@@ -7,6 +7,7 @@ import com.project.workplatform.data.enums.WsMsgTargetTypeEnum;
 import com.project.workplatform.data.enums.WsMsgTypeEnum;
 import com.project.workplatform.pojo.User;
 import com.project.workplatform.pojo.UserInfo;
+import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.service.UserService;
 import com.project.workplatform.util.DateFormatUtil;
@@ -94,19 +95,19 @@ public class WebSocketController {
         Integer id = JwtUtil.getId(token);
         User user = userService.getUserLogInfo(id);
         boolean flag = JwtUtil.verifyToken(token, user.getPhoneNumber(), user.getPassword());
-        WsMessageResponse messageResponse = new WsMessageResponse();
         if (flag) {
             UserInfo userInfo = userService.getUserInfo(user.getId());
             USER_MAP.put(session, userInfo);
             SESSION_MAP.put(userInfo.getUserId(), session);
-            messageResponse.setSenderId(userInfo.getUserId());
-            messageResponse.setSenderName(userInfo.getName());
+        }else{
+            WsMessageResponse messageResponse = new WsMessageResponse();
+            messageResponse.setCode(2);
+            doSend(session, messageResponse);
         }
-        messageResponse.setCode(flag ? 0 : 2);
-        doSend(session, messageResponse);
     }
 
     private void sendMessage(WsMessage wsMessage) {
+        log.info(wsMessage.toString());
         WsMessageResponse messageResponse = new WsMessageResponse();
         UserInfo senderInfo = USER_MAP.get(session);
         //如果用户没有登陆，则返回未身份错误
@@ -123,17 +124,25 @@ public class WebSocketController {
                 Integer studioId = wsMessage.getStudioId();
                 //构建WsMessageResponse对象
                 messageResponse.setSenderId(senderInfo.getUserId());
-                messageResponse.setSenderName(studioId == null || studioId <= 0 ? senderInfo.getName() :
-                        studioService.getUserStudioInfo(senderInfo.getUserId(), studioId).getInsideAlias());
+                String senderName;
+                if (studioId == null || studioId <= 0){
+                    senderName = senderInfo.getName();
+                }else{
+                    UserStudio userStudioInfo = studioService.getUserStudioInfo(senderInfo.getUserId(), studioId);
+                    senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
+                }
+                messageResponse.setSenderName(senderName);
                 messageResponse.setContent(wsMessage.getContent());
                 messageResponse.setTime(DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT));
+                messageResponse.setTargetType(wsMessage.getTargetType());
                 //TODO 将wsMessageResponse写进MySQL的personal_msg_record表中
                 //分为对方在线和不在线两种情况：如果对方在线，则实时发送并更新msg_ack_id；如果对方不在线，在redis中记录哪个用户发来了消息，上线后会自动拉取最新消息
                 Session targetSession = SESSION_MAP.get(targetId);
+                doSend(session, messageResponse);
+                //TODO 将friend表中自己的msg_ack_id更新
                 if (targetSession != null) {
-                    doSend(session, messageResponse);
                     doSend(targetSession, messageResponse);
-                    //TODO 将friend表中的msg_ack_id更新
+                    //TODO 将friend表中对方的msg_ack_id更新
                 } else {
                     //redis中记录未收到的信息的来源
                     String redisKey = Constant.REDIS_NOT_READ_MSG_SENDER_KEY_PREFIX + targetId;
