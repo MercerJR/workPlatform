@@ -16,5 +16,6 @@ public interface Constant {
     String REDIS_LIKE_KEY_PREFIX = "like:";
     String REDIS_INVITE_CODE_KEY_PREFIX = "inviteCode:";
     String REDIS_CURRENT_STUDIO_KEY_PREFIX = "currentStudio:";
+    String REDIS_NOT_READ_MSG_SENDER_KEY_PREFIX = "notReadMsgSender:";
 
 }

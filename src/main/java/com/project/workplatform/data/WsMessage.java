@@ -17,4 +17,6 @@ public class WsMessage {
 
     private Integer targetType;
 
+    private Integer studioId;
+
 }

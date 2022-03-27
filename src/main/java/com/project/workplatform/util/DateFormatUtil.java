@@ -20,4 +20,11 @@ public class DateFormatUtil {
         return simpleDateFormat.format(date);
     }
 
+    public static String getStringDateByMiles(Long miles,String format){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date date = new Date();
+        date.setTime(miles);
+        return simpleDateFormat.format(date);
+    }
+
 }

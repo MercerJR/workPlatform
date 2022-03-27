@@ -1,14 +1,41 @@
 package com.project.workplatform.service;
 
-import com.project.workplatform.dao.*;
+import com.project.workplatform.dao.StudioApplyMapper;
+import com.project.workplatform.dao.StudioContactInfoMapper;
+import com.project.workplatform.dao.StudioDepartmentMapper;
+import com.project.workplatform.dao.StudioMapper;
+import com.project.workplatform.dao.UserInfoMapper;
+import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.enums.StudioRoleEnum;
-import com.project.workplatform.data.request.studio.*;
-import com.project.workplatform.data.response.studio.*;
+import com.project.workplatform.data.request.studio.ApplyJoinStudioRequest;
+import com.project.workplatform.data.request.studio.ChangeDepartmentRequest;
+import com.project.workplatform.data.request.studio.CreateDepartmentRequest;
+import com.project.workplatform.data.request.studio.CreateStudioRequest;
+import com.project.workplatform.data.request.studio.DealStudioApplyRequest;
+import com.project.workplatform.data.request.studio.DeleteDepartmentRequest;
+import com.project.workplatform.data.request.studio.DistributeLeaderRequest;
+import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
+import com.project.workplatform.data.request.studio.InviteJoinStudioRequest;
+import com.project.workplatform.data.request.studio.UpdateDepartmentRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioContactInfoRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioInfoRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioRoleRequest;
+import com.project.workplatform.data.response.studio.DepartmentMemberResponse;
+import com.project.workplatform.data.response.studio.DepartmentResponse;
+import com.project.workplatform.data.response.studio.StudioAdminResponse;
+import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
+import com.project.workplatform.data.response.studio.StudioContactInfoResponse;
+import com.project.workplatform.data.response.studio.StudioInfoResponse;
+import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
-import com.project.workplatform.pojo.*;
+import com.project.workplatform.pojo.Studio;
+import com.project.workplatform.pojo.StudioApply;
+import com.project.workplatform.pojo.StudioContactInfo;
+import com.project.workplatform.pojo.StudioDepartment;
+import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.util.RandomUtil;
 import com.project.workplatform.util.ValidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +45,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Mercer JR
@@ -523,6 +552,10 @@ public class StudioService {
 
     public List<DepartmentMemberResponse> getDepartmentMemberList(int departmentId, Integer userId) {
         return userStudioMapper.selectMemberByDepartment(departmentId);
+    }
+
+    public UserStudio getUserStudioInfo(Integer userId,Integer studioId){
+        return userStudioMapper.selectByUserAndStudio(userId,studioId);
     }
 
     private boolean isCreator(int userId, int studioId) {
