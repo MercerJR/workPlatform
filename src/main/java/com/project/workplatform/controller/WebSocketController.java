@@ -8,6 +8,7 @@ import com.project.workplatform.data.enums.WsMsgTypeEnum;
 import com.project.workplatform.pojo.User;
 import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.pojo.UserStudio;
+import com.project.workplatform.service.ChatInfoService;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.service.UserService;
 import com.project.workplatform.util.DateFormatUtil;
@@ -52,6 +53,13 @@ public class WebSocketController {
     @Autowired
     private void setStudioService(StudioService studioService) {
         WebSocketController.studioService = studioService;
+    }
+
+    private static ChatInfoService chatInfoService;
+
+    @Autowired
+    private void setChatInfoService(ChatInfoService chatInfoService) {
+        WebSocketController.chatInfoService = chatInfoService;
     }
 
     private static RedisTemplate<String, Object> redisTemplate;
@@ -99,7 +107,7 @@ public class WebSocketController {
             UserInfo userInfo = userService.getUserInfo(user.getId());
             USER_MAP.put(session, userInfo);
             SESSION_MAP.put(userInfo.getUserId(), session);
-        }else{
+        } else {
             WsMessageResponse messageResponse = new WsMessageResponse();
             messageResponse.setCode(2);
             doSend(session, messageResponse);
@@ -125,9 +133,9 @@ public class WebSocketController {
                 //构建WsMessageResponse对象
                 messageResponse.setSenderId(senderInfo.getUserId());
                 String senderName;
-                if (studioId == null || studioId <= 0){
+                if (studioId == null || studioId <= 0) {
                     senderName = senderInfo.getName();
-                }else{
+                } else {
                     UserStudio userStudioInfo = studioService.getUserStudioInfo(senderInfo.getUserId(), studioId);
                     senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
                 }
@@ -136,6 +144,7 @@ public class WebSocketController {
                 messageResponse.setTime(DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT));
                 messageResponse.setTargetType(wsMessage.getTargetType());
                 //TODO 将wsMessageResponse写进MySQL的personal_msg_record表中
+                int msgAckId = chatInfoService.insertPersonalMsgRecord(messageResponse);
                 //分为对方在线和不在线两种情况：如果对方在线，则实时发送并更新msg_ack_id；如果对方不在线，在redis中记录哪个用户发来了消息，上线后会自动拉取最新消息
                 Session targetSession = SESSION_MAP.get(targetId);
                 doSend(session, messageResponse);
@@ -146,7 +155,7 @@ public class WebSocketController {
                 } else {
                     //redis中记录未收到的信息的来源
                     String redisKey = Constant.REDIS_NOT_READ_MSG_SENDER_KEY_PREFIX + targetId;
-                    redisTemplate.opsForSet().add(redisKey,senderInfo.getUserId());
+                    redisTemplate.opsForSet().add(redisKey, senderInfo.getUserId());
                 }
                 break;
             //群聊

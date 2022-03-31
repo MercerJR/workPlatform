@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.project.workplatform.dao.UserInfoMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
+import com.project.workplatform.data.WsMessageResponse;
 import com.project.workplatform.data.request.chatInfo.UpdateChatListRequest;
 import com.project.workplatform.data.response.chatInfo.ChatListResponse;
 import com.project.workplatform.pojo.UserInfo;
@@ -76,5 +77,10 @@ public class ChatInfoService {
             }
         }
         return responses;
+    }
+
+    public int insertPersonalMsgRecord(WsMessageResponse messageResponse) {
+        //TODO 引入personal_msg_record表，执行表的insert方法，并获取插入的主键自增id（获取自增id的方法为"SELECT LAST_INSERT_ID()"）
+        return 0;
     }
 }
