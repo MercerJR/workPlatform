@@ -1,11 +1,10 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.data.response.group.GroupResponse;
-import com.project.workplatform.data.response.group.MemberResponse;import com.project.workplatform.pojo.UserGroup;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.project.workplatform.data.response.group.GroupResponse;import com.project.workplatform.data.response.group.MemberResponse;import com.project.workplatform.pojo.UserGroup;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/16 20:23
+ * @Date: 2022/4/1 9:17
  */
 public interface UserGroupMapper {
     int deleteByPrimaryKey(Integer id);
@@ -24,7 +23,9 @@ public interface UserGroupMapper {
 
     List<MemberResponse> selectMemberByGroup(int groupId);
 
-    List<GroupResponse> selectByUser(@Param("userId") Integer userId,@Param("type") int type);
+    List<GroupResponse> selectByUser(@Param("userId") Integer userId, @Param("type") int type);
 
-    void updateRoleByUserAndGroup(@Param("roleId") int roleId,@Param("userId") int userId,@Param("groupId") int groupId);
+    void updateRoleByUserAndGroup(@Param("roleId") int roleId, @Param("userId") int userId, @Param("groupId") int groupId);
+
+    int updateMsgAckIdByUserAndGroup(@Param("userId") int userId, @Param("groupId") int groupId);
 }

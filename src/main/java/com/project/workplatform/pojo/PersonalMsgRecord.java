@@ -7,26 +7,21 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/4/1 9:17
+ * @Date: 2022/4/1 9:06
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserGroup implements Serializable {
+public class PersonalMsgRecord implements Serializable {
     private Integer id;
 
-    private Integer userId;
+    private Integer senderId;
 
-    private Integer groupId;
+    private Integer targetId;
 
-    private String nickname;
+    private String time;
 
-    /**
-     * 0：普通成员，1：管理员，2：群主
-     */
-    private Integer roleId;
-
-    private Integer msgAckId;
+    private String content;
 
     private static final long serialVersionUID = 1L;
 }

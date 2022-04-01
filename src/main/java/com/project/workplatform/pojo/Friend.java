@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/9 14:45
+ * @Date: 2022/4/1 9:16
  */
 @Data
 @AllArgsConstructor
@@ -18,6 +18,8 @@ public class Friend implements Serializable {
     private Integer userId;
 
     private Integer friendId;
+
+    private Integer msgAckId;
 
     private static final long serialVersionUID = 1L;
 
