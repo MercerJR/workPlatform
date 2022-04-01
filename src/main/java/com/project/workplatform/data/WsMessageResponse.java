@@ -16,6 +16,8 @@ public class WsMessageResponse {
 
     private Integer senderId;
 
+    private Integer targetId;
+
     private String senderName;
 
     private String content;

@@ -92,4 +92,8 @@ public class FriendService {
     public FriendInfoResponse getFriendInfo(int friendId) {
         return mapper.selectFriendInfo(friendId);
     }
+
+    public void updateMsgAckId(int msgAckId, Integer userId, Integer friendId) {
+        mapper.updateMsgAckIdByUserAndFriend(msgAckId,userId,friendId);
+    }
 }
