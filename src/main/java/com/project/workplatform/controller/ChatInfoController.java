@@ -47,7 +47,7 @@ public class ChatInfoController {
                                   @RequestParam("studio_id") Integer studioId,
                                   HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
-        List<WsMessageResponse> response = service.getPersonalMsgRecord(userId, targetId, targetType,studioId);
+        List<WsMessageResponse> response = service.getMsgRecord(userId, targetId, targetType,studioId);
         return new Response().success(response);
     }
 

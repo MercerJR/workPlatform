@@ -1,6 +1,11 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.data.response.group.GroupResponse;import com.project.workplatform.data.response.group.MemberResponse;import com.project.workplatform.pojo.UserGroup;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.project.workplatform.data.response.group.GroupResponse;
+import com.project.workplatform.data.response.group.MemberResponse;
+import com.project.workplatform.pojo.UserGroup;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -27,5 +32,5 @@ public interface UserGroupMapper {
 
     void updateRoleByUserAndGroup(@Param("roleId") int roleId, @Param("userId") int userId, @Param("groupId") int groupId);
 
-    int updateMsgAckIdByUserAndGroup(@Param("userId") int userId, @Param("groupId") int groupId);
+    int updateMsgAckIdByUserAndGroup(@Param("msgAckId") int msgAckId, @Param("userId") int userId, @Param("groupId") int groupId);
 }
