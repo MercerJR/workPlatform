@@ -58,7 +58,7 @@ public class ChatInfoService {
             for (Object obj : chatList) {
                 String str = (String) obj;
                 UpdateChatListRequest item = JSON.parseObject(str, UpdateChatListRequest.class);
-                if (item.getChatId().equals(updateChatListRequest.getChatId())) {
+                if (item.getChatId().equals(updateChatListRequest.getChatId()) && item.getTargetType().equals(updateChatListRequest.getTargetType())) {
                     redisTemplate.opsForList().remove(redisKey, 1, str);
                     break;
                 }
