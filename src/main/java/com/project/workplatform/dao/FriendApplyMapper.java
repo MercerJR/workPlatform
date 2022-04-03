@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/12 19:37
+ * @Date: 2022/4/3 15:27
  */
 public interface FriendApplyMapper {
     int deleteByPrimaryKey(Integer id);

@@ -1,103 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.FriendApplyMapper">
-    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.FriendApply">
-        <!--@mbg.generated-->
-        <!--@Table friend_apply-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="target_id" jdbcType="INTEGER" property="targetId"/>
-        <result column="tag" jdbcType="INTEGER" property="tag"/>
-        <result column="apply_message" jdbcType="VARCHAR" property="applyMessage"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, user_id, target_id, tag, apply_message
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from friend_apply
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from friend_apply
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.FriendApply"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into friend_apply (user_id, target_id, tag,
-        apply_message)
-        values (#{userId,jdbcType=INTEGER}, #{targetId,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER},
-        #{applyMessage,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.project.workplatform.pojo.FriendApply" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into friend_apply
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="targetId != null">
-                target_id,
-            </if>
-            <if test="tag != null">
-                tag,
-            </if>
-            <if test="applyMessage != null">
-                apply_message,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="targetId != null">
-                #{targetId,jdbcType=INTEGER},
-            </if>
-            <if test="tag != null">
-                #{tag,jdbcType=INTEGER},
-            </if>
-            <if test="applyMessage != null">
-                #{applyMessage,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.FriendApply">
-        <!--@mbg.generated-->
-        update friend_apply
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="targetId != null">
-                target_id = #{targetId,jdbcType=INTEGER},
-            </if>
-            <if test="tag != null">
-                tag = #{tag,jdbcType=INTEGER},
-            </if>
-            <if test="applyMessage != null">
-                apply_message = #{applyMessage,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.FriendApply">
-        <!--@mbg.generated-->
-        update friend_apply
-        set user_id = #{userId,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    <!--@Table friend_apply-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="target_id" jdbcType="INTEGER" property="targetId" />
+    <result column="tag" jdbcType="INTEGER" property="tag" />
+    <result column="apply_message" jdbcType="VARCHAR" property="applyMessage" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, target_id, tag, apply_message, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from friend_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from friend_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.FriendApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into friend_apply (user_id, target_id, tag, 
+      apply_message, create_time)
+    values (#{userId,jdbcType=INTEGER}, #{targetId,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}, 
+      #{applyMessage,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.FriendApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into friend_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="applyMessage != null">
+        apply_message,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="applyMessage != null">
+        #{applyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    update friend_apply
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="targetId != null">
         target_id = #{targetId,jdbcType=INTEGER},
         tag = #{tag,jdbcType=INTEGER},
-        apply_message = #{applyMessage,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <select id="selectByUser" resultType="com.project.workplatform.pojo.FriendApply">
-        select * from friend_apply
-        where user_id = #{userId} or target_id = #{userId}
-    </select>
-
+      </if>
+      <if test="applyMessage != null">
+        apply_message = #{applyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.FriendApply">
+    <!--@mbg.generated-->
+    update friend_apply
+    set user_id = #{userId,jdbcType=INTEGER},
+      target_id = #{targetId,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=INTEGER},
+      apply_message = #{applyMessage,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>
