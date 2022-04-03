@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NoticeResponse {
 
+    private Integer applyId;
+
     private String noticeTitle;
 
     private String noticeContent;

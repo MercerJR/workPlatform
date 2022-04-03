@@ -119,9 +119,11 @@
         where id = #{applyId}
     </update>
     <select id="selectByUser" resultType="com.project.workplatform.pojo.GroupApply">
-        select ga.user_id,ga.group_id,ga.apply_message,ga.tag,ga.create_time
-        from group_apply as ga inner join user_group as ug
-        on ga.group_id = ug.group_id
-        where ga.user_id = #{userId} or (ug.user_id = #{userId} and ug.role_id > 0)
+        select ga.id, ga.user_id, ga.group_id, ga.apply_message, ga.tag, ga.create_time
+        from group_apply as ga
+                 inner join user_group as ug
+                            on ga.group_id = ug.group_id
+        where ga.user_id = #{userId}
+           or (ug.user_id = #{userId} and ug.role_id > 0)
     </select>
 </mapper>

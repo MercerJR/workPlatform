@@ -59,15 +59,16 @@ public class NoticeService {
                 continue;
             }
             NoticeResponse response = new NoticeResponse();
+            response.setApplyId(apply.getId());
             response.setNoticeType(1);
             response.setCreateTime(apply.getCreateTime().getTime());
+            response.setNoticeContent(apply.getApplyMessage());
             //分为自己是申请人和自己是管理员两种情况
             if (apply.getUserId().equals(userId)) {
                 String groupName = groupMapper.selectByPrimaryKey(apply.getGroupId()).getGroupName();
                 String res = apply.getTag() == 1 ? "管理员同意让你加入群聊 " : "管理员拒绝让你加入群聊 ";
                 String title = res + " " + groupName;
                 response.setNoticeTitle(title);
-                response.setNoticeContent("");
                 response.setNeedDeal(false);
             } else {
                 String applyName = userInfoMapper.selectByUser(apply.getUserId()).getName();
@@ -75,13 +76,11 @@ public class NoticeService {
                 if (apply.getTag() == 0) {
                     String title = applyName + " 申请加入群聊 " + groupName;
                     response.setNoticeTitle(title);
-                    response.setNoticeContent(apply.getApplyMessage());
                     response.setNeedDeal(true);
                 } else {
                     String res = apply.getTag() == 1 ? "管理员已同意 " : "管理员已拒绝 ";
                     String title = res + applyName + " 加入群聊 " + groupName;
                     response.setNoticeTitle(title);
-                    response.setNoticeContent("");
                     response.setNeedDeal(false);
                 }
             }
@@ -97,28 +96,27 @@ public class NoticeService {
                 continue;
             }
             NoticeResponse response = new NoticeResponse();
+            response.setApplyId(apply.getId());
             response.setNoticeType(0);
             response.setCreateTime(apply.getCreateTime().getTime());
+            response.setNoticeContent(apply.getApplyMessage());
             //分为自己是申请人和自己是被申请人两种情况
             if (apply.getUserId().equals(userId)) {
                 String targetName = userInfoMapper.selectByUser(apply.getTargetId()).getName();
                 String res = apply.getTag() == 1 ? " 同意了你的好友请求" : " 拒绝了你的好友请求";
                 String title = targetName + res;
                 response.setNoticeTitle(title);
-                response.setNoticeContent("");
                 response.setNeedDeal(false);
             } else {
                 String applyName = userInfoMapper.selectByUser(apply.getUserId()).getName();
                 if (apply.getTag() == 0) {
                     String title = applyName + " 请求添加你为好友";
                     response.setNoticeTitle(title);
-                    response.setNoticeContent(apply.getApplyMessage());
                     response.setNeedDeal(true);
                 } else {
                     String res = apply.getTag() == 1 ? "已同意 " : "已拒绝 ";
                     String title = res + applyName + " 的好友申请";
                     response.setNoticeTitle(title);
-                    response.setNoticeContent("");
                     response.setNeedDeal(false);
                 }
             }
