@@ -4,7 +4,7 @@ import com.project.workplatform.pojo.StudioApply;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/22 12:53
+ * @Date: 2022/4/3 15:55
  */
 public interface StudioApplyMapper {
     int deleteByPrimaryKey(Integer id);

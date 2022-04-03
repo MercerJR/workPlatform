@@ -1,13 +1,14 @@
 package com.project.workplatform.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/22 12:53
+ * @Date: 2022/4/3 15:55
  */
 @Data
 @AllArgsConstructor
@@ -32,6 +33,8 @@ public class StudioApply implements Serializable {
      * 0：未处理；1：同意；2：拒绝
      */
     private Integer tag;
+
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }

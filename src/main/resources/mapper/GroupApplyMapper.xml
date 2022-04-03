@@ -1,100 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.GroupApplyMapper">
-    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.GroupApply">
-        <!--@mbg.generated-->
-        <!--@Table group_apply-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
-        <result column="apply_message" jdbcType="VARCHAR" property="applyMessage"/>
-        <result column="tag" jdbcType="INTEGER" property="tag"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, user_id, group_id, apply_message, tag
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from group_apply
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from group_apply
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupApply"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into group_apply (user_id, group_id, apply_message,
-        tag)
-        values (#{userId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{applyMessage,jdbcType=VARCHAR},
-        #{tag,jdbcType=INTEGER})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.project.workplatform.pojo.GroupApply" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into group_apply
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="groupId != null">
-                group_id,
-            </if>
-            <if test="applyMessage != null">
-                apply_message,
-            </if>
-            <if test="tag != null">
-                tag,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="groupId != null">
-                #{groupId,jdbcType=INTEGER},
-            </if>
-            <if test="applyMessage != null">
-                #{applyMessage,jdbcType=VARCHAR},
-            </if>
-            <if test="tag != null">
-                #{tag,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.GroupApply">
-        <!--@mbg.generated-->
-        update group_apply
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="groupId != null">
-                group_id = #{groupId,jdbcType=INTEGER},
-            </if>
-            <if test="applyMessage != null">
-                apply_message = #{applyMessage,jdbcType=VARCHAR},
-            </if>
-            <if test="tag != null">
-                tag = #{tag,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.GroupApply">
-        <!--@mbg.generated-->
-        update group_apply
-        set user_id = #{userId,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.GroupApply">
+    <!--@mbg.generated-->
+    <!--@Table group_apply-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="apply_message" jdbcType="VARCHAR" property="applyMessage" />
+    <result column="tag" jdbcType="INTEGER" property="tag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, group_id, apply_message, tag, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from group_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from group_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into group_apply (user_id, group_id, apply_message, 
+      tag, create_time)
+    values (#{userId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{applyMessage,jdbcType=VARCHAR}, 
+      #{tag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupApply" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into group_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="applyMessage != null">
+        apply_message,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="applyMessage != null">
+        #{applyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.GroupApply">
+    <!--@mbg.generated-->
+    update group_apply
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
         group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="applyMessage != null">
         apply_message = #{applyMessage,jdbcType=VARCHAR},
-        tag = #{tag,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.GroupApply">
+    <!--@mbg.generated-->
+    update group_apply
+    set user_id = #{userId,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      apply_message = #{applyMessage,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <select id="selectApplyList" resultType="com.project.workplatform.data.response.group.ApplyUserResponse">
         select ui.user_id as userId,ui.name,ga.apply_message as applyMessage from group_apply as ga inner join user_info as ui
         on ga.user_id = ui.user_id
