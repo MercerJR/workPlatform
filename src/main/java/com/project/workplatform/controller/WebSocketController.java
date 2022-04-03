@@ -5,10 +5,14 @@ import com.project.workplatform.data.WsMessage;
 import com.project.workplatform.data.WsMessageResponse;
 import com.project.workplatform.data.enums.WsMsgTargetTypeEnum;
 import com.project.workplatform.data.enums.WsMsgTypeEnum;
+import com.project.workplatform.data.request.chatInfo.UpdateChatListRequest;
+import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.pojo.User;
 import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.service.ChatInfoService;
+import com.project.workplatform.service.FriendService;
+import com.project.workplatform.service.GroupService;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.service.UserService;
 import com.project.workplatform.util.DateFormatUtil;
@@ -27,6 +31,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -60,6 +65,20 @@ public class WebSocketController {
     @Autowired
     private void setChatInfoService(ChatInfoService chatInfoService) {
         WebSocketController.chatInfoService = chatInfoService;
+    }
+
+    private static FriendService friendService;
+
+    @Autowired
+    private void setFriendService(FriendService friendService) {
+        WebSocketController.friendService = friendService;
+    }
+
+    private static GroupService groupService;
+
+    @Autowired
+    private void setGroupService(GroupService groupService) {
+        WebSocketController.groupService = groupService;
     }
 
     private static RedisTemplate<String, Object> redisTemplate;
@@ -126,45 +145,61 @@ public class WebSocketController {
         }
         WsMsgTargetTypeEnum targetTypeEnum = WsMsgTargetTypeEnum.valueOfEnum(wsMessage.getTargetType());
         Integer targetId = wsMessage.getTargetId();
+        Integer studioId = wsMessage.getStudioId();
+        //构造wsMessageResponse对象
+        messageResponse.setSenderId(senderInfo.getUserId());
+        String senderName;
+        if (studioId == null || studioId <= 0) {
+            senderName = senderInfo.getName();
+        } else {
+            UserStudio userStudioInfo = studioService.getUserStudioInfo(senderInfo.getUserId(), studioId);
+            senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
+        }
+        messageResponse.setSenderName(senderName);
+        messageResponse.setContent(wsMessage.getContent());
+        messageResponse.setTime(DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT));
+        messageResponse.setTargetId(targetId);
+        messageResponse.setTargetType(wsMessage.getTargetType());
         switch (targetTypeEnum) {
             //单人聊天
             case PERSONAL:
-                Integer studioId = wsMessage.getStudioId();
-                //构建WsMessageResponse对象
-                messageResponse.setSenderId(senderInfo.getUserId());
-                String senderName;
-                if (studioId == null || studioId <= 0) {
-                    senderName = senderInfo.getName();
-                } else {
-                    UserStudio userStudioInfo = studioService.getUserStudioInfo(senderInfo.getUserId(), studioId);
-                    senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
-                }
-                messageResponse.setSenderName(senderName);
-                messageResponse.setContent(wsMessage.getContent());
-                messageResponse.setTime(DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT));
-                messageResponse.setTargetType(wsMessage.getTargetType());
                 //TODO 将wsMessageResponse写进MySQL的personal_msg_record表中
-                int msgAckId = chatInfoService.insertPersonalMsgRecord(messageResponse);
+                int personalMsgAckId = chatInfoService.insertPersonalMsgRecord(messageResponse);
                 //分为对方在线和不在线两种情况：如果对方在线，则实时发送并更新msg_ack_id；如果对方不在线，在redis中记录哪个用户发来了消息，上线后会自动拉取最新消息
-                Session targetSession = SESSION_MAP.get(targetId);
                 doSend(session, messageResponse);
                 //TODO 将friend表中自己的msg_ack_id更新
+                friendService.updateMsgAckId(personalMsgAckId, senderInfo.getUserId(), targetId);
+                //将对方的聊天列表更新
+                chatInfoService.updateChatList(new UpdateChatListRequest(senderInfo.getUserId(), messageResponse.getTargetType()), targetId);
+                Session targetSession = SESSION_MAP.get(targetId);
                 if (targetSession != null) {
                     doSend(targetSession, messageResponse);
                     //TODO 将friend表中对方的msg_ack_id更新
+                    friendService.updateMsgAckId(personalMsgAckId, targetId, senderInfo.getUserId());
                 } else {
                     //redis中记录未收到的信息的来源
+                    //用于记录未读消息记录，暂时没用该段代码
                     String redisKey = Constant.REDIS_NOT_READ_MSG_SENDER_KEY_PREFIX + targetId;
                     redisTemplate.opsForSet().add(redisKey, senderInfo.getUserId());
                 }
                 break;
             //群聊
             case GROUP:
-                //TODO 将wsMessageResponse写进MySQL的group_msg_record表中
+                //TODO 将wsMessageResponse写进MySQL的group_msg_record表中，并获取msgAckId
+                int groupMsgAckId = chatInfoService.insertGroupMsgRecord(messageResponse);
                 //TODO 根据targetId从MySQL的user_group表中获取该群聊的用户列表
-                //TODO 遍历用户列表，分别找出在线和离线的用户的session列表
-                //TODO 给在线的用户实时推送消息，并且更新user_group中的msg_ack_id
-                //TODO 离线的用户不用操作
+                List<MemberResponse> memberList = groupService.getMemberList(senderInfo.getUserId(), targetId);
+                //TODO 遍历用户列表，找出在线用户的session
+                for (MemberResponse member : memberList){
+                    //TODO 更新聊天列表
+                    chatInfoService.updateChatList(new UpdateChatListRequest(targetId, messageResponse.getTargetType()),member.getUserId());
+                    //TODO 给在线的用户实时推送消息，更新user_group中的msg_ack_id
+                    Session memberSession = SESSION_MAP.get(member.getUserId());
+                    if (memberSession != null){
+                        doSend(memberSession, messageResponse);
+                        groupService.updateMsgAckId(groupMsgAckId,member.getUserId(),targetId);
+                    }
+                }
                 break;
             default:
                 break;
@@ -174,9 +209,7 @@ public class WebSocketController {
     private void doSend(Session session, WsMessageResponse messageResponse) {
         try {
             session.getBasicRemote().sendObject(messageResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (EncodeException e) {
+        } catch (IOException | EncodeException e) {
             e.printStackTrace();
         }
     }

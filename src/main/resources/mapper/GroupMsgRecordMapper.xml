@@ -1,96 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.GroupMsgRecordMapper">
-  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.GroupMsgRecord">
-    <!--@mbg.generated-->
-    <!--@Table group_msg_record-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="sender_id" jdbcType="INTEGER" property="senderId" />
-    <result column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="time" jdbcType="VARCHAR" property="time" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, sender_id, group_id, `time`, content
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from group_msg_record
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from group_msg_record
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupMsgRecord" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into group_msg_record (sender_id, group_id, `time`, 
-      content)
-    values (#{senderId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupMsgRecord" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into group_msg_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="senderId != null">
-        sender_id,
-      </if>
-      <if test="groupId != null">
-        group_id,
-      </if>
-      <if test="time != null">
-        `time`,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="senderId != null">
-        #{senderId,jdbcType=INTEGER},
-      </if>
-      <if test="groupId != null">
-        #{groupId,jdbcType=INTEGER},
-      </if>
-      <if test="time != null">
-        #{time,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.GroupMsgRecord">
-    <!--@mbg.generated-->
-    update group_msg_record
-    <set>
-      <if test="senderId != null">
-        sender_id = #{senderId,jdbcType=INTEGER},
-      </if>
-      <if test="groupId != null">
+    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.GroupMsgRecord">
+        <!--@mbg.generated-->
+        <!--@Table group_msg_record-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sender_id" jdbcType="INTEGER" property="senderId"/>
+        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, sender_id, group_id, `time`, content
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from group_msg_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from group_msg_record
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.GroupMsgRecord"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into group_msg_record (sender_id, group_id, `time`,
+        content)
+        values (#{senderId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.project.workplatform.pojo.GroupMsgRecord" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into group_msg_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="senderId != null">
+                sender_id,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="time != null">
+                `time`,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="senderId != null">
+                #{senderId,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.GroupMsgRecord">
+        <!--@mbg.generated-->
+        update group_msg_record
+        <set>
+            <if test="senderId != null">
+                sender_id = #{senderId,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                `time` = #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.GroupMsgRecord">
+        <!--@mbg.generated-->
+        update group_msg_record
+        set sender_id = #{senderId,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
-      </if>
-      <if test="time != null">
         `time` = #{time,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.GroupMsgRecord">
-    <!--@mbg.generated-->
-    update group_msg_record
-    set sender_id = #{senderId,jdbcType=INTEGER},
-      group_id = #{groupId,jdbcType=INTEGER},
-      `time` = #{time,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        content = #{content,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="getLastInsertId" resultType="java.lang.Integer">
+        select LAST_INSERT_ID();
+    </select>
+    <select id="selectByGroup" resultType="com.project.workplatform.pojo.GroupMsgRecord">
+        select * from group_msg_record
+        where group_id = #{groupId}
+        order by `time`
+    </select>
 </mapper>

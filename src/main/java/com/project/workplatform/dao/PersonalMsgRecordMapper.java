@@ -1,6 +1,9 @@
 package com.project.workplatform.dao;
 
 import com.project.workplatform.pojo.PersonalMsgRecord;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -18,4 +21,8 @@ public interface PersonalMsgRecordMapper {
     int updateByPrimaryKeySelective(PersonalMsgRecord record);
 
     int updateByPrimaryKey(PersonalMsgRecord record);
+
+    int getLastInsertId();
+
+    List<PersonalMsgRecord> selectByUserAndFriend(@Param("userId") Integer userId, @Param("friendId") Integer friendId);
 }

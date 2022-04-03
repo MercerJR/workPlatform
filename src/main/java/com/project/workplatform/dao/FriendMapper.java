@@ -27,5 +27,5 @@ public interface FriendMapper {
 
     FriendInfoResponse selectFriendInfo(int friendId);
 
-    int updateMsgAckIdByUserAndFriend(@Param("userId") int userId, @Param("friendId") int friendId);
+    int updateMsgAckIdByUserAndFriend(@Param("msgAckId") int msgAckId, @Param("userId") int userId, @Param("friendId") int friendId);
 }

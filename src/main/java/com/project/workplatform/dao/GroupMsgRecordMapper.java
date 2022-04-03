@@ -1,6 +1,9 @@
 package com.project.workplatform.dao;
 
 import com.project.workplatform.pojo.GroupMsgRecord;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author: Mercer JR
@@ -18,4 +21,8 @@ public interface GroupMsgRecordMapper {
     int updateByPrimaryKeySelective(GroupMsgRecord record);
 
     int updateByPrimaryKey(GroupMsgRecord record);
+
+    int getLastInsertId();
+
+    List<GroupMsgRecord> selectByGroup(@Param("groupId") Integer targetId);
 }

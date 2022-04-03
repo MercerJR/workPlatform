@@ -154,6 +154,10 @@ public class GroupService {
                 updateRoleRequest.getMemberId(),updateRoleRequest.getGroupId());
     }
 
+    public void updateMsgAckId(int msgAckId, int userId, Integer groupId) {
+        userGroupMapper.updateMsgAckIdByUserAndGroup(msgAckId,userId,groupId);
+    }
+
     private boolean checkUserInGroup(int userId,int groupId){
         return userGroupMapper.selectByUserAndGroup(userId, groupId) != null;
     }
@@ -165,5 +169,4 @@ public class GroupService {
     private boolean checkCreator(int userId,int groupId){
         return userGroupMapper.selectByUserAndGroup(userId,groupId).getRoleId() == GroupRoleEnum.CREATOR.getRoleId();
     }
-
 }
