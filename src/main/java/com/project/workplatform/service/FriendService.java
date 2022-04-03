@@ -42,8 +42,6 @@ public class FriendService {
         apply.setTargetId(applyFriendRequest.getTargetId());
         apply.setApplyMessage(applyFriendRequest.getApplyMessage());
         applyMapper.insertSelective(apply);
-
-        //TODO 用消息队列设置消息通知
     }
 
     public void dealApply(Integer userId, DealApplyRequest dealApplyRequest) {
