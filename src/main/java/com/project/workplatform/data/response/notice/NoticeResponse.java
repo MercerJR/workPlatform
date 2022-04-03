@@ -20,4 +20,6 @@ public class NoticeResponse {
 
     private boolean needDeal;
 
+    private Long createTime;
+
 }
