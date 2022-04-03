@@ -7,13 +7,12 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="msg_ack_id" jdbcType="INTEGER" property="msgAckId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, group_id, nickname, role_id, msg_ack_id
+    id, user_id, group_id, role_id, msg_ack_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,10 +28,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserGroup" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into user_group (user_id, group_id, nickname, 
-      role_id, msg_ack_id)
-    values (#{userId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, 
-      #{roleId,jdbcType=INTEGER}, #{msgAckId,jdbcType=INTEGER})
+    insert into user_group (user_id, group_id, role_id, 
+      msg_ack_id)
+    values (#{userId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, 
+      #{msgAckId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserGroup" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -43,9 +42,6 @@
       </if>
       <if test="groupId != null">
         group_id,
-      </if>
-      <if test="nickname != null">
-        nickname,
       </if>
       <if test="roleId != null">
         role_id,
@@ -60,9 +56,6 @@
       </if>
       <if test="groupId != null">
         #{groupId,jdbcType=INTEGER},
-      </if>
-      <if test="nickname != null">
-        #{nickname,jdbcType=VARCHAR},
       </if>
       <if test="roleId != null">
         #{roleId,jdbcType=INTEGER},
@@ -82,9 +75,6 @@
       <if test="groupId != null">
         group_id = #{groupId,jdbcType=INTEGER},
       </if>
-      <if test="nickname != null">
-        nickname = #{nickname,jdbcType=VARCHAR},
-      </if>
       <if test="roleId != null">
         role_id = #{roleId,jdbcType=INTEGER},
       </if>
@@ -99,7 +89,6 @@
     update user_group
     set user_id = #{userId,jdbcType=INTEGER},
       group_id = #{groupId,jdbcType=INTEGER},
-      nickname = #{nickname,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=INTEGER},
       msg_ack_id = #{msgAckId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
@@ -123,5 +112,5 @@
         set role_id = #{roleId}
         where user_id = #{userId} and group_id = #{groupId}
     </update>
-    <update id="updateMsgAckIdByUserAndGroup"></update>
+    <update id="updateMsgAckIdByUserAndGroup" />
 </mapper>

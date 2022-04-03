@@ -1,111 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.UserStudioMapper">
-    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.UserStudio">
-        <!--@mbg.generated-->
-        <!--@Table user_studio-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="studio_id" jdbcType="INTEGER" property="studioId"/>
-        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
-        <result column="inside_alias" jdbcType="VARCHAR" property="insideAlias"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, user_id, studio_id, department_id, role_id, inside_alias
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from user_studio
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from user_studio
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserStudio"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into user_studio (user_id, studio_id, department_id,
-        role_id, inside_alias)
-        values (#{userId,jdbcType=INTEGER}, #{studioId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER},
-        #{roleId,jdbcType=INTEGER}, #{insideAlias,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.project.workplatform.pojo.UserStudio" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into user_studio
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="studioId != null">
-                studio_id,
-            </if>
-            <if test="departmentId != null">
-                department_id,
-            </if>
-            <if test="roleId != null">
-                role_id,
-            </if>
-            <if test="insideAlias != null">
-                inside_alias,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="studioId != null">
-                #{studioId,jdbcType=INTEGER},
-            </if>
-            <if test="departmentId != null">
-                #{departmentId,jdbcType=INTEGER},
-            </if>
-            <if test="roleId != null">
-                #{roleId,jdbcType=INTEGER},
-            </if>
-            <if test="insideAlias != null">
-                #{insideAlias,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.UserStudio">
-        <!--@mbg.generated-->
-        update user_studio
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="studioId != null">
-                studio_id = #{studioId,jdbcType=INTEGER},
-            </if>
-            <if test="departmentId != null">
-                department_id = #{departmentId,jdbcType=INTEGER},
-            </if>
-            <if test="roleId != null">
-                role_id = #{roleId,jdbcType=INTEGER},
-            </if>
-            <if test="insideAlias != null">
-                inside_alias = #{insideAlias,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.UserStudio">
-        <!--@mbg.generated-->
-        update user_studio
-        set user_id = #{userId,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.UserStudio">
+    <!--@mbg.generated-->
+    <!--@Table user_studio-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="studio_id" jdbcType="INTEGER" property="studioId" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, studio_id, department_id, role_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from user_studio
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from user_studio
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserStudio" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_studio (user_id, studio_id, department_id, 
+      role_id)
+    values (#{userId,jdbcType=INTEGER}, #{studioId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER}, 
+      #{roleId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.UserStudio" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_studio
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="studioId != null">
+        studio_id,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="studioId != null">
+        #{studioId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.UserStudio">
+    <!--@mbg.generated-->
+    update user_studio
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="studioId != null">
         studio_id = #{studioId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
         department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
         role_id = #{roleId,jdbcType=INTEGER},
-        inside_alias = #{insideAlias,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.UserStudio">
+    <!--@mbg.generated-->
+    update user_studio
+    set user_id = #{userId,jdbcType=INTEGER},
+      studio_id = #{studioId,jdbcType=INTEGER},
+      department_id = #{departmentId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <select id="selectByUserAndStudio" resultMap="BaseResultMap">
         select * from user_studio
         where user_id = #{userId} and studio_id = #{studioId}
@@ -130,22 +117,19 @@
         from user_studio
         where studio_id = #{studioId} and role_id = 1
     </select>
-    <select id="selectAdminByStudio"
-            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+    <select id="selectAdminByStudio" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
         select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId}
     </select>
-    <select id="selectAdminByStudioAndPhone"
-            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+    <select id="selectAdminByStudioAndPhone" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
         select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId} and ui.phone_number = #{phoneNumber}
     </select>
-    <select id="selectAdminByStudioAndNameFuzzy"
-            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+    <select id="selectAdminByStudioAndNameFuzzy" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
         select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
@@ -157,8 +141,7 @@
         set role_id = #{roleId}
         where user_id = #{userId} and studio_id = #{studioId}
     </update>
-    <select id="selectAdminByDepartmentNameFuzzy"
-            resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
+    <select id="selectAdminByDepartmentNameFuzzy" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
         select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
@@ -171,8 +154,7 @@
         on us.department_id = sd.id and us.user_id = ui.user_id
         where sd.id = #{departmentId} and us.role_id = 1;
     </select>
-    <select id="selectMemberByDepartment"
-            resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
+    <select id="selectMemberByDepartment" resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
         select us.user_id,ifnull(us.inside_alias,ui.name) as insideAlias,ui.phone_number,sd.department_name
         from user_studio as us inner join user_info as ui inner join studio_department as sd
         on us.user_id = ui.user_id and us.department_id = sd.id
@@ -182,8 +164,7 @@
         select * from user_studio
         where department_id = #{departmentId}
     </select>
-    <select id="selectMemberByNameFuzzyAndStudio"
-            resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
+    <select id="selectMemberByNameFuzzyAndStudio" resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
         select us.user_id,ifnull(us.inside_alias,ui.name) as insideAlias,ui.phone_number,sd.department_name
         from user_studio as us inner join user_info as ui inner join studio_department as sd
         on us.user_id = ui.user_id and us.department_id = sd.id

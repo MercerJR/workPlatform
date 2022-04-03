@@ -1,15 +1,10 @@
 package com.project.workplatform.dao;
 
-import com.project.workplatform.data.response.studio.DepartmentMemberResponse;
-import com.project.workplatform.data.response.studio.StudioAdminResponse;
-import com.project.workplatform.pojo.UserStudio;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.project.workplatform.data.response.studio.DepartmentMemberResponse;import com.project.workplatform.data.response.studio.StudioAdminResponse;import com.project.workplatform.pojo.UserStudio;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/1/23 14:27
+ * @Date: 2022/4/3 12:34
  */
 public interface UserStudioMapper {
     int deleteByPrimaryKey(Integer id);
@@ -38,15 +33,15 @@ public interface UserStudioMapper {
     List<StudioAdminResponse> selectAdminByStudio(@Param("studioId") Integer studioId, @Param("roleId") Integer roleId);
 
     List<StudioAdminResponse> selectAdminByStudioAndPhone(@Param("studioId") Integer studioId,
-                                                          @Param("roleId") Integer roleId,@Param("phoneNumber") String phoneNumber);
+                                                          @Param("roleId") Integer roleId, @Param("phoneNumber") String phoneNumber);
 
     List<StudioAdminResponse> selectAdminByStudioAndNameFuzzy(@Param("studioId") Integer studioId,
-                                                              @Param("roleId") Integer roleId,@Param("nameFuzzy") String nameFuzzy);
+                                                              @Param("roleId") Integer roleId, @Param("nameFuzzy") String nameFuzzy);
 
-    void updateRoleByUserAndStudio(@Param("userId") Integer userId,@Param("studioId") Integer studioId,@Param("roleId") Integer roleId);
+    void updateRoleByUserAndStudio(@Param("userId") Integer userId, @Param("studioId") Integer studioId, @Param("roleId") Integer roleId);
 
     List<StudioAdminResponse> selectAdminByDepartmentNameFuzzy(@Param("studioId") Integer studioId,
-                                          @Param("roleId") Integer roleId,@Param("departmentNameFuzzy") String departmentNameFuzzy);
+                                                               @Param("roleId") Integer roleId, @Param("departmentNameFuzzy") String departmentNameFuzzy);
 
     List<String> selectLeaderNameByDepartment(Integer departmentId);
 
