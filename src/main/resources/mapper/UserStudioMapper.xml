@@ -118,19 +118,19 @@
         where studio_id = #{studioId} and role_id = 1
     </select>
     <select id="selectAdminByStudio" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
-        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
+        select us.user_id,us.studio_id,ui.name as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId}
     </select>
     <select id="selectAdminByStudioAndPhone" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
-        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
+        select us.user_id,us.studio_id,ui.name as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId} and ui.phone_number = #{phoneNumber}
     </select>
     <select id="selectAdminByStudioAndNameFuzzy" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
-        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
+        select us.user_id,us.studio_id,ui.name as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId} and
@@ -142,20 +142,20 @@
         where user_id = #{userId} and studio_id = #{studioId}
     </update>
     <select id="selectAdminByDepartmentNameFuzzy" resultType="com.project.workplatform.data.response.studio.StudioAdminResponse">
-        select us.user_id,us.studio_id,ifnull(us.inside_alias,ui.name) as insideAlias,sr.role,ui.phone_number,sd.department_name
+        select us.user_id,us.studio_id,ui.name as insideAlias,sr.role,ui.phone_number,sd.department_name
         from user_studio as us inner join studio_role as sr inner join user_info as ui inner join studio_department as sd
         on us.role_id = sr.role_id and us.user_id = ui.user_id and us.department_id = sd.id
         where us.studio_id = #{studioId} and us.role_id = #{roleId} and
         sd.department_name like CONCAT(CONCAT('%', #{departmentNameFuzzy}), '%')
     </select>
     <select id="selectLeaderNameByDepartment" resultType="java.lang.String">
-        select ifnull(us.inside_alias,ui.name)
+        select ui.name
         from user_studio as us inner join studio_department as sd inner join user_info as ui
         on us.department_id = sd.id and us.user_id = ui.user_id
         where sd.id = #{departmentId} and us.role_id = 1;
     </select>
     <select id="selectMemberByDepartment" resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
-        select us.user_id,ifnull(us.inside_alias,ui.name) as insideAlias,ui.phone_number,sd.department_name
+        select us.user_id,ui.name as insideAlias,ui.phone_number,sd.department_name
         from user_studio as us inner join user_info as ui inner join studio_department as sd
         on us.user_id = ui.user_id and us.department_id = sd.id
         where us.department_id = #{departmentId}
@@ -165,10 +165,10 @@
         where department_id = #{departmentId}
     </select>
     <select id="selectMemberByNameFuzzyAndStudio" resultType="com.project.workplatform.data.response.studio.DepartmentMemberResponse">
-        select us.user_id,ifnull(us.inside_alias,ui.name) as insideAlias,ui.phone_number,sd.department_name
+        select us.user_id,ui.name as insideAlias,ui.phone_number,sd.department_name
         from user_studio as us inner join user_info as ui inner join studio_department as sd
         on us.user_id = ui.user_id and us.department_id = sd.id
-        where us.studio_id = #{studioId} and us.inside_alias like CONCAT(CONCAT('%', #{searchContent}), '%')
+        where us.studio_id = #{studioId} and ui.name like CONCAT(CONCAT('%', #{searchContent}), '%')
     </select>
     <select id="selectByUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select * from user_studio

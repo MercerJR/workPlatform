@@ -9,7 +9,6 @@ import com.project.workplatform.data.request.chatInfo.UpdateChatListRequest;
 import com.project.workplatform.data.response.group.MemberResponse;
 import com.project.workplatform.pojo.User;
 import com.project.workplatform.pojo.UserInfo;
-import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.service.ChatInfoService;
 import com.project.workplatform.service.FriendService;
 import com.project.workplatform.service.GroupService;
@@ -148,14 +147,7 @@ public class WebSocketController {
         Integer studioId = wsMessage.getStudioId();
         //构造wsMessageResponse对象
         messageResponse.setSenderId(senderInfo.getUserId());
-        String senderName;
-        if (studioId == null || studioId <= 0) {
-            senderName = senderInfo.getName();
-        } else {
-            UserStudio userStudioInfo = studioService.getUserStudioInfo(senderInfo.getUserId(), studioId);
-            senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
-        }
-        messageResponse.setSenderName(senderName);
+        messageResponse.setSenderName(senderInfo.getName());
         messageResponse.setContent(wsMessage.getContent());
         messageResponse.setTime(DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT));
         messageResponse.setTargetId(targetId);

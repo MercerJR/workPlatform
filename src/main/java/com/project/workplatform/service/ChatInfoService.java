@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.project.workplatform.dao.GroupMapper;
 import com.project.workplatform.dao.GroupMsgRecordMapper;
 import com.project.workplatform.dao.PersonalMsgRecordMapper;
-import com.project.workplatform.dao.UserGroupMapper;
 import com.project.workplatform.dao.UserInfoMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
@@ -15,7 +14,6 @@ import com.project.workplatform.data.response.chatInfo.ChatListResponse;
 import com.project.workplatform.pojo.Group;
 import com.project.workplatform.pojo.GroupMsgRecord;
 import com.project.workplatform.pojo.PersonalMsgRecord;
-import com.project.workplatform.pojo.UserGroup;
 import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.pojo.UserStudio;
 import org.springframework.beans.BeanUtils;
@@ -43,9 +41,6 @@ public class ChatInfoService {
 
     @Autowired
     private GroupMsgRecordMapper groupMsgRecordMapper;
-
-    @Autowired
-    private UserGroupMapper userGroupMapper;
 
     @Autowired
     private GroupMapper groupMapper;
@@ -86,12 +81,11 @@ public class ChatInfoService {
                     if (userStudio != null && userStudio.getStudioId().equals(studioId)) {
                         record.setInsideType(1);
                         record.setInsideTag("内部用户");
-                        record.setChatName(userStudio.getInsideAlias() == null ? userInfo.getName() : userStudio.getInsideAlias());
                     } else {
                         record.setInsideType(0);
                         record.setInsideTag("外部用户");
-                        record.setChatName(userInfo.getName());
                     }
+                    record.setChatName(userInfo.getName());
                     record.setIcon("");
                     //获取对应的聊天记录
                 } else {
@@ -146,14 +140,7 @@ public class ChatInfoService {
                     WsMessageResponse message = new WsMessageResponse();
                     BeanUtils.copyProperties(msgRecord, message);
                     message.setCode(0);
-                    String senderName;
-                    if (studioId != null && studioId > 0) {
-                        UserStudio userStudioInfo = userStudioMapper.selectByUserAndStudio(senderInfo.getUserId(), studioId);
-                        senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
-                    } else {
-                        senderName = senderInfo.getName();
-                    }
-                    message.setSenderName(senderName);
+                    message.setSenderName(senderInfo.getName());
                     message.setTargetType(targetType);
                     messageList.add(message);
                 }
@@ -168,16 +155,7 @@ public class ChatInfoService {
                     WsMessageResponse message = new WsMessageResponse();
                     message.setCode(0);
                     message.setSenderId(msgRecord.getSenderId());
-                    String senderName;
-                    //如果是外部群聊，就利用群昵称来构造名称，否则就用工作室昵称来构造名称
-                    if (studioId != null && studioId > 0 && group.getType() == 1 && group.getStudioId().equals(studioId)) {
-                        UserStudio userStudioInfo = userStudioMapper.selectByUserAndStudio(senderInfo.getUserId(), studioId);
-                        senderName = userStudioInfo.getInsideAlias() == null ? senderInfo.getName() : userStudioInfo.getInsideAlias();
-                    } else {
-                        UserGroup userGroup = userGroupMapper.selectByUserAndGroup(msgRecord.getSenderId(),targetId);
-                        senderName = userGroup.getNickname() == null ? senderInfo.getName() : userGroup.getNickname();
-                    }
-                    message.setSenderName(senderName);
+                    message.setSenderName(senderInfo.getName());
                     message.setTargetId(targetId);
                     message.setTargetType(targetType);
                     message.setTime(msgRecord.getTime());

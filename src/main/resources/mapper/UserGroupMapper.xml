@@ -98,7 +98,7 @@
         where user_id = #{userId} and group_id = #{groupId}
     </select>
     <select id="selectMemberByGroup" resultType="com.project.workplatform.data.response.group.MemberResponse">
-        select ui.user_id as userId,ifnull(ug.nickname,ui.name) as nickname,ui.name,ug.role_id,gr.role from user_group as ug inner join user_info as ui inner join group_role as gr
+        select ui.user_id as userId,ui.name as nickname,ui.name,ug.role_id,gr.role from user_group as ug inner join user_info as ui inner join group_role as gr
         on ug.user_id = ui.user_id and ug.role_id = gr.role_id
         where ug.group_id = #{groupId}
     </select>
