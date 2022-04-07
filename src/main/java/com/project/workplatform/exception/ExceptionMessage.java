@@ -46,5 +46,6 @@ public interface ExceptionMessage {
     String CAN_NOT_DEAL_YOURSELF = "不能对自己进行操作";
     String PARENT_DEPARTMENT_DO_NOT_BELONG_STUDIO = "该上级部门不属于本工作室";
     String CAN_NOT_DEAL_TOP_DEPARTMENT = "不能删除顶级部门";
+    String PLEASE_ENTER_STUDIO = "请先进入工作室";
 
 }

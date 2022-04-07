@@ -22,6 +22,7 @@ import com.project.workplatform.data.request.studio.UpdateStudioContactInfoReque
 import com.project.workplatform.data.request.studio.UpdateStudioInfoRequest;
 import com.project.workplatform.data.request.studio.UpdateStudioRoleRequest;
 import com.project.workplatform.data.response.studio.DepartmentMemberResponse;
+import com.project.workplatform.data.response.studio.DepartmentMemberTreeResponse;
 import com.project.workplatform.data.response.studio.DepartmentResponse;
 import com.project.workplatform.data.response.studio.StudioAdminResponse;
 import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
@@ -86,6 +87,9 @@ public class StudioService {
         studio.setCreatorId(userId);
         studio.setClassify(createStudioRequest.getClassify());
         mapper.insertSelective(studio);
+
+        //TODO 创建公众号：工作室小助手
+        //TODO 新建了工作室小助手用户后，把小助手userId添加到studio表中
     }
 
     /**
@@ -369,6 +373,43 @@ public class StudioService {
             int childDepartmentId = Integer.parseInt(id);
             getCascadeDepartmentList(childDepartmentId, list);
         }
+    }
+
+    public List<DepartmentMemberTreeResponse> getDepartmentMemberTreeList(int studioId, Integer userId) {
+        UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
+        Integer departmentId = userStudio.getDepartmentId();
+        List<DepartmentMemberTreeResponse> list = new ArrayList<>();
+        getCascadeDepartmentTreeList(departmentId,list);
+        return list;
+    }
+
+    private void getCascadeDepartmentTreeList(Integer departmentId, List<DepartmentMemberTreeResponse> list) {
+        //将部门加入到list中
+        StudioDepartment department = departmentMapper.selectByPrimaryKey(departmentId);
+        DepartmentMemberTreeResponse item = new DepartmentMemberTreeResponse();
+        item.setId(departmentId * -1);
+        item.setLabel(department.getDepartmentName());
+        List<DepartmentMemberTreeResponse> children = new ArrayList<>();
+        //获取该部门的成员，并加入到children中
+        List<DepartmentMemberResponse> departmentMemberResponses = userStudioMapper.selectMemberByDepartment(departmentId);
+        for (DepartmentMemberResponse member : departmentMemberResponses){
+            DepartmentMemberTreeResponse memberItem = new DepartmentMemberTreeResponse();
+            memberItem.setId(member.getUserId());
+            memberItem.setLabel(member.getInsideAlias());
+            children.add(memberItem);
+        }
+        //获取该部门的子部门
+        String childrenDepartmentId = department.getChildrenDepartmentId();
+        if (StringUtils.hasLength(childrenDepartmentId)){
+            String[] childrenDepartmentList = childrenDepartmentId.split(",");
+            //遍历子部门，并将子部门信息加入到children中
+            for (String id : childrenDepartmentList){
+                int childDepartmentId = Integer.parseInt(id);
+                getCascadeDepartmentTreeList(childDepartmentId,children);
+            }
+        }
+        item.setChildren(children);
+        list.add(item);
     }
 
     private String getLeaders(Integer departmentId) {

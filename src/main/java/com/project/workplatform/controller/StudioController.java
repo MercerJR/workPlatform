@@ -1,15 +1,39 @@
 package com.project.workplatform.controller;
 
-import com.project.workplatform.data.request.studio.*;
+import com.project.workplatform.data.request.studio.ApplyJoinStudioRequest;
+import com.project.workplatform.data.request.studio.ChangeDepartmentRequest;
+import com.project.workplatform.data.request.studio.CheckInviteCodeRequest;
+import com.project.workplatform.data.request.studio.CreateDepartmentRequest;
+import com.project.workplatform.data.request.studio.CreateStudioRequest;
+import com.project.workplatform.data.request.studio.DealStudioApplyRequest;
+import com.project.workplatform.data.request.studio.DeleteDepartmentRequest;
+import com.project.workplatform.data.request.studio.DistributeLeaderRequest;
+import com.project.workplatform.data.request.studio.InitInviteCodeRequest;
+import com.project.workplatform.data.request.studio.InviteJoinStudioRequest;
+import com.project.workplatform.data.request.studio.UpdateDepartmentRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioContactInfoRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioInfoRequest;
+import com.project.workplatform.data.request.studio.UpdateStudioRoleRequest;
 import com.project.workplatform.data.response.Response;
-import com.project.workplatform.data.response.studio.*;
-import com.project.workplatform.pojo.StudioContactInfo;
+import com.project.workplatform.data.response.studio.DepartmentMemberResponse;
+import com.project.workplatform.data.response.studio.DepartmentMemberTreeResponse;
+import com.project.workplatform.data.response.studio.DepartmentResponse;
+import com.project.workplatform.data.response.studio.StudioAdminResponse;
+import com.project.workplatform.data.response.studio.StudioBaseInfoResponse;
+import com.project.workplatform.data.response.studio.StudioContactInfoResponse;
+import com.project.workplatform.data.response.studio.StudioInfoResponse;
+import com.project.workplatform.data.response.studio.StudioPeopleInfoResponse;
 import com.project.workplatform.service.StudioService;
 import com.project.workplatform.util.JwtUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -168,6 +192,13 @@ public class StudioController {
     public Response getDepartmentMemberList(@PathVariable("department_id") int departmentId, HttpServletRequest request) {
         Integer userId = JwtUtil.getId(request);
         List<DepartmentMemberResponse> responses = service.getDepartmentMemberList(departmentId, userId);
+        return new Response().success(responses);
+    }
+
+    @GetMapping(value = "/show_department_member_list_in_tree/{studio_id}",produces = "application/json")
+    public Response getDepartmentMemberListInTree(@PathVariable("studio_id") int studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        List<DepartmentMemberTreeResponse> responses = service.getDepartmentMemberTreeList(studioId,userId);
         return new Response().success(responses);
     }
 

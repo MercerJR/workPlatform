@@ -55,4 +55,7 @@ public interface ValidConstant {
     String SEARCH_CONTENT_EMPTY = "搜索内容不能为空";
     String SEARCH_CONTENT_LENGTH = "搜索内容长度不能超过20个字符";
 
+    //消息推送模块 校验常量
+
+    String TITLE_EMPTY = "标题不能为空";
 }
