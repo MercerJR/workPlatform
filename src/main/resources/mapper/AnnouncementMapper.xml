@@ -8,7 +8,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="publisher_id" jdbcType="INTEGER" property="publisherId" />
-    <result column="reader_id" jdbcType="INTEGER" property="readerId" />
+    <result column="reader_id" jdbcType="VARCHAR" property="readerId" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -32,7 +32,7 @@
     insert into announcement (title, content, publisher_id, 
       reader_id, `time`)
     values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{publisherId,jdbcType=INTEGER}, 
-      #{readerId,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP})
+      #{readerId,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Announcement" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -65,7 +65,7 @@
         #{publisherId,jdbcType=INTEGER},
       </if>
       <if test="readerId != null">
-        #{readerId,jdbcType=INTEGER},
+        #{readerId,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
         #{time,jdbcType=TIMESTAMP},
@@ -86,7 +86,7 @@
         publisher_id = #{publisherId,jdbcType=INTEGER},
       </if>
       <if test="readerId != null">
-        reader_id = #{readerId,jdbcType=INTEGER},
+        reader_id = #{readerId,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
         `time` = #{time,jdbcType=TIMESTAMP},
@@ -100,7 +100,7 @@
     set title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       publisher_id = #{publisherId,jdbcType=INTEGER},
-      reader_id = #{readerId,jdbcType=INTEGER},
+      reader_id = #{readerId,jdbcType=VARCHAR},
       `time` = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/4/7 22:28
+ * @Date: 2022/4/7 22:41
  */
 @Data
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class Announcement implements Serializable {
 
     private Integer publisherId;
 
-    private Integer readerId;
+    private String readerId;
 
     private Date time;
 

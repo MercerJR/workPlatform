@@ -4,7 +4,7 @@ import com.project.workplatform.pojo.Announcement;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/4/7 22:28
+ * @Date: 2022/4/7 22:41
  */
 public interface AnnouncementMapper {
     int deleteByPrimaryKey(Integer id);
