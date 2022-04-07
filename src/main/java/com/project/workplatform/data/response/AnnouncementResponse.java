@@ -18,10 +18,12 @@ public class AnnouncementResponse {
 
     private String content;
 
-    private String publisherId;
+    private Integer publisherId;
 
     private String publisherName;
 
     private String time;
+
+    private int seq;
 
 }

@@ -2,6 +2,7 @@ package com.project.workplatform.service;
 
 import com.project.workplatform.dao.AnnouncementMapper;
 import com.project.workplatform.dao.StudioMapper;
+import com.project.workplatform.dao.UserInfoMapper;
 import com.project.workplatform.data.WsMessageResponse;
 import com.project.workplatform.data.enums.WsMsgTargetTypeEnum;
 import com.project.workplatform.data.request.announcement.PublishAnnouncementRequest;
@@ -15,6 +16,7 @@ import com.project.workplatform.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +36,9 @@ public class AnnouncementService {
     @Autowired
     private StudioMapper studioMapper;
 
+    @Autowired
+    private UserInfoMapper userInfoMapper;
+
     public void publish(PublishAnnouncementRequest publishAnnouncementRequest, Integer userId) {
         //校验用户是否进入工作室
         checkInStudio(publishAnnouncementRequest.getStudioId());
@@ -42,6 +47,7 @@ public class AnnouncementService {
         announcement.setTitle(publishAnnouncementRequest.getTitle());
         announcement.setContent(publishAnnouncementRequest.getContent());
         announcement.setPublisherId(userId);
+        announcement.setStudioId(publishAnnouncementRequest.getStudioId());
         StringBuilder builder = new StringBuilder();
         Set<Integer> memberSet = publishAnnouncementRequest.getMemberSet();
         Iterator<Integer> iterator = memberSet.iterator();
@@ -72,10 +78,13 @@ public class AnnouncementService {
         Set<Integer> memberSet = publishAnnouncementRequest.getMemberSet();
 
         //更新用户聊天列表,并更新用户与公众号聊天记录
-        UpdateChatListRequest updateChatListRequest = new UpdateChatListRequest(chatId, 0);
+        UpdateChatListRequest updateChatListRequest = new UpdateChatListRequest(chatId, 2);
         String time = DateFormatUtil.getStringDateByMiles(System.currentTimeMillis(), DateFormatUtil.MINUTE_FORMAT);
-        String content = "hello，你收到新的通知推文了，点击下方的链接可以一键查看，也可以到'消息推送'里进行查看\n" + "{" + announcementId + "}";
+        String content = "hello，你收到新的通知推文了，点击下方的链接可以一键查看，也可以到'消息推送'里进行查看#" + announcementId;
         for (Integer memberId : memberSet) {
+            if (memberId < 0){
+                continue;
+            }
             //更新用户聊天列表
             chatInfoService.updateChatList(updateChatListRequest, memberId);
             //更新用户聊天记录
@@ -90,6 +99,32 @@ public class AnnouncementService {
     }
 
     public List<AnnouncementResponse> getAnnouncementList(Integer studioId) {
-//        List<Announcement> list = mapper.selectBy
+        checkInStudio(studioId);
+        List<Announcement> list = mapper.selectByStudio(studioId);
+        List<AnnouncementResponse> responses = new ArrayList<>();
+        for (Announcement announcement : list){
+            AnnouncementResponse announcementResponse = new AnnouncementResponse();
+            announcementResponse.setTitle(announcement.getTitle());
+            announcementResponse.setContent(announcement.getContent());
+            announcementResponse.setAnnouncementId(announcement.getId());
+            announcementResponse.setPublisherId(announcement.getPublisherId());
+            announcementResponse.setPublisherName(userInfoMapper.selectByUser(announcement.getPublisherId()).getName());
+            announcementResponse.setTime(DateFormatUtil.getStringDateByDate(announcement.getTime(),DateFormatUtil.MINUTE_FORMAT));
+            announcementResponse.setSeq(responses.size());
+            responses.add(announcementResponse);
+        }
+        return responses;
+    }
+
+    public AnnouncementResponse getOneAnnouncement(Integer announcementId) {
+        Announcement announcement = mapper.selectByPrimaryKey(announcementId);
+        AnnouncementResponse announcementResponse = new AnnouncementResponse();
+        announcementResponse.setTitle(announcement.getTitle());
+        announcementResponse.setContent(announcement.getContent());
+        announcementResponse.setAnnouncementId(announcement.getId());
+        announcementResponse.setPublisherId(announcement.getPublisherId());
+        announcementResponse.setPublisherName(userInfoMapper.selectByUser(announcement.getPublisherId()).getName());
+        announcementResponse.setTime(DateFormatUtil.getStringDateByDate(announcement.getTime(),DateFormatUtil.MINUTE_FORMAT));
+        return announcementResponse;
     }
 }

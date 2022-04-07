@@ -78,7 +78,7 @@ public class ChatInfoService {
                 ChatListResponse record = new ChatListResponse();
                 record.setChatId(item.getChatId());
                 record.setTargetType(item.getTargetType());
-                if (item.getTargetType() == 0) {
+                if (item.getTargetType() == 0 || item.getTargetType() == 2) {
                     UserStudio userStudio = userStudioMapper.selectByUser(item.getChatId());
                     UserInfo userInfo = userInfoMapper.selectByUser(item.getChatId());
                     //对内部用户和外部用户区分赋值
@@ -102,7 +102,7 @@ public class ChatInfoService {
                     //TODO 为群聊的record赋值
                     Group group = groupMapper.selectByPrimaryKey(item.getChatId());
                     //对内部群聊和外部群聊区分赋值
-                    if (group.getType() == 1 && group.getStudioId().equals(studioId)){
+                    if (group.getType() == 1 && studioId.equals(group.getStudioId())){
                         record.setInsideType(1);
                         record.setInsideTag("内部群聊");
                     }else {
@@ -173,6 +173,17 @@ public class ChatInfoService {
                     messageList.add(message);
                 }
                 break;
+            case PUBLIC_USER:
+                List<PersonalMsgRecord> publicUserRecordList = personalMsgRecordMapper.selectByUserAndFriend(userId, targetId);
+                for (PersonalMsgRecord msgRecord : publicUserRecordList) {
+                    UserInfo senderInfo = userInfoMapper.selectByUser(msgRecord.getSenderId());
+                    WsMessageResponse message = new WsMessageResponse();
+                    BeanUtils.copyProperties(msgRecord, message);
+                    message.setCode(0);
+                    message.setSenderName(senderInfo.getName());
+                    message.setTargetType(targetType);
+                    messageList.add(message);
+                }
             default:
                 break;
         }

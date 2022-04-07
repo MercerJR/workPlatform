@@ -39,7 +39,13 @@ public class AnnouncementController {
     @GetMapping(value = "/show_announcement_list/{studio_id}",produces = "application/json")
     public Response showAnnouncementList(@PathVariable("studio_id") Integer studioId){
         List<AnnouncementResponse> responses = service.getAnnouncementList(studioId);
-        return new Response().success();
+        return new Response().success(responses);
+    }
+
+    @GetMapping(value = "/show_one_announcement/{announcement_id}",produces = "application/json")
+    public Response showOneAnnouncement(@PathVariable("announcement_id") Integer announcementId){
+        AnnouncementResponse responses = service.getOneAnnouncement(announcementId);
+        return new Response().success(responses);
     }
 
 }
