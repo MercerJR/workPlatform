@@ -1,6 +1,7 @@
 package com.project.workplatform.controller;
 
 import com.project.workplatform.data.request.announcement.PublishAnnouncementRequest;
+import com.project.workplatform.data.response.AnnouncementResponse;
 import com.project.workplatform.data.response.Response;
 import com.project.workplatform.service.AnnouncementService;
 import com.project.workplatform.util.JwtUtil;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author zengjingran
@@ -36,6 +38,7 @@ public class AnnouncementController {
 
     @GetMapping(value = "/show_announcement_list/{studio_id}",produces = "application/json")
     public Response showAnnouncementList(@PathVariable("studio_id") Integer studioId){
+        List<AnnouncementResponse> responses = service.getAnnouncementList(studioId);
         return new Response().success();
     }
 

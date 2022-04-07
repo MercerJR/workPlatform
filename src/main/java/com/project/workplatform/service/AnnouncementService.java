@@ -1,8 +1,12 @@
 package com.project.workplatform.service;
 
+import com.project.workplatform.dao.AnnouncementMapper;
+import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.data.WsMessageResponse;
+import com.project.workplatform.data.enums.WsMsgTargetTypeEnum;
 import com.project.workplatform.data.request.announcement.PublishAnnouncementRequest;
 import com.project.workplatform.data.request.chatInfo.UpdateChatListRequest;
+import com.project.workplatform.data.response.AnnouncementResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,6 +27,12 @@ public class AnnouncementService {
 
     @Autowired
     private ChatInfoService chatInfoService;
+
+    @Autowired
+    private AnnouncementMapper mapper;
+
+    @Autowired
+    private StudioMapper studioMapper;
 
     public void publish(PublishAnnouncementRequest publishAnnouncementRequest, Integer userId) {
         //校验用户是否进入工作室
@@ -40,9 +51,10 @@ public class AnnouncementService {
                 builder.append(",");
             }
         }
-//        announcement.setReaderId(builder.toString());
+        announcement.setReaderId(builder.toString());
         //TODO 【建表】此处需要新建公告表
-        int announcementId = 0;
+        mapper.insertSelective(announcement);
+        int announcementId = mapper.getLastId();
         //调用公众号发布方法，采用伪WS方式
         publicUserSendMessage(publishAnnouncementRequest, announcementId);
     }
@@ -56,7 +68,7 @@ public class AnnouncementService {
     public void publicUserSendMessage(PublishAnnouncementRequest publishAnnouncementRequest, int announcementId) {
         //TODO 通过studioId获取公众号用户id
         //TODO 【修改表结构】需要更改工作室表结构，添加工作室公众号id属性；需要在创建工作室方法中，添加创建工作室公众号的功能；
-        int chatId = 0;
+        int chatId = studioMapper.selectByPrimaryKey(publishAnnouncementRequest.getStudioId()).getHelperId();
         Set<Integer> memberSet = publishAnnouncementRequest.getMemberSet();
 
         //更新用户聊天列表,并更新用户与公众号聊天记录
@@ -72,7 +84,12 @@ public class AnnouncementService {
             messageResponse.setTargetId(memberId);
             messageResponse.setContent(content);
             messageResponse.setTime(time);
+            messageResponse.setTargetType(WsMsgTargetTypeEnum.PUBLIC_USER.getType());
             chatInfoService.insertPersonalMsgRecord(messageResponse);
         }
+    }
+
+    public List<AnnouncementResponse> getAnnouncementList(Integer studioId) {
+//        List<Announcement> list = mapper.selectBy
     }
 }

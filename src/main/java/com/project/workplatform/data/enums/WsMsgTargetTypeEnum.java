@@ -13,6 +13,11 @@ public enum WsMsgTargetTypeEnum {
     GROUP(1,"群聊信息"),
 
     /**
+     * 公众号信息
+     */
+    PUBLIC_USER(2,"公众号信息"),
+
+    /**
      * 错误消息类型
      */
     WRONG_TARGET(-1,"错误类型");

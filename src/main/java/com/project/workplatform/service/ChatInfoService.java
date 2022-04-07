@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.project.workplatform.dao.GroupMapper;
 import com.project.workplatform.dao.GroupMsgRecordMapper;
 import com.project.workplatform.dao.PersonalMsgRecordMapper;
+import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.dao.UserInfoMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
@@ -45,6 +46,9 @@ public class ChatInfoService {
     @Autowired
     private GroupMapper groupMapper;
 
+    @Autowired
+    private StudioMapper studioMapper;
+
     public void updateChatList(UpdateChatListRequest updateChatListRequest, Integer userId) {
         String redisKey = Constant.REDIS_CHAT_LIST_KEY_PREFIX + userId;
         List<Object> chatList = redisTemplate.opsForList().range(redisKey, 0, -1);
@@ -82,8 +86,14 @@ public class ChatInfoService {
                         record.setInsideType(1);
                         record.setInsideTag("内部用户");
                     } else {
-                        record.setInsideType(0);
-                        record.setInsideTag("外部用户");
+                        Integer helperId = studioMapper.selectByPrimaryKey(studioId).getHelperId();
+                        if (helperId != null && helperId.equals(item.getChatId())){
+                            record.setInsideType(1);
+                            record.setInsideTag("公众号");
+                        }else {
+                            record.setInsideType(0);
+                            record.setInsideTag("外部用户");
+                        }
                     }
                     record.setChatName(userInfo.getName());
                     record.setIcon("");

@@ -18,4 +18,6 @@ public interface AnnouncementMapper {
     int updateByPrimaryKeySelective(Announcement record);
 
     int updateByPrimaryKey(Announcement record);
+
+    int getLastId();
 }
