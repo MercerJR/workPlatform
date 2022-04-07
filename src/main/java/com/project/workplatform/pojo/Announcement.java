@@ -1,6 +1,7 @@
 package com.project.workplatform.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,24 +13,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Studio implements Serializable {
+public class Announcement implements Serializable {
     private Integer id;
 
-    private String studioName;
+    private String title;
 
-    private String studioAbbreviation;
+    private String content;
 
-    private Integer creatorId;
+    private Integer publisherId;
 
-    private String classify;
+    private Integer readerId;
 
-    private String describe;
-
-    private Integer peopleNumber;
-
-    private String inviteCode;
-
-    private Integer helperId;
+    private Date time;
 
     private static final long serialVersionUID = 1L;
 }

@@ -1,136 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.workplatform.dao.StudioMapper">
-    <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.Studio">
-        <!--@mbg.generated-->
-        <!--@Table studio-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="studio_name" jdbcType="VARCHAR" property="studioName"/>
-        <result column="studio_abbreviation" jdbcType="VARCHAR" property="studioAbbreviation"/>
-        <result column="creator_id" jdbcType="INTEGER" property="creatorId"/>
-        <result column="classify" jdbcType="VARCHAR" property="classify"/>
-        <result column="describe" jdbcType="VARCHAR" property="describe"/>
-        <result column="people_number" jdbcType="INTEGER" property="peopleNumber"/>
-        <result column="invite_code" jdbcType="VARCHAR" property="inviteCode"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, studio_name, studio_abbreviation, creator_id, classify, `describe`, people_number,
-        invite_code
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from studio
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from studio
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Studio"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into studio (studio_name, studio_abbreviation, creator_id,
-        classify, `describe`, people_number,
-        invite_code)
-        values (#{studioName,jdbcType=VARCHAR}, #{studioAbbreviation,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
-        #{classify,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{peopleNumber,jdbcType=INTEGER},
-        #{inviteCode,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Studio"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into studio
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studioName != null">
-                studio_name,
-            </if>
-            <if test="studioAbbreviation != null">
-                studio_abbreviation,
-            </if>
-            <if test="creatorId != null">
-                creator_id,
-            </if>
-            <if test="classify != null">
-                classify,
-            </if>
-            <if test="describe != null">
-                `describe`,
-            </if>
-            <if test="peopleNumber != null">
-                people_number,
-            </if>
-            <if test="inviteCode != null">
-                invite_code,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="studioName != null">
-                #{studioName,jdbcType=VARCHAR},
-            </if>
-            <if test="studioAbbreviation != null">
-                #{studioAbbreviation,jdbcType=VARCHAR},
-            </if>
-            <if test="creatorId != null">
-                #{creatorId,jdbcType=INTEGER},
-            </if>
-            <if test="classify != null">
-                #{classify,jdbcType=VARCHAR},
-            </if>
-            <if test="describe != null">
-                #{describe,jdbcType=VARCHAR},
-            </if>
-            <if test="peopleNumber != null">
-                #{peopleNumber,jdbcType=INTEGER},
-            </if>
-            <if test="inviteCode != null">
-                #{inviteCode,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.Studio">
-        <!--@mbg.generated-->
-        update studio
-        <set>
-            <if test="studioName != null">
-                studio_name = #{studioName,jdbcType=VARCHAR},
-            </if>
-            <if test="studioAbbreviation != null">
-                studio_abbreviation = #{studioAbbreviation,jdbcType=VARCHAR},
-            </if>
-            <if test="creatorId != null">
-                creator_id = #{creatorId,jdbcType=INTEGER},
-            </if>
-            <if test="classify != null">
-                classify = #{classify,jdbcType=VARCHAR},
-            </if>
-            <if test="describe != null">
-                `describe` = #{describe,jdbcType=VARCHAR},
-            </if>
-            <if test="peopleNumber != null">
-                people_number = #{peopleNumber,jdbcType=INTEGER},
-            </if>
-            <if test="inviteCode != null">
-                invite_code = #{inviteCode,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.Studio">
-        <!--@mbg.generated-->
-        update studio
-        set studio_name = #{studioName,jdbcType=VARCHAR},
+  <resultMap id="BaseResultMap" type="com.project.workplatform.pojo.Studio">
+    <!--@mbg.generated-->
+    <!--@Table studio-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="studio_name" jdbcType="VARCHAR" property="studioName" />
+    <result column="studio_abbreviation" jdbcType="VARCHAR" property="studioAbbreviation" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="classify" jdbcType="VARCHAR" property="classify" />
+    <result column="describe" jdbcType="VARCHAR" property="describe" />
+    <result column="people_number" jdbcType="INTEGER" property="peopleNumber" />
+    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+    <result column="helper_id" jdbcType="INTEGER" property="helperId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, studio_name, studio_abbreviation, creator_id, classify, `describe`, people_number, 
+    invite_code, helper_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from studio
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from studio
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Studio" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into studio (studio_name, studio_abbreviation, creator_id, 
+      classify, `describe`, people_number, 
+      invite_code, helper_id)
+    values (#{studioName,jdbcType=VARCHAR}, #{studioAbbreviation,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, 
+      #{classify,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{peopleNumber,jdbcType=INTEGER}, 
+      #{inviteCode,jdbcType=VARCHAR}, #{helperId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Studio" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into studio
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="studioName != null">
+        studio_name,
+      </if>
+      <if test="studioAbbreviation != null">
+        studio_abbreviation,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="classify != null">
+        classify,
+      </if>
+      <if test="describe != null">
+        `describe`,
+      </if>
+      <if test="peopleNumber != null">
+        people_number,
+      </if>
+      <if test="inviteCode != null">
+        invite_code,
+      </if>
+      <if test="helperId != null">
+        helper_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="studioName != null">
+        #{studioName,jdbcType=VARCHAR},
+      </if>
+      <if test="studioAbbreviation != null">
+        #{studioAbbreviation,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="classify != null">
+        #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="peopleNumber != null">
+        #{peopleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null">
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="helperId != null">
+        #{helperId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.workplatform.pojo.Studio">
+    <!--@mbg.generated-->
+    update studio
+    <set>
+      <if test="studioName != null">
+        studio_name = #{studioName,jdbcType=VARCHAR},
+      </if>
+      <if test="studioAbbreviation != null">
         studio_abbreviation = #{studioAbbreviation,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
         creator_id = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="classify != null">
         classify = #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null">
         `describe` = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="peopleNumber != null">
         people_number = #{peopleNumber,jdbcType=INTEGER},
-        invite_code = #{inviteCode,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="inviteCode != null">
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="helperId != null">
+        helper_id = #{helperId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.workplatform.pojo.Studio">
+    <!--@mbg.generated-->
+    update studio
+    set studio_name = #{studioName,jdbcType=VARCHAR},
+      studio_abbreviation = #{studioAbbreviation,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=INTEGER},
+      classify = #{classify,jdbcType=VARCHAR},
+      `describe` = #{describe,jdbcType=VARCHAR},
+      people_number = #{peopleNumber,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      helper_id = #{helperId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <select id="selectCreatorByPrimaryKey" resultType="int">
         select creator_id from studio
         where id = #{id}
@@ -140,23 +149,20 @@
         set invite_code = #{inviteCode}
         where id = #{id}
     </update>
-    <select id="selectStudioInfoByPrimaryKey"
-            resultType="com.project.workplatform.data.response.studio.StudioInfoResponse">
+    <select id="selectStudioInfoByPrimaryKey" resultType="com.project.workplatform.data.response.studio.StudioInfoResponse">
         select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation,
         ui.name as creatorAlias,s.classify,s.describe,s.people_number as peopleNumber
         from studio as s inner join user_studio as us inner join user_info as ui
         on s.creator_id = us.user_id and s.creator_id = ui.user_id
         where s.id = #{id}
     </select>
-    <select id="selectStudioBaseInfoByUser"
-            resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
+    <select id="selectStudioBaseInfoByUser" resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
         select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation
         from studio as s inner join user_studio as us
         on s.id = us.studio_id
         where us.user_id = #{userId}
     </select>
-    <select id="selectStudioBaseInfoByPrimaryKey"
-            resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
+    <select id="selectStudioBaseInfoByPrimaryKey" resultType="com.project.workplatform.data.response.studio.StudioBaseInfoResponse">
         select s.id as studioId,s.studio_name as studioName,s.studio_abbreviation as studioAbbreviation,
         sr.role,sd.department_name as departmentName
         from studio as s inner join user_studio as us inner join studio_role as sr inner join studio_department as sd
