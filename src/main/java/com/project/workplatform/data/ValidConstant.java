@@ -58,4 +58,10 @@ public interface ValidConstant {
     //消息推送模块 校验常量
 
     String TITLE_EMPTY = "标题不能为空";
+
+    //待办模块 校验常量
+
+    String DAY_EMPTY = "日期不能为空";
+    String TIME_EMPTY = "时间不能为空";
+
 }
