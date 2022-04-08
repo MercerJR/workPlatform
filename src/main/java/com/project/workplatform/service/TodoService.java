@@ -10,10 +10,12 @@ import com.project.workplatform.data.response.todo.TodoPageResponse;
 import com.project.workplatform.exception.CustomException;
 import com.project.workplatform.exception.CustomExceptionType;
 import com.project.workplatform.exception.ExceptionMessage;
+import com.project.workplatform.pojo.Todo;
 import com.project.workplatform.util.DateFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -32,7 +34,23 @@ public class TodoService {
         //校验用户是否进入工作室
         checkInStudio(addTodoRequest.getStudioId());
         //TODO 【建表】构造todo数据结构，并存入mysql
-
+        Todo todo = new Todo();
+        todo.setTitile(addTodoRequest.getTitle());
+        todo.setDescribe(addTodoRequest.getDescribe());
+        todo.setDay(DateFormatUtil.getStringDateByDate(addTodoRequest.getDay(),DateFormatUtil.DAY_FORMAT));
+        todo.setStartTime(addTodoRequest.getStartTime());
+        todo.setEndTime(addTodoRequest.getEndTime());
+        todo.setOriginatorId(userId);
+        todo.setStudioId(addTodoRequest.getStudioId());
+        StringBuilder builder = new StringBuilder();
+        Set<Integer> memberSet = addTodoRequest.getMemberSet();
+        Iterator<Integer> iterator = memberSet.iterator();
+        while (iterator.hasNext()){
+            builder.append(iterator.next());
+            if (iterator.hasNext()){
+                builder.append(",");
+            }
+        }
         //调用公众号发布方法，采用伪WS方式
         publicUserSendMessage(addTodoRequest);
     }
