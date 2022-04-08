@@ -11,7 +11,7 @@
     <result column="start_time" jdbcType="VARCHAR" property="startTime" />
     <result column="end_time" jdbcType="VARCHAR" property="endTime" />
     <result column="originator_id" jdbcType="INTEGER" property="originatorId" />
-    <result column="participant_id" jdbcType="INTEGER" property="participantId" />
+    <result column="participant_id" jdbcType="VARCHAR" property="participantId" />
     <result column="studio_id" jdbcType="INTEGER" property="studioId" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -38,7 +38,7 @@
       participant_id, studio_id)
     values (#{titile,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{day,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{originatorId,jdbcType=INTEGER}, 
-      #{participantId,jdbcType=INTEGER}, #{studioId,jdbcType=INTEGER})
+      #{participantId,jdbcType=VARCHAR}, #{studioId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.project.workplatform.pojo.Todo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -89,7 +89,7 @@
         #{originatorId,jdbcType=INTEGER},
       </if>
       <if test="participantId != null">
-        #{participantId,jdbcType=INTEGER},
+        #{participantId,jdbcType=VARCHAR},
       </if>
       <if test="studioId != null">
         #{studioId,jdbcType=INTEGER},
@@ -119,7 +119,7 @@
         originator_id = #{originatorId,jdbcType=INTEGER},
       </if>
       <if test="participantId != null">
-        participant_id = #{participantId,jdbcType=INTEGER},
+        participant_id = #{participantId,jdbcType=VARCHAR},
       </if>
       <if test="studioId != null">
         studio_id = #{studioId,jdbcType=INTEGER},
@@ -136,7 +136,7 @@
       start_time = #{startTime,jdbcType=VARCHAR},
       end_time = #{endTime,jdbcType=VARCHAR},
       originator_id = #{originatorId,jdbcType=INTEGER},
-      participant_id = #{participantId,jdbcType=INTEGER},
+      participant_id = #{participantId,jdbcType=VARCHAR},
       studio_id = #{studioId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

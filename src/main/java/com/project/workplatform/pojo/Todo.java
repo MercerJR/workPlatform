@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/4/8 20:20
+ * @Date: 2022/4/8 20:27
  */
 @Data
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class Todo implements Serializable {
 
     private Integer originatorId;
 
-    private Integer participantId;
+    private String participantId;
 
     private Integer studioId;
 

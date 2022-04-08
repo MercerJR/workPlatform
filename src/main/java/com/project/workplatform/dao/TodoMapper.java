@@ -4,7 +4,7 @@ import com.project.workplatform.pojo.Todo;
 
 /**
  * @Author: Mercer JR
- * @Date: 2022/4/8 20:20
+ * @Date: 2022/4/8 20:27
  */
 public interface TodoMapper {
     int deleteByPrimaryKey(Integer id);
