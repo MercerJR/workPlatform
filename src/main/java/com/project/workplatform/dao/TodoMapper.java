@@ -2,6 +2,8 @@ package com.project.workplatform.dao;
 
 import com.project.workplatform.pojo.Todo;
 
+import java.util.List;
+
 /**
  * @Author: Mercer JR
  * @Date: 2022/4/8 20:27
@@ -18,4 +20,6 @@ public interface TodoMapper {
     int updateByPrimaryKeySelective(Todo record);
 
     int updateByPrimaryKey(Todo record);
+
+    List<Todo> selectByStudio(Integer studioId);
 }

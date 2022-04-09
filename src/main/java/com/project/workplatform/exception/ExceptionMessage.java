@@ -48,4 +48,6 @@ public interface ExceptionMessage {
     String CAN_NOT_DEAL_TOP_DEPARTMENT = "不能删除顶级部门";
     String PLEASE_ENTER_STUDIO = "请先进入工作室";
 
+    String NOT_ORIGINATOR = "你不是该待办的发起人";
+
 }

@@ -15,6 +15,8 @@ public class DateFormatUtil {
 
     public static final String SECOND_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String HOUR_MINUTE_FORMAT = "HHmm";
+
     public static String getStringDateByDate(Date date,String format){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
         return simpleDateFormat.format(date);
@@ -25,6 +27,10 @@ public class DateFormatUtil {
         Date date = new Date();
         date.setTime(miles);
         return simpleDateFormat.format(date);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getStringDateByMiles(System.currentTimeMillis(), HOUR_MINUTE_FORMAT));
     }
 
 }
