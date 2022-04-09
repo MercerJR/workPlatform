@@ -5,6 +5,7 @@ import com.project.workplatform.dao.StudioContactInfoMapper;
 import com.project.workplatform.dao.StudioDepartmentMapper;
 import com.project.workplatform.dao.StudioMapper;
 import com.project.workplatform.dao.UserInfoMapper;
+import com.project.workplatform.dao.UserMapper;
 import com.project.workplatform.dao.UserStudioMapper;
 import com.project.workplatform.data.Constant;
 import com.project.workplatform.data.enums.StudioRoleEnum;
@@ -36,6 +37,8 @@ import com.project.workplatform.pojo.Studio;
 import com.project.workplatform.pojo.StudioApply;
 import com.project.workplatform.pojo.StudioContactInfo;
 import com.project.workplatform.pojo.StudioDepartment;
+import com.project.workplatform.pojo.User;
+import com.project.workplatform.pojo.UserInfo;
 import com.project.workplatform.pojo.UserStudio;
 import com.project.workplatform.util.RandomUtil;
 import com.project.workplatform.util.ValidUtil;
@@ -78,6 +81,9 @@ public class StudioService {
     private UserInfoMapper userInfoMapper;
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     public void create(Integer userId, CreateStudioRequest createStudioRequest) {
@@ -86,10 +92,43 @@ public class StudioService {
         studio.setStudioAbbreviation(createStudioRequest.getStudioAbbreviation());
         studio.setCreatorId(userId);
         studio.setClassify(createStudioRequest.getClassify());
-        mapper.insertSelective(studio);
 
         //TODO 创建公众号：工作室小助手
+        User user = new User();
+        user.setPhoneNumber("1");
+        user.setPassword("1");
+        userMapper.insert(user);
+        int helperId = userMapper.getLastInsertId();
+        UserInfo helperInfo = userInfoMapper.selectByUser(helperId);
+        helperInfo.setName(createStudioRequest.getStudioAbbreviation() + "小助手");
+        userInfoMapper.updateByPrimaryKeySelective(helperInfo);
         //TODO 新建了工作室小助手用户后，把小助手userId添加到studio表中
+        studio.setHelperId(helperId);
+        mapper.insertSelective(studio);
+
+        int studioId = mapper.getLastInsertId();
+
+        //创建顶级部门
+        StudioDepartment department = new StudioDepartment();
+        department.setDepartmentName(studio.getStudioAbbreviation());
+        department.setStudioId(studioId);
+        departmentMapper.insertSelective(department);
+
+        int departmentId = departmentMapper.getLastInsertId();
+
+        //记录userStudio
+        UserStudio userStudio = new UserStudio();
+        userStudio.setUserId(userId);
+        userStudio.setStudioId(studioId);
+        userStudio.setDepartmentId(departmentId);
+        userStudio.setRoleId(StudioRoleEnum.SUPER_ADMIN.getRoleId());
+        userStudioMapper.insertSelective(userStudio);
+
+        //创建工作室联系信息
+        StudioContactInfo studioContactInfo = new StudioContactInfo();
+        studioContactInfo.setStudioId(studioId);
+        contactInfoMapper.insertSelective(studioContactInfo);
+
     }
 
     /**
@@ -239,6 +278,9 @@ public class StudioService {
     }
 
     public void recordCurrentStudio(Integer studioId, Integer userId) {
+        if (studioId == 0) {
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.STUDIO_ID_INVALID);
+        }
         String key = Constant.REDIS_CURRENT_STUDIO_KEY_PREFIX + userId;
         redisTemplate.opsForValue().set(key, studioId);
     }
@@ -379,7 +421,7 @@ public class StudioService {
         UserStudio userStudio = userStudioMapper.selectByUserAndStudio(userId, studioId);
         Integer departmentId = userStudio.getDepartmentId();
         List<DepartmentMemberTreeResponse> list = new ArrayList<>();
-        getCascadeDepartmentTreeList(departmentId,list);
+        getCascadeDepartmentTreeList(departmentId, list);
         return list;
     }
 
@@ -392,7 +434,7 @@ public class StudioService {
         List<DepartmentMemberTreeResponse> children = new ArrayList<>();
         //获取该部门的成员，并加入到children中
         List<DepartmentMemberResponse> departmentMemberResponses = userStudioMapper.selectMemberByDepartment(departmentId);
-        for (DepartmentMemberResponse member : departmentMemberResponses){
+        for (DepartmentMemberResponse member : departmentMemberResponses) {
             DepartmentMemberTreeResponse memberItem = new DepartmentMemberTreeResponse();
             memberItem.setId(member.getUserId());
             memberItem.setLabel(member.getInsideAlias());
@@ -400,12 +442,12 @@ public class StudioService {
         }
         //获取该部门的子部门
         String childrenDepartmentId = department.getChildrenDepartmentId();
-        if (StringUtils.hasLength(childrenDepartmentId)){
+        if (StringUtils.hasLength(childrenDepartmentId)) {
             String[] childrenDepartmentList = childrenDepartmentId.split(",");
             //遍历子部门，并将子部门信息加入到children中
-            for (String id : childrenDepartmentList){
+            for (String id : childrenDepartmentList) {
                 int childDepartmentId = Integer.parseInt(id);
-                getCascadeDepartmentTreeList(childDepartmentId,children);
+                getCascadeDepartmentTreeList(childDepartmentId, children);
             }
         }
         item.setChildren(children);
@@ -449,8 +491,8 @@ public class StudioService {
                     updateDepartmentRequest.getParentDepartmentName());
             //校验新输入的上级部门是否属于该工作室
             newParentDepartment = departmentMapper.selectByPrimaryKey(newParentDepartmentId);
-            if (newParentDepartment == null){
-                throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.PARENT_DEPARTMENT_NAME_WRONG);
+            if (newParentDepartment == null) {
+                throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.PARENT_DEPARTMENT_NAME_WRONG);
             }
             if (!departmentMapper.selectByPrimaryKey(newParentDepartmentId).getStudioId().
                     equals(updateDepartmentRequest.getStudioId())) {
@@ -458,13 +500,13 @@ public class StudioService {
             }
         }
         StudioDepartment department = departmentMapper.selectByPrimaryKey(updateDepartmentRequest.getDepartmentId());
-        if (newParentDepartmentId != null){
+        if (newParentDepartmentId != null) {
             //更新新的上级部门信息
             String childrenStr = newParentDepartment.getChildrenDepartmentId();
             //如果新部门已经有下级部门，则先添加","
-            if (StringUtils.hasLength(childrenStr)){
+            if (StringUtils.hasLength(childrenStr)) {
                 childrenStr = childrenStr + "," + updateDepartmentRequest.getDepartmentId();
-            }else{
+            } else {
                 childrenStr = String.valueOf(updateDepartmentRequest.getDepartmentId());
             }
             newParentDepartment.setChildrenDepartmentId(childrenStr);
@@ -473,17 +515,17 @@ public class StudioService {
             String childrenStr2 = oldParentDepartment.getChildrenDepartmentId();
             String[] children = childrenStr2.split(",");
             StringBuilder builder = new StringBuilder();
-            for (int i = 0;i < children.length;i++){
+            for (int i = 0; i < children.length; i++) {
                 int child = Integer.parseInt(children[i]);
-                if (child == updateDepartmentRequest.getDepartmentId()){
-                    if (i == children.length - 1 && builder.length() > 0){
+                if (child == updateDepartmentRequest.getDepartmentId()) {
+                    if (i == children.length - 1 && builder.length() > 0) {
                         builder.deleteCharAt(builder.length() - 1);
                     }
                     continue;
                 }
-                if (i == children.length - 1){
+                if (i == children.length - 1) {
                     builder.append(child);
-                }else {
+                } else {
                     builder.append(child).append(",");
                 }
             }
@@ -493,19 +535,19 @@ public class StudioService {
         }
         //更新部门信息
         String departmentName = department.getDepartmentName();
-        if (StringUtils.hasLength(updateDepartmentRequest.getDepartmentName())){
+        if (StringUtils.hasLength(updateDepartmentRequest.getDepartmentName())) {
             departmentName = updateDepartmentRequest.getDepartmentName();
-            if (newParentDepartmentId != null){
+            if (newParentDepartmentId != null) {
                 departmentName = updateDepartmentRequest.getParentDepartmentName() + "/" + departmentName;
-            }else{
+            } else {
                 String oldDepartmentName = departmentMapper.selectByPrimaryKey(department.getParentDepartmentId()).
                         getDepartmentName();
                 departmentName = oldDepartmentName + "/" + departmentName;
             }
-        }else{
+        } else {
             String[] split = department.getDepartmentName().split("/");
             String departmentNameSuffix = split[split.length - 1];
-            if (newParentDepartmentId != null){
+            if (newParentDepartmentId != null) {
                 departmentName = updateDepartmentRequest.getParentDepartmentName() + "/" + departmentNameSuffix;
             }
         }
@@ -516,7 +558,7 @@ public class StudioService {
 
     public void deleteDepartment(DeleteDepartmentRequest deleteDepartmentRequest, Integer userId) {
         //TODO 更新下级部门，更新上级部门，更改部门成员的departmentId为上级部门的id，删除该部门
-        checkSuperAdmin(userId,deleteDepartmentRequest.getStudioId());
+        checkSuperAdmin(userId, deleteDepartmentRequest.getStudioId());
         checkTopDepartment(deleteDepartmentRequest.getDepartmentId());
         StudioDepartment department = departmentMapper.selectByPrimaryKey(deleteDepartmentRequest.getDepartmentId());
         String childrenStr = department.getChildrenDepartmentId();
@@ -524,9 +566,9 @@ public class StudioService {
         StudioDepartment parentDepartment = departmentMapper.selectByPrimaryKey(parentDepartmentId);
         //更新下级部门
         String[] children = null;
-        if (childrenStr != null){
+        if (childrenStr != null) {
             children = childrenStr.split(",");
-            for (String child : children){
+            for (String child : children) {
                 int childId = Integer.parseInt(child);
                 StudioDepartment childDepartment = departmentMapper.selectByPrimaryKey(childId);
                 String[] split = childDepartment.getDepartmentName().split("/");
@@ -539,33 +581,33 @@ public class StudioService {
         //更新上级部门
         String childrenStr2 = parentDepartment.getChildrenDepartmentId();
         StringBuilder builder = new StringBuilder();
-        if (childrenStr2 != null){
+        if (childrenStr2 != null) {
             String[] children2 = childrenStr2.split(",");
-            for (int i = 0;i < children2.length;i++){
+            for (int i = 0; i < children2.length; i++) {
                 int child = Integer.parseInt(children2[i]);
-                if (child == deleteDepartmentRequest.getDepartmentId()){
-                    if (i == children2.length - 1 && builder.length() > 0){
+                if (child == deleteDepartmentRequest.getDepartmentId()) {
+                    if (i == children2.length - 1 && builder.length() > 0) {
                         builder.deleteCharAt(builder.length() - 1);
                     }
                     continue;
                 }
-                if (i == children2.length - 1){
+                if (i == children2.length - 1) {
                     builder.append(child);
-                }else {
+                } else {
                     builder.append(child).append(",");
                 }
             }
         }
-        if (childrenStr != null){
+        if (childrenStr != null) {
             //如果上面childrenStr2不为空，说明builder中已经有内容，则添加逗号
-            if (builder.length() > 0){
+            if (builder.length() > 0) {
                 builder.append(",");
             }
-            for (int i = 0;i < children.length;i++){
+            for (int i = 0; i < children.length; i++) {
                 int child = Integer.parseInt(children[i]);
-                if (i == children.length - 1){
+                if (i == children.length - 1) {
                     builder.append(child);
-                }else {
+                } else {
                     builder.append(child).append(",");
                 }
             }
@@ -574,7 +616,7 @@ public class StudioService {
         departmentMapper.updateByPrimaryKeySelective(parentDepartment);
         //更新部门成员
         List<UserStudio> userStudioList = userStudioMapper.selectByDepartmentId(deleteDepartmentRequest.getDepartmentId());
-        for (UserStudio record : userStudioList){
+        for (UserStudio record : userStudioList) {
             record.setDepartmentId(parentDepartmentId);
             userStudioMapper.updateByPrimaryKeySelective(record);
         }
@@ -583,20 +625,21 @@ public class StudioService {
 
     /**
      * 此处因为返回内容和部门成员列表返回的一致，因此沿用List<DepartmentMemberResponse>
+     *
      * @param searchContent
      * @param studioId
      * @return List<DepartmentMemberResponse>
      */
     public List<DepartmentMemberResponse> searchMember(String searchContent, Integer studioId) {
-        return userStudioMapper.selectMemberByNameFuzzyAndStudio(searchContent,studioId);
+        return userStudioMapper.selectMemberByNameFuzzyAndStudio(searchContent, studioId);
     }
 
     public List<DepartmentMemberResponse> getDepartmentMemberList(int departmentId, Integer userId) {
         return userStudioMapper.selectMemberByDepartment(departmentId);
     }
 
-    public UserStudio getUserStudioInfo(Integer userId,Integer studioId){
-        return userStudioMapper.selectByUserAndStudio(userId,studioId);
+    public UserStudio getUserStudioInfo(Integer userId, Integer studioId) {
+        return userStudioMapper.selectByUserAndStudio(userId, studioId);
     }
 
     private boolean isCreator(int userId, int studioId) {
@@ -632,8 +675,8 @@ public class StudioService {
 
     private void checkTopDepartment(Integer departmentId) {
         StudioDepartment department = departmentMapper.selectByPrimaryKey(departmentId);
-        if (department != null && department.getDepartmentName().split("/").length == 1){
-            throw new CustomException(CustomExceptionType.NORMAL_ERROR,ExceptionMessage.CAN_NOT_DEAL_TOP_DEPARTMENT);
+        if (department != null && department.getDepartmentName().split("/").length == 1) {
+            throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.CAN_NOT_DEAL_TOP_DEPARTMENT);
         }
     }
 

@@ -149,4 +149,7 @@
         set people_number = people_number + #{number}
         where id = #{id}
     </update>
+    <select id="getLastInsertId" resultType="java.lang.Integer">
+        select LAST_INSERT_ID();
+    </select>
 </mapper>

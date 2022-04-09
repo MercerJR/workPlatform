@@ -34,4 +34,6 @@ public interface UserMapper {
     List<SearchUserResponse> selectUserInfoByPhone(String phoneNumber);
 
     List<SearchUserResponse> selectUserInfoByNameFuzzy(String fuzzyName);
+
+    int getLastInsertId();
 }

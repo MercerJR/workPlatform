@@ -31,4 +31,6 @@ public interface StudioDepartmentMapper {
     void decreasePeopleNumber(@Param("id") Integer id, @Param("number") Integer number);
 
     void increasePeopleNumber(@Param("id") Integer id, @Param("number") Integer i);
+
+    int getLastInsertId();
 }

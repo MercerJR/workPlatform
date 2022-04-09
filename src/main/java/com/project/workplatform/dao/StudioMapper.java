@@ -28,4 +28,6 @@ public interface StudioMapper {
     List<StudioBaseInfoResponse> selectStudioBaseInfoByUser(Integer userId);
 
     StudioBaseInfoResponse selectStudioBaseInfoByPrimaryKey(@Param("studioId") Integer id, @Param("userId") Integer userId);
+
+    int getLastInsertId();
 }

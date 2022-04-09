@@ -21,6 +21,7 @@ public class CreateStudioRequest {
     @Size(max = 20,message = ValidConstant.STUDIO_NAME_LENGTH)
     private String studioName;
 
+    @NotBlank(message = ValidConstant.STUDIO_ABBREVIATION_LENGTH)
     private String studioAbbreviation;
 
     private String classify;
