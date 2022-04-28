@@ -15,6 +15,4 @@ public class InitInviteCodeRequest {
 
     private int studioId;
 
-    private int expireDay;
-
 }

@@ -19,4 +19,6 @@ public interface Constant {
     String REDIS_NOT_READ_MSG_SENDER_KEY_PREFIX = "notReadMsgSender:";
     String REDIS_CHAT_LIST_KEY_PREFIX = "chatListKey:";
 
+    Integer INVITE_CODE_EXPIRE_DAY = 40;
+
 }

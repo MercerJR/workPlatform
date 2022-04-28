@@ -66,6 +66,13 @@ public class StudioController {
         return new Response().success(inviteCode);
     }
 
+    @GetMapping(value = "/show_invite_code/{studio_id}",produces = "application/json")
+    public Response showInviteCode(@PathVariable("studio_id") Integer studioId,HttpServletRequest request){
+        Integer userId = JwtUtil.getId(request);
+        String inviteCode = service.getInviteCode(studioId,userId);
+        return new Response().success(inviteCode);
+    }
+
     @PostMapping(value = "/check_invite_code", produces = "application/json")
     public Response checkInviteCode(@Valid @RequestBody CheckInviteCodeRequest checkInviteCodeRequest) {
         Integer studioId = service.checkInviteCode(checkInviteCodeRequest.getInviteCode());

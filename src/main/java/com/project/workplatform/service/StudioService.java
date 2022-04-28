@@ -159,9 +159,20 @@ public class StudioService {
 
         //将邀请码及邀请码的过期时间存入Redis
         String redisKey = Constant.REDIS_INVITE_CODE_KEY_PREFIX + inviteCode;
-        redisTemplate.opsForValue().set(redisKey, String.valueOf(studioId),
-                Duration.ofDays(initInviteCodeRequest.getExpireDay()));
+        redisTemplate.opsForValue().set(redisKey, studioId,
+                Duration.ofDays(Constant.INVITE_CODE_EXPIRE_DAY));
         return inviteCode;
+    }
+
+    public String getInviteCode(Integer studioId, Integer userId) {
+        String inviteCode = mapper.selectByPrimaryKey(studioId).getInviteCode();
+        String redisKey = Constant.REDIS_INVITE_CODE_KEY_PREFIX + inviteCode;
+        Integer value = (Integer) redisTemplate.opsForValue().get(redisKey);
+        if (studioId.equals(value)){
+            return inviteCode;
+        }else {
+            return "暂无邀请码或邀请码已过期，请刷新邀请码";
+        }
     }
 
     public Integer checkInviteCode(String inviteCode) {
