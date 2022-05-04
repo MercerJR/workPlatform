@@ -79,7 +79,7 @@ public class ChatInfoService {
                 record.setChatId(item.getChatId());
                 record.setTargetType(item.getTargetType());
                 if (item.getTargetType() == 0 || item.getTargetType() == 2) {
-                    UserStudio userStudio = userStudioMapper.selectByUser(item.getChatId());
+                    UserStudio userStudio = userStudioMapper.selectByUserAndStudio(item.getChatId(),studioId);
                     UserInfo userInfo = userInfoMapper.selectByUser(item.getChatId());
                     //对内部用户和外部用户区分赋值
                     if (userStudio != null && userStudio.getStudioId().equals(studioId)) {
@@ -99,7 +99,7 @@ public class ChatInfoService {
                     record.setIcon("");
                     //获取对应的聊天记录
                 } else {
-                    //TODO 为群聊的record赋值
+                    //为群聊的record赋值
                     Group group = groupMapper.selectByPrimaryKey(item.getChatId());
                     //对内部群聊和外部群聊区分赋值
                     if (group.getType() == 1 && studioId.equals(group.getStudioId())){
@@ -129,7 +129,7 @@ public class ChatInfoService {
     }
 
     public int insertGroupMsgRecord(WsMessageResponse messageResponse) {
-        //TODO 将群聊聊天记录存入mysql，并返回msgAckId
+        //将群聊聊天记录存入mysql，并返回msgAckId
         GroupMsgRecord msgRecord = new GroupMsgRecord();
         msgRecord.setSenderId(messageResponse.getSenderId());
         msgRecord.setGroupId(messageResponse.getTargetId());
@@ -156,9 +156,9 @@ public class ChatInfoService {
                 }
                 break;
             case GROUP:
-                //TODO 获取群聊聊天记录
+                //获取群聊聊天记录
                 List<GroupMsgRecord> groupMsgRecordList = groupMsgRecordMapper.selectByGroup(targetId);
-                //TODO 构造WsMessageResponse对象，并添加到messageList中
+                //构造WsMessageResponse对象，并添加到messageList中
                 for (GroupMsgRecord msgRecord : groupMsgRecordList){
                     UserInfo senderInfo = userInfoMapper.selectByUser(msgRecord.getSenderId());
                     Group group = groupMapper.selectByPrimaryKey(targetId);

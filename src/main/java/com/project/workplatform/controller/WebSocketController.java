@@ -107,7 +107,7 @@ public class WebSocketController {
         switch (typeEnum) {
             case AUTH:
                 verifyTokenAndGetUser(wsMessage.getContent());
-                //TODO 从redis中拉取未读消息的消息来源，并从MySQL中根据来源和ack_id拉取最新的消息记录
+                //从redis中拉取未读消息的消息来源，并从MySQL中根据来源和ack_id拉取最新的消息记录
                 break;
             case TEXT_MSG:
                 sendMessage(wsMessage);
@@ -155,18 +155,18 @@ public class WebSocketController {
         switch (targetTypeEnum) {
             //单人聊天
             case PERSONAL:
-                //TODO 将wsMessageResponse写进MySQL的personal_msg_record表中
+                //将wsMessageResponse写进MySQL的personal_msg_record表中
                 int personalMsgAckId = chatInfoService.insertPersonalMsgRecord(messageResponse);
                 //分为对方在线和不在线两种情况：如果对方在线，则实时发送并更新msg_ack_id；如果对方不在线，在redis中记录哪个用户发来了消息，上线后会自动拉取最新消息
                 doSend(session, messageResponse);
-                //TODO 将friend表中自己的msg_ack_id更新
+                //将friend表中自己的msg_ack_id更新
                 friendService.updateMsgAckId(personalMsgAckId, senderInfo.getUserId(), targetId);
                 //将对方的聊天列表更新
                 chatInfoService.updateChatList(new UpdateChatListRequest(senderInfo.getUserId(), messageResponse.getTargetType()), targetId);
                 Session targetSession = SESSION_MAP.get(targetId);
                 if (targetSession != null) {
                     doSend(targetSession, messageResponse);
-                    //TODO 将friend表中对方的msg_ack_id更新
+                    //将friend表中对方的msg_ack_id更新
                     friendService.updateMsgAckId(personalMsgAckId, targetId, senderInfo.getUserId());
                 } else {
                     //redis中记录未收到的信息的来源
@@ -177,15 +177,15 @@ public class WebSocketController {
                 break;
             //群聊
             case GROUP:
-                //TODO 将wsMessageResponse写进MySQL的group_msg_record表中，并获取msgAckId
+                //将wsMessageResponse写进MySQL的group_msg_record表中，并获取msgAckId
                 int groupMsgAckId = chatInfoService.insertGroupMsgRecord(messageResponse);
-                //TODO 根据targetId从MySQL的user_group表中获取该群聊的用户列表
+                //根据targetId从MySQL的user_group表中获取该群聊的用户列表
                 List<MemberResponse> memberList = groupService.getMemberList(senderInfo.getUserId(), targetId);
-                //TODO 遍历用户列表，找出在线用户的session
+                //遍历用户列表，找出在线用户的session
                 for (MemberResponse member : memberList){
-                    //TODO 更新聊天列表
+                    //更新聊天列表
                     chatInfoService.updateChatList(new UpdateChatListRequest(targetId, messageResponse.getTargetType()),member.getUserId());
-                    //TODO 给在线的用户实时推送消息，更新user_group中的msg_ack_id
+                    //给在线的用户实时推送消息，更新user_group中的msg_ack_id
                     Session memberSession = SESSION_MAP.get(member.getUserId());
                     if (memberSession != null){
                         doSend(memberSession, messageResponse);

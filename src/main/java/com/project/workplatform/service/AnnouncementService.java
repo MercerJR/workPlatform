@@ -42,7 +42,7 @@ public class AnnouncementService {
     public void publish(PublishAnnouncementRequest publishAnnouncementRequest, Integer userId) {
         //校验用户是否进入工作室
         checkInStudio(publishAnnouncementRequest.getStudioId());
-        //TODO 构建推文数据结构，放入MySQL，并获取刚刚插入的id
+        //构建推文数据结构，放入MySQL，并获取刚刚插入的id
         Announcement announcement = new Announcement();
         announcement.setTitle(publishAnnouncementRequest.getTitle());
         announcement.setContent(publishAnnouncementRequest.getContent());
@@ -58,7 +58,7 @@ public class AnnouncementService {
             }
         }
         announcement.setReaderId(builder.toString());
-        //TODO 【建表】此处需要新建公告表
+        //此处需要新建公告表
         mapper.insertSelective(announcement);
         int announcementId = mapper.getLastId();
         //调用公众号发布方法，采用伪WS方式
@@ -72,8 +72,8 @@ public class AnnouncementService {
     }
 
     public void publicUserSendMessage(PublishAnnouncementRequest publishAnnouncementRequest, int announcementId) {
-        //TODO 通过studioId获取公众号用户id
-        //TODO 【修改表结构】需要更改工作室表结构，添加工作室公众号id属性；需要在创建工作室方法中，添加创建工作室公众号的功能；
+        //通过studioId获取公众号用户id
+        //【修改表结构】需要更改工作室表结构，添加工作室公众号id属性；需要在创建工作室方法中，添加创建工作室公众号的功能；
         int chatId = studioMapper.selectByPrimaryKey(publishAnnouncementRequest.getStudioId()).getHelperId();
         Set<Integer> memberSet = publishAnnouncementRequest.getMemberSet();
 

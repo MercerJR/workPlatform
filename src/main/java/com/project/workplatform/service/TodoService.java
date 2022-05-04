@@ -44,7 +44,7 @@ public class TodoService {
     public void addTodo(AddTodoRequest addTodoRequest, Integer userId) {
         //校验用户是否进入工作室
         checkInStudio(addTodoRequest.getStudioId());
-        //TODO 【建表】构造todo数据结构，并存入mysql
+        //构造todo数据结构，并存入mysql
         Todo todo = new Todo();
         todo.setTitile(addTodoRequest.getTitle());
         todo.setDescribe(addTodoRequest.getDescribe());
@@ -57,7 +57,11 @@ public class TodoService {
         Set<Integer> memberSet = addTodoRequest.getMemberSet();
         Iterator<Integer> iterator = memberSet.iterator();
         while (iterator.hasNext()){
-            builder.append(iterator.next());
+            int participantId = iterator.next();
+            if (participantId <= 0){
+                continue;
+            }
+            builder.append(participantId);
             if (iterator.hasNext()){
                 builder.append(",");
             }
@@ -100,12 +104,12 @@ public class TodoService {
     }
 
     public void deleteTodo(DeleteTodoRequest deleteTodoRequest, Integer userId) {
-        //TODO 判断todo的发起人是否是当前用户，否则报警
+        //判断todo的发起人是否是当前用户，否则报警
         Integer originatorId = mapper.selectByPrimaryKey(deleteTodoRequest.getTodoId()).getOriginatorId();
         if (!userId.equals(originatorId)) {
             throw new CustomException(CustomExceptionType.NORMAL_ERROR, ExceptionMessage.NOT_ORIGINATOR);
         }
-        //TODO 执行mysql删除操作
+        //执行mysql删除操作
         mapper.deleteByPrimaryKey(deleteTodoRequest.getTodoId());
     }
 
