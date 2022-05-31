@@ -50,4 +50,9 @@ public interface ExceptionMessage {
 
     String NOT_ORIGINATOR = "你不是该待办的发起人";
 
+    String FILE_EMPTY = "未选择文件";
+    String FILE_UPLOAD_FAILED = "文件上传失败";
+    String FILE_PERMISSION_DENIED = "未拥有该文件的权限";
+    String FILE_DOWNLOAD_FAILED = "文件下载失败";
+
 }
